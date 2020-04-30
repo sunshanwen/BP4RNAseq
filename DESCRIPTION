@@ -12,8 +12,15 @@ Description: An automated pipe for reproducible RNA-seq analysis with the minima
 License: GPL-2
 Encoding: UTF-8
 LazyData: true #### consider to remove
-Imports: dplyr (>= 0.8.5), 
-         fastqcr (>= 0.1.2)
-Depends: R (>= 4.0.0)
+Imports: 
+    dplyr,
+    fastqcr,
+    stringr,
+    tidyr,
+    stats,
+    utils,
+    magrittr
+Depends: R (>= 3.6.0)
 SystemRequirements: Linux, conda, SRA Toolkit, Entrez Direct, FastQC, Cutadapt, datasets, samtools, Hisat2, Stringtie, Salmon
 RoxygenNote: 7.1.0
+

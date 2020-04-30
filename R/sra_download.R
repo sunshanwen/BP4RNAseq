@@ -2,8 +2,13 @@
 #'
 #' Download RNA-seq samples from the NCBI using SRA Toolkit and Entrez Direct based on the accession code.
 #' @param accession the bioproject accession code for the RNA-seq samples deposited in the NCBI.
+#' @export sra_download
+#' @return None
 #' @examples
+#' \dontrun{
+#'
 #' sra_download("PRJNA478474")
+#' }
 
 
 

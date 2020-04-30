@@ -9,9 +9,15 @@ sra_download(accession)
 \arguments{
 \item{accession}{the bioproject accession code for the RNA-seq samples deposited in the NCBI.}
 }
+\value{
+None
+}
 \description{
 Download RNA-seq samples from the NCBI using SRA Toolkit and Entrez Direct based on the accession code.
 }
 \examples{
+\dontrun{
+
 sra_download("PRJNA478474")
+}
 }
