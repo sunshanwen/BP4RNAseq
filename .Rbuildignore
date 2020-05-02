@@ -2,3 +2,5 @@
 ^\.Rproj\.user$
 cran-comments.md
 ^README\.Rmd$
+install_depends.sh
+quality_test.R

@@ -21,6 +21,6 @@ Imports:
     utils,
     magrittr
 Depends: R (>= 3.6.0)
-SystemRequirements: Linux, conda, SRA Toolkit, Entrez Direct, FastQC, Cutadapt, datasets, samtools, Hisat2, Stringtie, Salmon
+SystemRequirements: UNIX, conda, SRA Toolkit, Entrez Direct, FastQC, Cutadapt, datasets, SAMtools, HISAT2, StringTie, Salmon
 RoxygenNote: 7.1.0
 
