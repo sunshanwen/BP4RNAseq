@@ -9,7 +9,7 @@ conda config --add channels bioconda
 conda config --add channels conda-forge
 conda config --set channel_priority flexible
 conda install -y -c bioconda sra-tools
-conda install -y -c bioconda entrez-direct 
+conda install -y -c bioconda entrez-direct
 conda install -y -c bioconda fastqc
 conda install -y -c bioconda cutadapt
 conda install -y -c bioconda samtools
@@ -27,4 +27,5 @@ conda install -y -c conda-forge r-dplyr
 conda install -y -c conda-forge r-fastqcr
 conda install -y -c conda-forge r-devtools
 
+conda update -y --all
 # conda config --show-sources
