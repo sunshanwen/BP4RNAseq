@@ -44,7 +44,7 @@ sra2fastq <- function(threads = 4)
   fq.dir = getwd()
 
   pair <- check_paired(sra.dir)
-  dir.create(file.path(fq.dir), showWarnings = FALSE) ### create the folder no matter it
+  dir.create(file.path(fq.dir), recursive = TRUE,showWarnings = FALSE) ### create the folder no matter it
   files<-list.files(sra.dir, pattern = ".sra$", recursive = T, full.names = T)
   # files_sra <- stringr::str_subset(files,".sra")
   for(f in files) {
