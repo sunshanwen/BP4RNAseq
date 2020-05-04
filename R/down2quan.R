@@ -17,7 +17,7 @@
 
 down2quan <- function(accession, threads = 4, dir = getwd(), taxa, novel_transcript = FALSE) {
   setwd(dir)
-  sra_download(accession)
+  sra_download(accession, dir)
   pair <- sra2fastq(threads)
   quality <- qc_test(threads)
 

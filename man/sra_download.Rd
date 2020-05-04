@@ -4,10 +4,12 @@
 \alias{sra_download}
 \title{Download RNA-seq samples from the NCBI.}
 \usage{
-sra_download(accession)
+sra_download(accession, dir)
 }
 \arguments{
 \item{accession}{the bioproject accession code for the RNA-seq samples deposited in the NCBI.}
+
+\item{dir}{the working directory. Default is the current working directory.}
 }
 \value{
 None
