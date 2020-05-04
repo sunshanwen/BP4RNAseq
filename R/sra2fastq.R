@@ -49,7 +49,7 @@ sra2fastq <- function(threads = 4)
   # files_sra <- stringr::str_subset(files,".sra")
   for(f in files) {
     cmd = paste("fasterq-dump", f, "-O", fq.dir, "-e", threads)
-    cat(cmd,"\n")#print the current command
+    # cat(cmd,"\n")#print the current command
     system(cmd) # invoke command
   }
   return(pair)

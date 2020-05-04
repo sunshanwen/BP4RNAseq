@@ -1,12 +1,11 @@
 #' @order 2
 ### produce fastqc reports
-fastqc_r <- function(threads, fq.dir, qc.dir)
+fastqc_r <- function(threads, fq.dir)
 {
-  dir.create(file.path(qc.dir), showWarnings = FALSE) ### create the folder
   files_fastq<-list.files(fq.dir, pattern = ".fastq$", recursive = T, full.names = T)
   for(f in files_fastq)
   {
-    cmd = paste("fastqc ", f, " --outdir=", fq.dir, " --threads ", threads)
+    cmd = paste("fastqc ", f, " --threads ", threads)
     # cat(cmd,"\n")#print the current command
     system(cmd) # invoke command
   }
@@ -32,7 +31,7 @@ qc_test <- function(threads = 4)
 {
   fq.dir = getwd()
   qc.dir = getwd()
-  fastqc_r(threads, fq.dir, qc.dir)
+  fastqc_r(threads, fq.dir)
   qc <- fastqcr::qc_aggregate(qc.dir, progressbar = FALSE)
   index_ad <- subset(qc, module == "Adapter Content" & status == "Fail", select = sample)
   index_sq <- subset(qc, module == "Per base sequence quality" & status == "Fail", select = sample)
