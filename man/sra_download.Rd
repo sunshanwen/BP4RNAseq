@@ -18,6 +18,6 @@ Download RNA-seq samples from the NCBI using SRA Toolkit and Entrez Direct based
 \examples{
 \dontrun{
 
-sra_download("PRJNA478474")
+sra_download("PRJNA615381")
 }
 }

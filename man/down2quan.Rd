@@ -4,9 +4,17 @@
 \alias{down2quan}
 \title{Download the RNA-seq samples from the NCBI and produce the quantifications of gene expression.}
 \usage{
-down2quan(threads = 4, dir = getwd(), taxa, novel_transcript = FALSE)
+down2quan(
+  accession,
+  threads = 4,
+  dir = getwd(),
+  taxa,
+  novel_transcript = FALSE
+)
 }
 \arguments{
+\item{accession}{the bioproject accession code for the RNA-seq samples deposited in the NCBI.}
+
 \item{threads}{the number of threads to be used. Default is 4.}
 
 \item{dir}{the working directory. Default is the current working directory.}

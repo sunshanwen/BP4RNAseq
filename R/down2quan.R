@@ -2,6 +2,7 @@
 #'
 #'Download the RNA-seq samples from the NCBI and produce the quantifications of gene expression with alignment-based and alignment-free workflows.
 #'
+#'@param accession the bioproject accession code for the RNA-seq samples deposited in the NCBI.
 #'@param threads the number of threads to be used. Default is 4.
 #'@param dir the working directory. Default is the current working directory.
 #'@param taxa the scientific or common name of the organism.
@@ -14,8 +15,9 @@
 #'down2quan(threads = 4, dir = getwd(), "sesame", novel_transcript = FALSE)
 #'}
 
-down2quan <- function(threads = 4, dir = getwd(), taxa, novel_transcript = FALSE) {
+down2quan <- function(accession, threads = 4, dir = getwd(), taxa, novel_transcript = FALSE) {
   setwd(dir)
+  sra_download(accession)
   pair <- sra2fastq(threads)
   quality <- qc_test(threads)
 

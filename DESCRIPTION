@@ -20,7 +20,7 @@ Imports:
     stats,
     utils,
     magrittr
-Depends: R (>= 3.6.0)
+Depends: R (>= 3.5.0)
 SystemRequirements: UNIX, conda, SRA Toolkit, Entrez Direct, FastQC, Cutadapt, datasets, SAMtools, HISAT2, StringTie, Salmon
 RoxygenNote: 7.1.0
 
