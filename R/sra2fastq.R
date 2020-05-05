@@ -55,6 +55,6 @@ sra2fastq <- function(threads = 4)
     final_fastq <- paste0(gsub("sra$","",f), "fastq")
     system(paste("mv", raw_fastq, final_fastq))
   }
-  #unlink(files)
+  unlink(files)
   return(pair)
 }
