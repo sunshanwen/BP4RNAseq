@@ -23,11 +23,20 @@ sra_download <- function(accession, dir)
     for(f in accession)
     {
         #### use Entrez Direct tool to get all samples accession code, then use prefetch to download all the data
-        # cmd1 = paste("prefetch -O", dir, "--max-size 100000000 $(esearch -db sra -query", f, "| efetch --format runinfo |cut -d \",\" -f 1 | grep SRR)")
-        cmd2 = paste("prefetch --max-size 100000000 $(esearch -db sra -query", f, "| efetch --format runinfo |cut -d \",\" -f 1 | grep SRR)")
+        cmd2 = paste("prefetch -O", dir, "-X 100000000 $(esearch -db sra -query", f, "| efetch --format runinfo |cut -d \",\" -f 1 | grep SRR)")
+        #cmd2 = paste("prefetch -X 100000000 $(esearch -db sra -query", f, "| efetch --format runinfo |cut -d \",\" -f 1 | grep SRR)")
         # cat(cmd1)
         system(cmd2)
 
+    }
+    files <- list.files(pattern = ".sra$", recursive = TRUE, full.names = T)
+    direc <- unique(gsub("[a-zA-Z0-9]*\\.sra$", replacement = "",files))
+    if(direc !="./"){
+        file <- paste(files, collapse=" ")
+        cmd <- paste("mv", file, dir)
+        system(cmd)
+        #print(direc)
+        unlink(direc, recursive = TRUE)
     }
 }
 
