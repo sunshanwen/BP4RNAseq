@@ -4,7 +4,7 @@ wget -O - https://www.anaconda.com/distribution/ 2>/dev/null | sed -ne 's@.*\(ht
 
 find . -name "Anacond*" -exec bash {} \;
 find . -name "Anacond*" | xargs rm
-conda update -n root conda
+conda update -y -n root conda
 conda config --add channels bioconda
 conda config --add channels conda-forge
 conda config --set channel_priority flexible
