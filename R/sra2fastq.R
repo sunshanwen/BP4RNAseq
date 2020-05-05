@@ -51,6 +51,9 @@ sra2fastq <- function(threads = 4)
     cmd = paste("fasterq-dump", f, "-O", fq.dir, "-e", threads)
     # cat(cmd,"\n")#print the current command
     system(cmd) # invoke command
+    raw_fastq <- paste0(f, ".fastq")
+    final_fastq <- paste0(gsub("sra$","",f), "fastq")
+    system(paste("mv", raw_fastq, final_fastq))
   }
   unlink(files)
   return(pair)
