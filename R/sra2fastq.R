@@ -2,7 +2,7 @@
 #' @order 2
 check_paired <- function(sra.dir)
 {
-  files<-list.files(sra.dir, pattern = ".sra$", recursive = T, full.names = T)
+  files<-list.files(sra.dir, pattern = ".sra$", recursive = F, full.names = F)
   temp <- data.frame(samples = NA, paired_or_single = NA)
   for(f in files) {
     cmd = paste("fastq-dump","-X","1","-Z","--split-spot", f, "| wc -l")
@@ -44,8 +44,8 @@ sra2fastq <- function(threads = 4)
   fq.dir = getwd()
 
   pair <- check_paired(sra.dir)
-  dir.create(file.path(fq.dir), showWarnings = FALSE) ### create the folder no matter it
-  files<-list.files(sra.dir, pattern = ".sra$", recursive = T, full.names = T)
+  #dir.create(file.path(fq.dir), showWarnings = FALSE) ### create the folder no matter it
+  files<-list.files(sra.dir, pattern = ".sra$", recursive = F, full.names = F)
   # files_sra <- stringr::str_subset(files,".sra")
   for(f in files) {
     cmd = paste("fasterq-dump", f, "-O", fq.dir, "-e", threads)
