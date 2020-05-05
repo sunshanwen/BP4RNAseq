@@ -34,7 +34,8 @@ get_adapter <- function(sample)
 adapter_trim <- function(sample, pair, threads = 4)
 {
   ### get the names of samples with the adapter
-  samples <- unique(stringr::str_extract(sample, "[A-Z]*[a-z]*[0-9]*\\.sra"))
+  #samples <- unique(stringr::str_extract(sample, "[A-Z]*[a-z]*[0-9]*\\.sra"))
+  samples <- unique(gsub("\\.fastq","",sample))
 
   answer3 <- readline(prompt="Do you know the adapter (y/n)?")
   if(answer3 == "y")
