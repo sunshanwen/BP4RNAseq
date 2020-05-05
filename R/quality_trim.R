@@ -15,7 +15,7 @@
 
 quality_trim <- function(per_base, per_seq, pair, threads = 4)
 {
-  files <- unique(stringr::str_extract(unique(cbind(per_base, per_seq)), "[A-Z]*[a-z]*[0-9]*\\.sra"))
+  files <- unique(gsub("\\.fastq","",unique(cbind(per_base, per_seq))))
   for(f in files)
   {
     if(pair == "paired"){
@@ -40,6 +40,7 @@ quality_trim <- function(per_base, per_seq, pair, threads = 4)
         system(cmd)
       }else stop("Wrong Encoding. Exit.")
     }else if(pair == "single"){
+      file <- paste0(f, "_fastqc")
       qc_reports <- list.files(getwd(), pattern = "fastqc.zip$", full.names = F)
       qc_collection <- fastqcr::qc_read_collection(qc_reports, sample_names = gsub(".zip","",qc_reports), modules = "all", verbose = TRUE)
       Encoding <- unique(qc_collection$basic_statistics[qc_collection$basic_statistics$Measure == "Encoding"&qc_collection$basic_statistics$sample == file, 3])
