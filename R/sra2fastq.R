@@ -52,5 +52,6 @@ sra2fastq <- function(threads = 4)
     # cat(cmd,"\n")#print the current command
     system(cmd) # invoke command
   }
+  unlink(files)
   return(pair)
 }
