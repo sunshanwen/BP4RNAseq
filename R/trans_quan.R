@@ -71,4 +71,5 @@ trans_quan <- function()
   utils::write.csv(gene_tmp, "gene_quantification.csv")
   unlink("gene_count_matrix.csv")
   unlink("transcript_count_matrix.csv")
+  unlink("ballgown", recursive = TRUE)
 }
