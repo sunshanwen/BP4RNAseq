@@ -6,22 +6,22 @@
 \usage{
 down2quan(
   accession,
-  threads = 4,
   dir = getwd(),
   taxa,
-  novel_transcript = FALSE
+  novel_transcript = FALSE,
+  threads = 4
 )
 }
 \arguments{
 \item{accession}{the bioproject accession code for the RNA-seq samples deposited in the NCBI.}
-
-\item{threads}{the number of threads to be used. Default is 4.}
 
 \item{dir}{the working directory. Default is the current working directory.}
 
 \item{taxa}{the scientific or common name of the organism.}
 
 \item{novel_transcript}{logic, whether identifying novel transcripts is expected or not. Default is FALSE.}
+
+\item{threads}{the number of threads to be used. Default is 4.}
 }
 \value{
 None
