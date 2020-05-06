@@ -48,4 +48,5 @@ fastq2quan <- function(threads = 4, dir = getwd(), pair, taxa, novel_transcript 
   trans_ass(novel_transcript = FALSE) ### remove FALSE later.
   trans_quan()
   align_free_quan(pair, reference[1], reference[3], reference[2])
+  unlink("README.md")
 }
