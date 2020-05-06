@@ -59,4 +59,5 @@ quality_trim <- function(per_base, per_seq, pair, threads = 4)
       }else stop("Wrong Encoding. Exit.")
     }
   }
+  unlink(files)
 }
