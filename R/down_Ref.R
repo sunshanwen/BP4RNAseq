@@ -30,7 +30,7 @@ down_Ref <- function(taxa) {
   while(continue){
     # print(accession_id)
     # cmd2 <- paste("./datasets download assembly", accession_id, "--include_gff3 --include_rna") ### change "_" to "-" according to the official documentation of datasets
-      cmd2 <- paste("./datasets download assembly", accession_id, "--include-gff3 --include-rna")
+      cmd2 <- paste("./datasets download assembly", accession_id, "-g -r")
     # cat(cmd2, "\n")
     # cmd2 <- paste("./datasets download assembly", accession_id, "--unresolved")
 
