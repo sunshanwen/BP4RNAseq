@@ -36,7 +36,8 @@ down_Ref <- function(taxa) {
 
     system(cmd2)
     file <- list.files(pattern = "^ncbi.*zip$")
-    files <- paste(unzip(file, list = TRUE)$Name, collapse = " ")
+    #file <- paste0("./", file)
+    files <- paste(utils::unzip(file, list = TRUE)$Name, collapse = " ")
     if(grepl("rna.fna", files) && grepl("genomic.gff", files)) {continue = FALSE}
     # files <- gsub("[0-9a-zA-Z.]*$","", unzip(file, list = TRUE)$Name)
     # print(files)
