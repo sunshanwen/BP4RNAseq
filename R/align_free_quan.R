@@ -41,7 +41,7 @@ gene_quan <- function()
   tmp1 <- all %>% dplyr::group_by(sample, gene_id) %>% dplyr::summarise(abundance = sum(TPM), count = sum(count), length = sum(length*TPM)/sum(TPM))
   # pre-calculate a simple average transcript length
   # for the case the abundances are all zero for a gene.
-  mean_TPM <- all %>% dplyr::group_by(gene_id) %>% dplyr::summarise(length = mean(TPM))
+  mean_TPM <- all %>% dplyr::group_by(gene_id) %>% dplyr::summarise(length = mean(length))
 
   missing <- unique(tmp1$gene_id[is.nan(tmp1$length)])
   for(i in missing)
