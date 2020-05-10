@@ -37,6 +37,7 @@ compile <- function(files)
   names(count)[-1] <- samples
   tmp <- count %>% tidyr::gather(sample, count, -transcript_id)
   all <- merge(others, tmp, by = c("transcript_id", "sample"), all = TRUE)
+  all$transcript_id <- gsub("gene-", "", all$transcript_id)
   utils::write.csv(all, "transcript_quantifications.csv")
 }
 
@@ -68,6 +69,7 @@ trans_quan <- function()
   unlink(files)
   gene_tmp <- utils::read.csv("gene_count_matrix.csv")
   gene_tmp <- gene_tmp %>% tidyr::gather(sample, count, -gene_id)
+  gene_tmp$gene_id <- gsub("gene-", "", gene_tmp$gene_id)
   utils::write.csv(gene_tmp, "gene_quantification.csv")
   unlink("gene_count_matrix.csv")
   unlink("transcript_count_matrix.csv")
