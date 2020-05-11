@@ -17,6 +17,7 @@ extract_genome <- function(taxa)
   ref_seq <- list.files(pattern = "fna$", recursive = T, full.names = T)
   transcript <- list.files(pattern = "rna\\.fna", recursive = T, full.names = T)
   # ref_seq1 <- ref_seq[-which(ref_seq == transcript)]
+  taxa <- paste0("\"", taxa, "\"")
   name1 <- paste0(taxa, ".fna")
   # tmp <- paste0("./", name1)
   # ref_seq1 <- paste(ref_seq[-which(ref_seq == tmp)], collapse = ' ')
