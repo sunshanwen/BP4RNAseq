@@ -11,7 +11,8 @@
 #'}
 down_Ref <- function(taxa) {
   #cmd1 <- paste("./datasets assembly_descriptors tax_name", taxa, "-r | jq .datasets[].assembly_accession -r") ### change "_" to "-" according to the official documentation of datasets
-  taxa <- paste0("\"",taxa,"\"")
+  taxa <- gsub("\\s", "_", taxa)
+  #taxa <- paste0("\"",taxa,"\"")
   cmd1 <- paste("./datasets assembly-descriptors tax-name", taxa, "--refseq --assmaccs | jq .datasets[].assembly_accession -r") ### may change later
   # cat(cmd1, "\n")
   accession_id <- system(cmd1,  intern = TRUE)

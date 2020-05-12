@@ -26,7 +26,8 @@ index_build <- function(taxa, genome, annotation)
 #'
 align_ge <- function(pair, taxa, genome, annotation)
 {
-  taxa <- paste0("\"", taxa, "\"")
+  taxa <- gsub("\\s", "_", taxa)
+
   index_build(taxa, genome, annotation)
   index <- list.files(pattern = "ht2$", recursive = T, full.names = T)
   if(pair == "paired")
