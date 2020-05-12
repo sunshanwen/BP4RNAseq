@@ -29,12 +29,13 @@ sra_download <- function(accession, dir)
         system(cmd2)
 
     }
-    files <- list.files(pattern = ".sra$", recursive = TRUE, full.names = T)
+    files <- list.files(pattern = "\\.sra$", recursive = TRUE, full.names = T)
     direc <- unique(gsub("[a-zA-Z0-9]*\\.sra$", replacement = "",files))
     if(direc !="./"){
         file <- paste(files, collapse=" ")
         cmd <- paste("mv", file, dir)
-        system(cmd)
+        cat(cmd)
+        #system(cmd)
         #print(direc)
         unlink(direc, recursive = TRUE)
     }
