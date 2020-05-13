@@ -17,7 +17,7 @@
 sra_download <- function(accession, dir)
 {
     dir=getwd()
-    cmd1 <- paste0("touch $HOME/.ncbi/user-settings.mkfg| echo \"/repository/user/main/public/root = \\\"",dir,"\\\"\" > $HOME/.ncbi/user-settings.mkfg 2> /dev/null")
+    cmd1 <- paste0("mkdir $HOME/.ncbi | touch $HOME/.ncbi/user-settings.mkfg| echo \"/repository/user/main/public/root = \\\"",dir,"\\\"\" > $HOME/.ncbi/user-settings.mkfg 2> /dev/null")
     (cmd1)
     system(cmd1)
     for(f in accession)
