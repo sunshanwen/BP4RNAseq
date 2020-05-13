@@ -56,9 +56,9 @@ and its dependencies in the working directory with:
 This is a basic example which shows you how to use the package:
 
 ``` r
-#library(BP4RNAseq)
+# library(BP4RNAseq)
 ## basic example code
-#down2quan(accession="PRJNA623275", taxa="Drosophila melanogaster")
+# down2quan(accession="PRJNA623275", taxa="Drosophila melanogaster")
 ```
 
 <!-- What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so: -->
