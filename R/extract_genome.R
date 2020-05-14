@@ -11,6 +11,8 @@
 
 extract_genome <- function(taxa)
 {
+  file <- list.files(pattern = "^ncbi.*zip$")
+  utils::unzip(file, list = FALSE)
   cmd1 <- paste("unzip -o $(ls | grep ^ncbi.*zip$)")
   system(cmd1)
   # unlink("ncbi_dataset.zip")
