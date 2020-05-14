@@ -11,8 +11,8 @@ The goal of BP4RNAseq is to make the RNA-seq analysis smooth and easy.
 The package integrates the state-of-art tools from both alignment-based
 and alignment-free quantification workflows. It applies to both
 retrospective and newly generated RNA-seq data analyses and can take
-only one untechnical parameter and output two formatted gene expression
-quantifications at gene and transcript levels when working with local
+only one nontechnical parameter and output two formatted gene expression
+quantification at gene and transcript levels when working with local
 FASTQ files, therefore, facilitating the application of RNA-seq.
 
 Many of its dependencies only works under Unix environment, therefore,
