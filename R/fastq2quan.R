@@ -4,7 +4,7 @@
 #'
 #'@param threads the number of threads to be used. Default is 4.
 #'@param dir the working directory. Default is the current working directory.
-#'@param pair "single" for single-end (SE) or "paired" for paired-end (PE) reads.
+#'@param pair "single" for single-end (SE) reads or "paired" for paired-end (PE) reads.
 #'@param taxa the scientific or common name of the organism.
 #'@param novel_transcript logic, whether identifying novel transcripts is expected or not. Default is FALSE.
 #'@export fastq2quan

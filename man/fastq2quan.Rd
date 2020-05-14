@@ -11,7 +11,7 @@ fastq2quan(threads = 4, dir = getwd(), pair, taxa, novel_transcript = FALSE)
 
 \item{dir}{the working directory. Default is the current working directory.}
 
-\item{pair}{"single" for single-end (SE) or "paired" for paired-end (PE) reads.}
+\item{pair}{"single" for single-end (SE) reads or "paired" for paired-end (PE) reads.}
 
 \item{taxa}{the scientific or common name of the organism.}
 
