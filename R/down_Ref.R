@@ -39,7 +39,7 @@ down_Ref <- function(taxa) {
     #file <- paste0("./", file)
     tmp <- try(utils::unzip(file, list = TRUE)$Name, silent = T)
     if(class(tmp) != "try-error"){
-      files <- paste(dd, collapse = " ")
+      files <- paste(tmp, collapse = " ")
       if(grepl("rna.fna", files) && grepl("genomic.gff", files)) {continue = FALSE}
       # files <- gsub("[0-9a-zA-Z.]*$","", unzip(file, list = TRUE)$Name)
       # print(files)
