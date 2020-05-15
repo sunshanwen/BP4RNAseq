@@ -5,8 +5,13 @@ index_build <- function(taxa, genome, annotation)
   system(cmd1)
   cmd2 <- paste("awk \'{if ($3==\"intron\") {print $1\"\\t\"$4-1\"\\t\"$5-1\"\\t\"$7}}\'", annotation, "> ssFile.table")
   system(cmd2)
-  cmd3 <- paste("hisat2-build -f", genome, taxa, "--ss ssFile.table", "--exon exonsFile.table")
-  system(cmd3)
+  if(file.size("exonsFile.table")*file.size("ssFile.table")){
+    cmd3 <- paste("hisat2-build -f", genome, taxa, "--ss ssFile.table", "--exon exonsFile.table")
+    system(cmd3)
+  }else {
+    cmd3 <- paste("hisat2-build -f", genome, taxa)
+    system(cmd3)
+  }
 }
 
 #' Aligning the RNA-seq data to the reference genome with HISAT2.
