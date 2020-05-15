@@ -26,8 +26,10 @@ tx2gene <- function()
   # system(cmd3)
   # cmd1 <- paste("egrep -v \'^#|^$\'", annotation, "| awk -F '\\t' '$3 ~ /RNA/ {print $9}' | grep -o \'Name=.*gene=[a-zA-Z0-9_\\.]*' | cut -d \';\' --output-delimiter=\'=\' -f 1,3 | awk -F '=' \'BEGIN{OFS = \",\"; print \"transcript_id\", \"gene_id\"} {print $2, $4}\'> tx2gene.csv")
 
-  cmd1 <- paste("egrep -v \'^#|^$\'", annotation, "| awk -F '\\t' '$3 ~ /RNA/ {print $9}' | grep -o \'gene=.*transcript_id=.*\' |awk -F \';\' \'BEGIN{OFS = \"=\";} {print $1, $NF;}\' | awk -F \'=\' \'BEGIN{OFS = \",\"; print \"gene_id\", \"transcript_id\"} {print $2, $NF;}\'> tx2gene.csv")
-  cat(cmd1)
+  # cmd1 <- paste("egrep -v \'^#|^$\'", annotation, "| awk -F '\\t' '$3 ~ /RNA/ {print $9}' | grep -o \'ID=.*transcript_id=.*\' |awk -F \';\' \'BEGIN{OFS = \"=\";} {print $1, $NF;}\' | awk -F \'=\' \'BEGIN{OFS = \",\"; print \"gene_id\", \"transcript_id\"} {print $2, $NF;}\'> tx2gene.csv")
+  # cat(cmd1)
+  cmd1 <- paste("egrep -v \'^#|^$\'", annotation, "| awk -F '\\t' '$3 ~ /RNA/ {print $9}' | awk -F \';\' \'BEGIN{OFS = \"-\";} {print $1, $2;}\' | awk -F \'-\' \'BEGIN{OFS = \",\"; print \"gene_id\", \"transcript_id\"} {print $2, $4;}\'> tx2gene.csv")
+  # cat(cmd1)
   system(cmd1)
 }
 
