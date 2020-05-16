@@ -36,6 +36,7 @@ extract_genome <- function(taxa)
   system(cmd4)
   results <- c(name1, name2, name3)
   unlink("./ncbi_dataset.zip")
+  unlink("README.md")
   unlink("./ncbi_dataset", recursive = TRUE)
   return(results)
 }
