@@ -5,7 +5,7 @@ Version: 0.1.0
 Author: Shanwen Sun [aut, cre]
 Authors@R: as.person(c(
     "Shanwen Sun <sunshanwen@uestc.edu.cn> [aut, cre]", 
-    "Winston Chang <winston@rstudio.com> [aut]" #### to change later 
+    "Quan Zou <zouquan@nclab.net> [aut]"
     ))
 Maintainer: Shanwen Sun <sunshanwen@uestc.edu.cn>
 Description: An automated pipe for reproducible RNA-seq analysis with the minimal efforts from researchers. You only need to provide the taxa name and the accession code of RNA-seq samples deposited in the National Center for Biotechnology Information (NCBI). After a cup of tea or longer, you will get formated gene expression data as gene count, transcript count and TPM values, etc.  
