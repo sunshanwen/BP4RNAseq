@@ -28,7 +28,8 @@ tx2gene <- function()
 
   # cmd1 <- paste("egrep -v \'^#|^$\'", annotation, "| awk -F '\\t' '$3 ~ /RNA/ {print $9}' | grep -o \'ID=.*transcript_id=.*\' |awk -F \';\' \'BEGIN{OFS = \"=\";} {print $1, $NF;}\' | awk -F \'=\' \'BEGIN{OFS = \",\"; print \"gene_id\", \"transcript_id\"} {print $2, $NF;}\'> tx2gene.csv")
   # cat(cmd1)
-  cmd1 <- paste("egrep -v \'^#|^$\'", annotation, "| awk -F '\\t' '$3 ~ /RNA/ {print $9}' | awk -F \';\' \'BEGIN{OFS = \"-\";} {print $1, $2;}\' | awk -F \'-\' \'BEGIN{OFS = \",\"; print \"gene_id\", \"transcript_id\"} {print $2, $4;}\'> tx2gene.csv")
+  # cmd1 <- paste("egrep -v \'^#|^$\'", annotation, "| awk -F '\\t' '$3 ~ /RNA/ {print $9}' | awk -F \';\' \'BEGIN{OFS = \"-\";} {print $1, $2;}\' | awk -F \'-\' \'BEGIN{OFS = \",\"; print \"gene_id\", \"transcript_id\"} {print $2, $4;}\'> tx2gene.csv")
+  cmd1 <- paste("egrep -v '^#|^$' ./Drosophila_melanogaster.gff | awk -F '\t' '$3 ~ /RNA/ {print $9}' | awk -F ';' 'BEGIN{OFS = \"=\";} {print $1, $2;}' | awk -F '=' 'BEGIN{OFS = \"-\";}{print $NF, $2;}'| grep 'gene' | awk -F '-' 'BEGIN{OFS = \",\";print \"gene_id\", \"transcript_id\"}{print $2, $4}' > tx2gene.csv")
   # cat(cmd1)
   system(cmd1)
 }
