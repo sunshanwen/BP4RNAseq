@@ -121,9 +121,9 @@ align_free_quan <- function(pair, genome, transcript, annotation)
   convert_data() #### rna quantification to use for quantifying genes.
   tx2gene()
   gene_quan()
-  unlink("tx2gene.csv")
-  folders <- dir(pattern = "transcripts_quant$")
-  unlink(folders, recursive = TRUE)
-  unlink("salmon_index", recursive = TRUE)
+  # unlink("tx2gene.csv")
+  # folders <- dir(pattern = "transcripts_quant$")
+  # unlink(folders, recursive = TRUE)
+  # unlink("salmon_index", recursive = TRUE)
 }
 
