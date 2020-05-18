@@ -49,5 +49,4 @@ down2quan <- function(accession, dir = getwd(), taxa, novel_transcript = FALSE, 
   trans_ass(novel_transcript = FALSE) ### remove FALSE later.
   trans_quan()
   align_free_quan(pair, reference[1], reference[3], reference[2])
-  unlink("README.md")
 }
