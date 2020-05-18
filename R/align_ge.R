@@ -1,4 +1,3 @@
-#' @export index_build
 index_build <- function(taxa, genome, annotation)
 {
   cmd1 <- paste("awk \'{if ($3==\"exon\") {print $1\"\\t\"$4-1\"\\t\"$5-1}}\'", annotation, "> exonsFile.table")
