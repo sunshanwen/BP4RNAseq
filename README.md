@@ -62,7 +62,7 @@ This is a basic example which shows you how to use the package:
 # down2quan(accession="PRJNA623275", taxa="Drosophila melanogaster")
 
 # basic example code to work with local RNA-seq data
-# down2quan(taxa="Drosophila melanogaster", pair = "paired")
+# fastq2quan(taxa="Drosophila melanogaster", pair = "paired")
 ```
 
 <!-- What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so: -->
