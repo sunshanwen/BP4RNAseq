@@ -51,10 +51,10 @@ sra2fastq <- function(threads = 4)
     cmd = paste("fasterq-dump", f, "-O", fq.dir, "-e", threads)
     # cat(cmd,"\n")#print the current command
     system(cmd) # invoke command
-
-    files<-list.files(sra.dir, pattern = "fastq$", recursive = F, full.names = F)
-    file.rename(files, gsub(".sra","",files))
   }
+
+  fastq_files<-list.files(sra.dir, pattern = "fastq$", recursive = F, full.names = F)
+  file.rename(fastq_files, gsub(".sra","",fastq_files))
   unlink(files)
   return(pair)
 }
