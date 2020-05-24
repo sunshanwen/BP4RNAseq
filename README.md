@@ -9,12 +9,12 @@
 
 The goal of BP4RNAseq is to make the RNA-seq analysis smooth and easy.
 The package integrates the state-of-art tools from both alignment-based
-and alignment-free quantification workflows. It applies to both
-retrospective and newly generated RNA-seq data analyses and can take
-only two nontechnical parameters and output two formatted gene
-expression quantification at gene and transcript levels when working
-with local FASTQ files, therefore, facilitating the application of
-RNA-seq.
+and alignment-free quantification workflows. The BP4RNAseq package uses
+an optimized pipeline, applies to both retrospective and newly generated
+RNA-seq data analyses and can take only two nontechnical parameters and
+output two formatted gene expression quantification at gene and
+transcript levels when working with local FASTQ files, therefore,
+facilitating the application of RNA-seq.
 
 Many of its dependencies only works under Unix environment, therefore,
 so does the package.
@@ -58,7 +58,7 @@ This is a basic example which shows you how to use the package:
 
 ``` r
 # library(BP4RNAseq)
-## basic example code to work with public RNA-seq data
+## basic example code to work with public RNA-seq data. This will download about 86 GB RNA-seq data and quantify the transcriptional consequences of the deletions of sulfur metabolism genes in Drosophila melanogaster
 # down2quan(accession="PRJNA623275", taxa="Drosophila melanogaster")
 
 # basic example code to work with local RNA-seq data
