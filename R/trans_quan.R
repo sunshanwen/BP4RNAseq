@@ -33,14 +33,14 @@ compile <- function(files)
   }
   others <- stats::na.exclude(others)
   others <- others[!grepl("gene-", others$transcript_id), ]
-  others$transcript_id <- sub(".*-", "", others$transcript_id)
+  others$transcript_id <- sub("^.*?-", "", others$transcript_id)
   count <- utils::read.csv("transcript_count_matrix.csv")
   samples <- gsub("sorted_", "", names(count)[-1])
   names(count)[-1] <- samples
   count <- count[!grepl("gene-", count$transcript_id), ]
-  count$transcript_id <- sub(".*-", "", count$transcript_id)
+  count$transcript_id <- sub("^.*?-", "", count$transcript_id)
   tmp <- count %>% tidyr::gather(sample, count, -transcript_id)
-  all <- merge(others, tmp, by = c("transcript_id", "sample"), all = TRUE)
+  all <- merge(others, tmp, by = c("sample", "transcript_id"), all = TRUE)
   # all$transcript_id <- gsub("gene-", "", all$transcript_id)
   utils::write.csv(all, "transcript_quantifications.csv")
 }
@@ -74,6 +74,7 @@ trans_quan <- function()
   gene_tmp <- utils::read.csv("gene_count_matrix.csv")
   gene_tmp <- gene_tmp %>% tidyr::gather(sample, count, -gene_id)
   gene_tmp$gene_id <- gsub("gene-", "", gene_tmp$gene_id)
+  gene_tmp <- gene_tmp[,c("sample", "gene_id", "count")]
   utils::write.csv(gene_tmp, "gene_quantification.csv")
   unlink("gene_count_matrix.csv")
   unlink("transcript_count_matrix.csv")
