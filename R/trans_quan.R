@@ -40,7 +40,7 @@ compile <- function(files)
   count <- count[!grepl("gene-", count$transcript_id), ]
   count$transcript_id <- sub("^.*?-", "", count$transcript_id)
   tmp <- count %>% tidyr::gather(sample, count, -transcript_id)
-  all <- merge(others, tmp, by = c("sample", "transcript_id"), all = TRUE)
+  all <- merge(tmp, others, by = c("sample", "transcript_id"), all = TRUE)
   # all$transcript_id <- gsub("gene-", "", all$transcript_id)
   utils::write.csv(all, "transcript_quantifications.csv")
 }
