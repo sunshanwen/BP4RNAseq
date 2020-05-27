@@ -58,11 +58,14 @@ This is a basic example which shows you how to use the package:
 
 ``` r
 # library(BP4RNAseq)
-## basic example code to work with public RNA-seq data. This will download about 86 GB RNA-seq data and quantify the transcriptional consequences of the deletions of sulfur metabolism genes in Drosophila melanogaster
+## basic example code to work with public RNA-seq data. This will download about 86 GB RNA-seq data containing 57 RNA-seq data sets and quantify the transcriptional consequences of the deletions of sulfur metabolism genes in Drosophila melanogaster
 # down2quan(accession="PRJNA623275", taxa="Drosophila melanogaster")
 
+## a smaller example that uses two of the RNA-seq data sets above.
+# down2quan(accession=c("SRR11486115","SRR11486114"), taxa="Drosophila melanogaster")
+
 # basic example code to work with local RNA-seq data
-# fastq2quan(taxa="Drosophila melanogaster", pair = "paired")
+# fastq2quan(taxa="Drosophila melanogaster", pair = "single")
 ```
 
 <!-- What is special about using `README.Rmd` instead of just `README.md`? You can include R chunks like so: -->
