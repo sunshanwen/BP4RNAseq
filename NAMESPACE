@@ -3,6 +3,7 @@
 export(adapter_trim)
 export(align_free_quan)
 export(align_ge)
+export(average)
 export(down2quan)
 export(down_Ref)
 export(extract_genome)
