@@ -51,7 +51,8 @@ following commands:
 
 ``` r
 cd WorkingDirectory ### change 'WorkingDirectory' to the the actual folder that you want to work in
-wget --no-check-certificate --content-disposition https://raw.githubusercontent.com/sunshanwen/BP4RNAseq/master/install_depends.sh
+curl -LJO https://raw.githubusercontent.com/sunshanwen/BP4RNAseq/master/install_depends.sh
+chmod +x install_depends.sh
 ./install_depends.sh
 ```
 
