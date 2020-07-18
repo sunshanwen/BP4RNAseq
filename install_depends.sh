@@ -20,7 +20,7 @@ conda install -y -c bioconda hisat2
 conda install -y -c bioconda stringtie
 conda install -y -c bioconda salmon
 conda install -y -c conda-forge jq
-curl -o datasets 'https://ftp.ncbi.nlm.nih.gov/pub/datasets/command-line/LATEST/linux-amd64/datasets'
+wget -O datasets https://ftp.ncbi.nlm.nih.gov/pub/datasets/command-line/LATEST/linux-amd64/datasets
 chmod +x datasets
 
 # conda config --set channel_priority strict
