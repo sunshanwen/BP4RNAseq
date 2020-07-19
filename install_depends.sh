@@ -46,9 +46,11 @@ conda update -y --all
 rm use_conda.sh
 " > use_conda.sh
 
+chmod +x use_conda.sh
+
 if [[ $platform == 'linux' ]]; then
    source ~/.bashrc
-   exec sudo --login --user $USER sh -c 'cd '"$PWD"'; bash use_conda.sh'
+   exec sudo --login --user $USER sh -c 'cd '"$PWD"'; bash'
 elif [[ $platform == 'darwin' ]]; then
-   exec bash use_conda.sh
+   exec bash
 fi
