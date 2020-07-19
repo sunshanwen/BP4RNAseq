@@ -46,4 +46,9 @@ conda update -y --all
 rm use_conda.sh
 " > use_conda.sh
 
-exec bash use_conda.sh
+if [[ $platform == 'linux' ]]; then
+   source ~/.bashrc
+   exec bash use_conda.sh
+elif [[ $platform == 'darwin' ]]; then
+   exec bash use_conda.sh
+fi
