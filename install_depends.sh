@@ -14,6 +14,7 @@ elif [[ $platform == 'darwin' ]]; then
    wget -O - https://www.anaconda.com/distribution/ 2>/dev/null | sed -ne 's@.*\(https:\/\/repo\.anaconda\.com\/archive\/Anaconda3-.*-MacOSX-x86_64\.sh\)\">64-Bit Command Line Installer.*@\1@p' | xargs wget
    wget -O datasets https://ftp.ncbi.nlm.nih.gov/pub/datasets/command-line/LATEST/mac/datasets
 fi
+chmod +x datasets
 
 find . -name "Anacond*" -exec bash {} \;
 find . -name "Anacond*" | xargs rm
@@ -33,8 +34,6 @@ conda install -y -c bioconda hisat2
 conda install -y -c bioconda stringtie
 conda install -y -c bioconda salmon
 conda install -y -c conda-forge jq
-chmod +x datasets
-
 # conda config --set channel_priority strict
 conda install -y -c conda-forge r-base
 conda install -y -c conda-forge r-tidyr
@@ -42,7 +41,6 @@ conda install -y -c conda-forge r-stringr
 conda install -y -c conda-forge r-dplyr
 conda install -y -c conda-forge r-fastqcr
 conda install -y -c conda-forge r-devtools
-
 conda update -y --all
 # conda config --show-sources
 rm use_conda.sh
