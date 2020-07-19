@@ -46,14 +46,48 @@ The BP4RNAseq requires the following utilities:
   - Salmon=1.2.1  
   - R (\>= 3.5.0)
 
-Users can install all the dependencies in the working directory with the
-following commands:
+We provide a bash script to aid users to install all the dependencies.
+The script uses Wget, which is pre-installed on most Linux distributions
+today such as Windows Subsystem for Linux, to download some of the
+utilities. If wget is not installed, users can easily install it with
+the following commands.
+
+  - Installing Wget on Ubuntu and Debian or Windows Subsystem
+    equivalents
+
+<!-- end list -->
+
+``` r
+sudo apt-get update 
+sudo apt-get install -y wget
+```
+
+  - Installing Wget on CentOS and Fedora or Windows Subsystem
+    equivalents
+
+<!-- end list -->
+
+``` r
+sudo yum install wget
+```
+
+  - Installing Wget on macOS with Homebrew
+
+<!-- end list -->
+
+``` r
+brew install wget
+```
+
+With Wget installed, users can install all the dependencies in the
+working directory with the following commands:
 
 ``` r
 cd WorkingDirectory ### change 'WorkingDirectory' to the the actual folder that you want to work in
-curl -LJO https://raw.githubusercontent.com/sunshanwen/BP4RNAseq/master/install_depends.sh
+wget https://raw.githubusercontent.com/sunshanwen/BP4RNAseq/master/install_depends.sh
 chmod +x install_depends.sh
 ./install_depends.sh
+./use_conda.sh
 ```
 
 ### Installation
