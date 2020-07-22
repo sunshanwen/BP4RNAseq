@@ -15,7 +15,7 @@ convert_data <- function()
   utils::write.csv(others, "salmon_transcript_quantifications.csv")
 }
 
-tx2gene <- function(scRNA)
+tx2gene <- function()
 {
   annotation <- list.files(pattern = "gff$", recursive = T, full.names = TRUE)
   #cmd1 <- paste("egrep -v '^#|^$'", annotation, "| awk -F '\t' '$3 ~ /RNA/ {print $9}' | awk -F ';' 'BEGIN{OFS = \"=\";} {print $1, $2;}' | awk -F '=' 'BEGIN{OFS = \"-\";}{print $NF, $2;}'| grep 'gene' | awk -F '-' 'BEGIN{OFS = \",\";print \"gene_id\", \"transcript_id\"}{print $2, $4}' > tx2gene.csv")
@@ -32,12 +32,8 @@ tx2gene <- function(scRNA)
   tx2gene[,1] <- gsub("gene-","", tx2gene[,1])
   tx2gene[,2] <- gsub("rna-","", tx2gene[,2])
   tx2gene[, c(2,1)]
-  if(scRNA = TRUE){
-    write.table(tx2gene, sep = "\t", col.names = FALSE,row.names=FALSE, "tx2gene.tsv", quote=FALSE)
-  } else {
-    colnames(tx2gene) <- c("transcript_id", "gene_id")
-    write.csv(tx2gene, row.names=FALSE, "tx2gene.csv")
-  }
+  colnames(tx2gene) <- c("transcript_id", "gene_id")
+  write.csv(tx2gene, row.names=FALSE, "tx2gene.csv")
 }
 
 utils::globalVariables("TPM")
@@ -78,106 +74,58 @@ gene_quan <- function()
 #' @examples
 #' \dontrun{
 #'
-#' align_free_quan("paired", "sesame.fna", "transcript_sesame.fna","sesame.gff", scRNA = FALSE)
+#' align_free_quan("paired", "sesame.fna", "transcript_sesame.fna","sesame.gff")
 #'}
 #'
-align_free_quan <- function(pair, genome, transcript, annotation, scRNA = FALSE)
+align_free_quan <- function(pair, genome, transcript, annotation)
 {
   cmd3 <- paste("salmon index --gencode -t", transcript, "-i salmon_index")
   # cat(cmd3, "\n")
   system(cmd3)
-  if(scRNA = FALSE){
-    if(pair == "paired")
+  if(pair == "paired")
+  {
+    read <- list.files(pattern = "^Trimmed.*1\\.fastq$", full.names = F)
+    if(length(read) == 0){
+      read <- list.files(pattern = ".*1\\.fastq$", full.names = F)
+    }
+    # read2 <- list.files(pattern = "^Trimmed.*2\\.fastq$", full.names = F)
+    for(f in read)
     {
-      read <- list.files(pattern = "^Trimmed.*1\\.fastq$", full.names = F)
-      if(length(read) == 0){
-        read <- list.files(pattern = ".*1\\.fastq$", full.names = F)
-      }
-      # read2 <- list.files(pattern = "^Trimmed.*2\\.fastq$", full.names = F)
-      for(f in read)
-      {
-        # read1 <- paste(read1, sep = ",", collapse = ',')
-        # read2 <- paste(read2, sep = ",", collapse = ',')
-        name <- gsub("_1.fastq", "", f)
-        out <- paste0(name, "_transcripts_quant")
-        read1 <- paste0(name, "_1.fastq")
-        read2 <- paste0(name, "_2.fastq")
-        # cmd4 <- paste("salmon quant -i salmon_index -l A", gentrome.fna, "-1", read1, "-2", read2, "--validateMappings -o", out)
-        cmd4 <- paste("salmon quant -i salmon_index -l A", "-1", read1, "-2", read2, "--validateMappings -o", out)
-        # cat(cmd4, "\n")
-        system(cmd4, intern = T)
-      }
-    } else if(pair == "single"){
-      read <- list.files(pattern = "^Trimmed.*\\.fastq$", full.names = F)
-      if(length(read) == 0){
-        read <- list.files(pattern = ".*\\.fastq$", full.names = F)
-      }
-      # read <- paste(read, sep = ",", collapse = ',')
-      for(f in read)
-      {
-        name <- gsub(".fastq", "", f)
-        out <- paste0(name, "_transcripts_quant")
-        # cmd4 <- paste("salmon quant -i salmon_index -l A -1", gentrome.fna, "-r", f, "--validateMappings -o", out)
-        cmd4 <- paste("salmon quant -i salmon_index -l A -r", f, "--validateMappings -o", out)
+      # read1 <- paste(read1, sep = ",", collapse = ',')
+      # read2 <- paste(read2, sep = ",", collapse = ',')
+      name <- gsub("_1.fastq", "", f)
+      out <- paste0(name, "_transcripts_quant")
+      read1 <- paste0(name, "_1.fastq")
+      read2 <- paste0(name, "_2.fastq")
+      # cmd4 <- paste("salmon quant -i salmon_index -l A", gentrome.fna, "-1", read1, "-2", read2, "--validateMappings -o", out)
+      cmd4 <- paste("salmon quant -i salmon_index -l A", "-1", read1, "-2", read2, "--validateMappings -o", out)
+      # cat(cmd4, "\n")
+      system(cmd4, intern = T)
+    }
+  } else if(pair == "single"){
+    read <- list.files(pattern = "^Trimmed.*\\.fastq$", full.names = F)
+    if(length(read) == 0){
+      read <- list.files(pattern = ".*\\.fastq$", full.names = F)
+    }
+    # read <- paste(read, sep = ",", collapse = ',')
+    for(f in read)
+    {
+      name <- gsub(".fastq", "", f)
+      out <- paste0(name, "_transcripts_quant")
+      # cmd4 <- paste("salmon quant -i salmon_index -l A -1", gentrome.fna, "-r", f, "--validateMappings -o", out)
+      cmd4 <- paste("salmon quant -i salmon_index -l A -r", f, "--validateMappings -o", out)
 
-        # cat(cmd4, "\n")
-        system(cmd4, intern = T)
-      }
+      # cat(cmd4, "\n")
+      system(cmd4, intern = T)
+    }
 
-    } else stop("Paired-end and single-end mix. Please check the data source!")
-    convert_data() #### rna quantification to use for quantifying genes.
-    tx2gene()
-    gene_quan()
-    unlink("tx2gene.csv")
-    folders <- dir(pattern = "transcripts_quant$")
-    unlink(folders, recursive = TRUE)
-    unlink("salmon_index", recursive = TRUE)
-  } else if (scRNA = TRUE){
-      if(pair == "paired")
-      {
-        read <- list.files(pattern = "^Trimmed.*1\\.fastq$", full.names = F)
-        if(length(read) == 0){
-          read <- list.files(pattern = ".*1\\.fastq$", full.names = F)
-        }
-        # read2 <- list.files(pattern = "^Trimmed.*2\\.fastq$", full.names = F)
-        for(f in read)
-        {
-          # read1 <- paste(read1, sep = ",", collapse = ',')
-          # read2 <- paste(read2, sep = ",", collapse = ',')
-          name <- gsub("_1.fastq", "", f)
-          out <- paste0(name, "_transcripts_quant")
-          read1 <- paste0(name, "_1.fastq")
-          read2 <- paste0(name, "_2.fastq")
-          # cmd4 <- paste("salmon quant -i salmon_index -l A", gentrome.fna, "-1", read1, "-2", read2, "--validateMappings -o", out)
-          cmd4 <- paste("salmon quant -i salmon_index -l A", "-1", read1, "-2", read2, "--validateMappings -o", out)
-          # cat(cmd4, "\n")
-          system(cmd4, intern = T)
-        }
-      } else if(pair == "single"){
-        read <- list.files(pattern = "^Trimmed.*\\.fastq$", full.names = F)
-        if(length(read) == 0){
-          read <- list.files(pattern = ".*\\.fastq$", full.names = F)
-        }
-        # read <- paste(read, sep = ",", collapse = ',')
-        for(f in read)
-        {
-          name <- gsub(".fastq", "", f)
-          out <- paste0(name, "_transcripts_quant")
-          # cmd4 <- paste("salmon quant -i salmon_index -l A -1", gentrome.fna, "-r", f, "--validateMappings -o", out)
-          cmd4 <- paste("salmon quant -i salmon_index -l A -r", f, "--validateMappings -o", out)
-
-          # cat(cmd4, "\n")
-          system(cmd4, intern = T)
-        }
-
-      } else stop("Paired-end and single-end mix. Please check the data source!")
-      convert_data() #### rna quantification to use for quantifying genes.
-      tx2gene(scRNA)
-      gene_quan()
-      unlink("tx2gene.csv")
-      folders <- dir(pattern = "transcripts_quant$")
-      unlink(folders, recursive = TRUE)
-      unlink("salmon_index", recursive = TRUE)
-  }
+  } else stop("Paired-end and single-end mix. Please check the data source!")
+  convert_data() #### rna quantification to use for quantifying genes.
+  tx2gene()
+  gene_quan()
+  unlink("tx2gene.csv")
+  folders <- dir(pattern = "transcripts_quant$")
+  unlink(folders, recursive = TRUE)
+  unlink("salmon_index", recursive = TRUE)
 }
 

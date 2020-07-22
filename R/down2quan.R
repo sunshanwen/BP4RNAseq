@@ -8,6 +8,7 @@
 #'@param novel_transcript logic, whether identifying novel transcripts is expected or not. Default is FALSE.
 #'@param threads the number of threads to be used. Default is 4.
 #'@param scRNA logic, whether single-cell RNA-seq is quantified or not. Default is FALSE.
+#'@param protocol the single-cell RNA sequencing protocol: dropseq, chromium, or chromiumV3.
 #'@export down2quan
 #'@return None
 #'@examples
@@ -16,7 +17,7 @@
 #'down2quan(threads = 4, dir = getwd(), "sesame", novel_transcript = FALSE, scRNA = FALSE)
 #'}
 
-down2quan <- function(accession, dir = getwd(), taxa, novel_transcript = FALSE, threads = 4, scRNA = FALSE) {
+down2quan <- function(accession, dir = getwd(), taxa, novel_transcript = FALSE, threads = 4, scRNA = FALSE, protocol) {
   setwd(dir)
   sra_download(accession, dir)
   pair <- sra2fastq(threads)
@@ -50,9 +51,9 @@ down2quan <- function(accession, dir = getwd(), taxa, novel_transcript = FALSE, 
     align_ge(pair, taxa, reference[1], reference[2])
     trans_ass(novel_transcript)
     trans_quan()
-    align_free_quan(pair, reference[1], reference[3], reference[2], scRNA = FALSE)
+    align_free_quan(pair, reference[1], reference[3], reference[2])
     average()
   } else if (scRNA = TRUE){
-    align_free_quan(pair, reference[1], reference[3], reference[2], scRNA = TRUE)
+    scRNA(reference[3], protocol)
   }
 }

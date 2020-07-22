@@ -8,6 +8,7 @@
 #'@param taxa the scientific or common name of the organism.
 #'@param novel_transcript logic, whether identifying novel transcripts is expected or not. Default is FALSE.
 #'@param scRNA logic, whether single-cell RNA-seq is quantified or not. Default is FALSE.
+#'@param protocol the single-cell RNA sequencing protocol: dropseq, chromium, or chromiumV3.
 #'@export fastq2quan
 #'@return None
 #'@examples
@@ -16,7 +17,7 @@
 #'down2quan(threads = 4, dir = getwd(), "sesame", novel_transcript = FALSE, scRNA = FALSE)
 #'}
 
-fastq2quan <- function(threads = 4, dir = getwd(), pair, taxa, novel_transcript = FALSE, scRNA = FALSE) {
+fastq2quan <- function(threads = 4, dir = getwd(), pair, taxa, novel_transcript = FALSE, scRNA = FALSE, protocol) {
   setwd(dir)
 
   quality <- qc_test(threads, scRNA = FALSE)
@@ -52,6 +53,6 @@ fastq2quan <- function(threads = 4, dir = getwd(), pair, taxa, novel_transcript 
     align_free_quan(pair, reference[1], reference[3], reference[2], scRNA = FALSE)
     average()
   } else if (scRNA = TRUE){
-    align_free_quan(pair, reference[1], reference[3], reference[2], scRNA = TRUE)
+    scRNA_quan(reference[3], protocol)
   }
 }

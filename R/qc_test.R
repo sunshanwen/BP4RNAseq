@@ -20,15 +20,15 @@ fastqc_r <- function(threads, fq.dir, scRNA)
         name <- gsub("_1.fastq", "", f)
         read1 <- paste0(name, "_1.fastq")
         read2 <- paste0(name, "_2.fastq")
-        read_seq <- read2
-        barcode_seq <- seq1
+        read_seq <- c(read_seq, read2)
+        barcode_seq <- c(barcode_seq, read1)
         cmd1 <- paste0("head -n 1 ", read1, " | grep -o length=[0-9]* | cut -d '=' -f 2")
         leg_1 <- as.numeric(system(cmd1, intern = TRUE))
         cmd2 <- paste0("head -n 1 ", read2, " | grep -o length=[0-9]* | cut -d '=' -f 2")
         leg_2 <- as.numeric(system(cmd2, intern = TRUE))
         if(leg_1 > leg_2){
-          read_seq <- read1
-          barcode_seq <- read2
+          read_seq <- c(read_seq, read1)
+          barcode_seq <- c(barcode_seq, read2)
         }
       }
       for(d in read_seq)
