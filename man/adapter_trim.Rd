@@ -4,7 +4,7 @@
 \alias{adapter_trim}
 \title{Trim samples with adapter using cutadapt.}
 \usage{
-adapter_trim(sample, pair, threads = 4)
+adapter_trim(sample, pair, threads = 4, scRNA = FALSE)
 }
 \arguments{
 \item{sample}{samples with adapter.}
@@ -12,6 +12,8 @@ adapter_trim(sample, pair, threads = 4)
 \item{pair}{"single" for single-end (SE) or "paired" for paired-end (PE) reads.}
 
 \item{threads}{the number of threads to be used. Default is 4.}
+
+\item{scRNA}{logic, whether single-cell RNA-seq is quantified or not. Default is FALSE.}
 }
 \value{
 None

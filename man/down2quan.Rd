@@ -9,7 +9,9 @@ down2quan(
   dir = getwd(),
   taxa,
   novel_transcript = FALSE,
-  threads = 4
+  threads = 4,
+  scRNA = FALSE,
+  protocol
 )
 }
 \arguments{
@@ -22,6 +24,10 @@ down2quan(
 \item{novel_transcript}{logic, whether identifying novel transcripts is expected or not. Default is FALSE.}
 
 \item{threads}{the number of threads to be used. Default is 4.}
+
+\item{scRNA}{logic, whether single-cell RNA-seq is quantified or not. Default is FALSE.}
+
+\item{protocol}{the single-cell RNA sequencing protocol: dropseq, chromium, or chromiumV3.}
 }
 \value{
 None
@@ -32,6 +38,6 @@ Download the RNA-seq samples from the NCBI and produce the quantifications of ge
 \examples{
 \dontrun{
 
-down2quan(threads = 4, dir = getwd(), "sesame", novel_transcript = FALSE)
+down2quan(threads = 4, dir = getwd(), "sesame", novel_transcript = FALSE, scRNA = FALSE)
 }
 }

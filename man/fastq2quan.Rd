@@ -4,7 +4,15 @@
 \alias{fastq2quan}
 \title{Produce the quantifications of gene expression based on the fastq files.}
 \usage{
-fastq2quan(threads = 4, dir = getwd(), pair, taxa, novel_transcript = FALSE)
+fastq2quan(
+  threads = 4,
+  dir = getwd(),
+  pair,
+  taxa,
+  novel_transcript = FALSE,
+  scRNA = FALSE,
+  protocol
+)
 }
 \arguments{
 \item{threads}{the number of threads to be used. Default is 4.}
@@ -16,6 +24,10 @@ fastq2quan(threads = 4, dir = getwd(), pair, taxa, novel_transcript = FALSE)
 \item{taxa}{the scientific or common name of the organism.}
 
 \item{novel_transcript}{logic, whether identifying novel transcripts is expected or not. Default is FALSE.}
+
+\item{scRNA}{logic, whether single-cell RNA-seq is quantified or not. Default is FALSE.}
+
+\item{protocol}{the single-cell RNA sequencing protocol: dropseq, chromium, or chromiumV3.}
 }
 \value{
 None
@@ -26,6 +38,6 @@ Produce the quantifications of gene expression based on the fastq files with ali
 \examples{
 \dontrun{
 
-down2quan(threads = 4, dir = getwd(), "sesame", novel_transcript = FALSE)
+down2quan(threads = 4, dir = getwd(), "sesame", novel_transcript = FALSE, scRNA = FALSE)
 }
 }

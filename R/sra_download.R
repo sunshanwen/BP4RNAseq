@@ -14,7 +14,7 @@
 
 
 
-sra_download1 <- function(accession, dir)
+sra_download <- function(accession, dir)
 {
     dir=getwd()
     system("mkdir -p $HOME/.ncbi/")
