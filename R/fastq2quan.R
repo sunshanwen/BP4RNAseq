@@ -50,7 +50,7 @@ fastq2quan <- function(threads = 4, dir = getwd(), pair, taxa, novel_transcript 
     align_ge(pair, taxa, reference[1], reference[2])
     trans_ass(novel_transcript)
     trans_quan()
-    align_free_quan(pair, reference[1], reference[3], reference[2], scRNA = FALSE)
+    align_free_quan(pair, reference[1], reference[3], reference[2])
     average()
   } else if (scRNA == TRUE){
     scRNA_quan(reference[3], protocol)
