@@ -47,13 +47,13 @@ down2quan <- function(accession, dir = getwd(), taxa, novel_transcript = FALSE, 
 
   down_Ref(taxa)
   reference <- extract_genome(taxa)
-  if(scRNA = FALSE){
+  if(scRNA == FALSE){
     align_ge(pair, taxa, reference[1], reference[2])
     trans_ass(novel_transcript)
     trans_quan()
     align_free_quan(pair, reference[1], reference[3], reference[2])
     average()
-  } else if (scRNA = TRUE){
+  } else if (scRNA == TRUE){
     scRNA(reference[3], protocol)
   }
 }

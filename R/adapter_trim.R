@@ -34,7 +34,7 @@ get_adapter <- function(sample)
 #' }
 adapter_trim <- function(sample, pair, threads = 4, scRNA = FALSE)
 {
-  if(scRNA = FALSE){
+  if(scRNA == FALSE){
     samples <- unique(gsub("\\.fastq","",sample))
     samples <- gsub("_1$","",samples)
     samples <- gsub("_2$","",samples)
@@ -147,7 +147,7 @@ adapter_trim <- function(sample, pair, threads = 4, scRNA = FALSE)
         }
       }
     }
-  } else if(scRNA = TRUE){
+  } else if(scRNA == TRUE){
     samples <- unique(gsub("\\.fastq","",sample))
     answer3 <- readline(prompt="Do you know the adapter (y/n)?")
     if(answer3 == "y")

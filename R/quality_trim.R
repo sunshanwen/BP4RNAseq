@@ -16,7 +16,7 @@
 
 quality_trim <- function(per_base, per_seq, pair, threads = 4, scRNA = FALSE)
 {
-  if(scRNA = FALSE){
+  if(scRNA == FALSE){
       files <- unique(gsub("\\.fastq","",unique(cbind(per_base, per_seq))))
       files <- unique(gsub("_1$","",files))
       files <- unique(gsub("_2$","",files))
@@ -65,7 +65,7 @@ quality_trim <- function(per_base, per_seq, pair, threads = 4, scRNA = FALSE)
         }
       }
       unlink(files)
-  } else if(scRNA = TRUE){
+  } else if(scRNA == TRUE){
       files <- unique(gsub("\\.fastq","",unique(cbind(per_base, per_seq))))
       for (d in files){
           qc_reports <- list.files(getwd(), pattern = "fastqc.zip$", full.names = F)

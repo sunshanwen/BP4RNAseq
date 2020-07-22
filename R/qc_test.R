@@ -3,7 +3,7 @@
 fastqc_r <- function(threads, fq.dir, scRNA)
 {
 
-  if(scRNA = FALSE){
+  if(scRNA == FALSE){
     files_fastq<-list.files(fq.dir, pattern = ".fastq$", recursive = T, full.names = T)
     for(f in files_fastq)
     {
@@ -11,7 +11,7 @@ fastqc_r <- function(threads, fq.dir, scRNA)
       # cat(cmd,"\n")#print the current command
       system(cmd) # invoke command
     }
-  } else if(scRNA = TRUE){
+  } else if(scRNA == TRUE){
       read <- list.files(pattern = ".*1\\.fastq$", full.names = F)
       read_seq <- c()
       barcode_seq <- c()
