@@ -14,7 +14,7 @@
 
 
 
-sra_download <- function(accession, dir)
+sra_download1 <- function(accession, dir)
 {
     dir=getwd()
     system("mkdir -p $HOME/.ncbi/")
@@ -25,22 +25,22 @@ sra_download <- function(accession, dir)
     for(f in accession)
     {
         #### use Entrez Direct tool to get all samples accession code, then use prefetch to download all the data
-        cmd2 = paste("prefetch -O", dir, "-X 100000000 $(esearch -db sra -query", f, "| efetch --format runinfo |cut -d \",\" -f 1 | grep SRR)")
+        cmd2 = paste("prefetch -O", dir, "-X 100000000 $(esearch -db sra -query", f, "| efetch --format runinfo | grep",f, "| cut -d \",\" -f 1)")
         #cmd2 = paste("prefetch -X 100000000 $(esearch -db sra -query", f, "| efetch --format runinfo |cut -d \",\" -f 1 | grep SRR)")
         # cat(cmd1)
         system(cmd2)
 
     }
-    files <- list.files(pattern = "\\.sra$", recursive = TRUE, full.names = T)
-    direc <- unique(gsub("[a-zA-Z0-9]*\\.sra$", replacement = "",files))
-    if(direc !="./"){
-        file <- paste(files, collapse=" ")
-        cmd <- paste("mv", file, dir)
-        cat(cmd)
-        #system(cmd)
-        #print(direc)
-        unlink(direc, recursive = TRUE)
-    }
+    # files <- list.files(pattern = "\\.sra$", recursive = TRUE, full.names = T)
+    # direc <- unique(gsub("[a-zA-Z0-9]*\\.sra$", replacement = "",files))
+    # if(direc !="./"){
+    #     file <- paste(files, collapse=" ")
+    #     cmd <- paste("mv", file, dir)
+    #     cat(cmd)
+    #     #system(cmd)
+    #     #print(direc)
+    #     unlink(direc, recursive = TRUE)
+    # }
 }
 
 
