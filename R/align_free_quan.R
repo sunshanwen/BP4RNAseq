@@ -12,7 +12,7 @@ convert_data <- function()
   }
   names(others) <- c("transcript_id", "length", "TPM", "count", "sample")
   others <- others[, c("sample", "transcript_id", "count", "TPM", "length")]
-  utils::write.csv(others, "salmon_transcript_quantifications.csv")
+  utils::write.csv(others, "salmon_transcript_quantifications.csv", row.names=FALSE)
 }
 
 tx2gene <- function()
@@ -59,7 +59,7 @@ gene_quan <- function()
   # gene_quantification <- tmp1[, c("sample", "gene_id", "count", "abundance", "length")]
   tmp1 <- all %>% dplyr::group_by(sample, gene_id) %>% dplyr::summarise(count = sum(count))
   gene_quantification <- tmp1[, c("sample", "gene_id", "count")]
-  utils::write.csv(gene_quantification, "salmon_gene_quantification.csv")
+  utils::write.csv(gene_quantification, "salmon_gene_quantification.csv", row.names=FALSE)
 }
 
 #' Alignment-free expression quantification with Salmon at gene and transcript levels.
@@ -123,6 +123,7 @@ align_free_quan <- function(pair, genome, transcript, annotation)
   convert_data() #### rna quantification to use for quantifying genes.
   tx2gene()
   gene_quan()
+  unlink("raw_tx2gene.csv")
   unlink("tx2gene.csv")
   folders <- dir(pattern = "transcripts_quant$")
   unlink(folders, recursive = TRUE)
