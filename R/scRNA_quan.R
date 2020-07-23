@@ -59,7 +59,7 @@ scRNA_quan <- function(transcript, protocol)
       barcode_seq <- read2
     }
     # cmd4 <- paste("salmon quant -i salmon_index -l A", gentrome.fna, "-1", read1, "-2", read2, "--validateMappings -o", out)
-    cmd4 <- paste0("salmon alevin -i salmon_index -l ISR --", protocol, "-1 ", barcode_seq, "-2 ", read_seq, "--tgMap tx2gene.tsv -o ", out)
+    cmd4 <- paste0("salmon alevin -i salmon_index -l ISR --", protocol, " -1 ", barcode_seq, " -2 ", read_seq, " --tgMap tx2gene.tsv -o ", out)
     # cat(cmd4, "\n")
     system(cmd4, intern = T)
   }
