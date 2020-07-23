@@ -16,7 +16,7 @@ tx2gene_scRNA <- function()
   tx2gene[,2] <- gsub("rna-","", tx2gene[,2])
   tx2gene <- tx2gene[, c(2,1)]
   write.table(tx2gene, sep = "\t", col.names = FALSE,row.names=FALSE, "tx2gene.tsv", quote=FALSE)
-  unlink(raw_tx2gene.csv)
+  unlink("raw_tx2gene.csv")
 }
 
 
