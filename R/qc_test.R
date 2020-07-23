@@ -61,7 +61,7 @@ qc_test <- function(threads = 4, scRNA = FALSE)
 {
   fq.dir = getwd()
   qc.dir = getwd()
-  fastqc_r(threads, fq.dir)
+  fastqc_r(threads, fq.dir, scRNA)
   qc <- fastqcr::qc_aggregate(qc.dir, progressbar = FALSE)
   index_ad <- subset(qc, module == "Adapter Content" & status == "FAIL", select = sample)
   index_sq <- subset(qc, module == "Per base sequence quality" & status == "FAIL", select = sample)
