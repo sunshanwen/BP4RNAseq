@@ -65,7 +65,7 @@ qc_test <- function(threads = 4, scRNA = FALSE)
   qc <- fastqcr::qc_aggregate(qc.dir, progressbar = FALSE)
   index_ad <- subset(qc, module == "Adapter Content" & status == "FAIL", select = sample)
   index_sq <- subset(qc, module == "Per base sequence quality" & status == "FAIL", select = sample)
-  index_sqs <- subset(qc, module == "Per sequence quality scores" & status == "PASS", select = sample)
+  index_sqs <- subset(qc, module == "Per sequence quality scores" & status == "FAIL", select = sample)
   index <- list(index_ad, index_sq, index_sqs)
   return (index)
 }
