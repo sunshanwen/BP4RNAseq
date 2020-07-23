@@ -20,7 +20,7 @@
 fastq2quan <- function(threads = 4, dir = getwd(), pair, taxa, novel_transcript = FALSE, scRNA = FALSE, protocol) {
   setwd(dir)
 
-  quality <- qc_test(threads, scRNA = FALSE)
+  quality <- qc_test(threads, scRNA)
 
   if(length(quality[[1]]$sample)) cat("Adapter exists!\n")
   if(length(quality[[2]]$sample)) cat("Per base sequence quality failed!\n")
@@ -29,17 +29,17 @@ fastq2quan <- function(threads = 4, dir = getwd(), pair, taxa, novel_transcript 
   ### quality trimming
   if(length(quality[[2]]$sample)|length(quality[[3]]$sample)) {
     print("Trim low quality bases.")
-    quality_trim(quality[[2]]$sample, quality[[3]]$sample, pair, scRNA = FALSE)### consider if add directory parameter.
+    quality_trim(quality[[2]]$sample, quality[[3]]$sample, pair, scRNA)### consider if add directory parameter.
     if(length(quality[[1]]$sample)) {
       print("Trim the adapter.")
-      adapter_trim(quality[[1]]$sample, pair, scRNA = FALSE)
+      adapter_trim(quality[[1]]$sample, pair, scRNA)
     }
   }
 
   if(length(quality[[1]]$sample)) {
     print("Trim the adapter.")
-    quality_trim(quality[[1]]$sample, quality[[1]]$sample, pair, scRNA = FALSE)### consider if add directory parameter.
-    adapter_trim(quality[[1]]$sample, pair, scRNA = FALSE)
+    quality_trim(quality[[1]]$sample, quality[[1]]$sample, pair, scRNA )### consider if add directory parameter.
+    adapter_trim(quality[[1]]$sample, pair, scRNA)
   }
   files <- list.files(dir, pattern = "fastqc", full.names = F)
   unlink(files)
