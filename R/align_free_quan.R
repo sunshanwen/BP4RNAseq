@@ -25,9 +25,11 @@ tx2gene <- function()
   tx2gene <- read.csv("raw_tx2gene.csv", header = FALSE)
   index_to_be_changed <- which(tx2gene[,1] %in% tx2gene[,2])
   b <- length(index_to_be_changed)
-  for (i in 1:b)
-  {
-    tx2gene[index_to_be_changed[i],1] <- tx2gene[tx2gene[,2] == tx2gene[index_to_be_changed[i],1] ,1]
+  if(b > 0){
+    for (i in 1:b)
+    {
+      tx2gene[index_to_be_changed[i],1] <- tx2gene[tx2gene[,2] == tx2gene[index_to_be_changed[i],1] ,1]
+    }
   }
   tx2gene[,1] <- gsub("gene-","", tx2gene[,1])
   tx2gene[,2] <- gsub("rna-","", tx2gene[,2])
