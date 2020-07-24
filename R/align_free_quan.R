@@ -31,7 +31,7 @@ tx2gene <- function()
   }
   tx2gene[,1] <- gsub("gene-","", tx2gene[,1])
   tx2gene[,2] <- gsub("rna-","", tx2gene[,2])
-  tx2gene[, c(2,1)]
+  tx2gene <- tx2gene[, c(2,1)]
   colnames(tx2gene) <- c("transcript_id", "gene_id")
   write.csv(tx2gene, row.names=FALSE, "tx2gene.csv")
 }
