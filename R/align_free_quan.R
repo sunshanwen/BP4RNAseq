@@ -44,21 +44,9 @@ gene_quan <- function()
 {
   tx2gene_file <- utils::read.csv("tx2gene.csv")
   transcript <- utils::read.csv("salmon_transcript_quantifications.csv")
-  transcript <- transcript[, -1]
+  #transcript <- transcript[, -1]
   all <- merge(tx2gene_file, transcript, by = "transcript_id", all = TRUE)
   all <- stats::na.omit(all)
-
-  # tmp1 <- all %>% dplyr::group_by(sample, gene_id) %>% dplyr::summarise(abundance = sum(TPM), count = sum(count), length = sum(length*TPM)/sum(TPM))
-  # # pre-calculate a simple average transcript length
-  # # for the case the abundances are all zero for a gene.
-  # mean_TPM <- all %>% dplyr::group_by(gene_id) %>% dplyr::summarise(length = mean(length))
-  #
-  # missing <- unique(tmp1$gene_id[is.nan(tmp1$length)])
-  # for(i in missing)
-  # {
-  #   tmp1[tmp1$gene_id == i, ]$length <- mean_TPM[mean_TPM$gene_id == i, ]$length
-  # }
-  # gene_quantification <- tmp1[, c("sample", "gene_id", "count", "abundance", "length")]
   tmp1 <- all %>% dplyr::group_by(sample, gene_id) %>% dplyr::summarise(count = sum(count))
   gene_quantification <- tmp1[, c("sample", "gene_id", "count")]
   utils::write.csv(gene_quantification, "salmon_gene_quantification.csv", row.names=FALSE)
