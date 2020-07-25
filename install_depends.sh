@@ -52,5 +52,5 @@ if [[ $platform == 'linux' ]]; then
    source ~/.bashrc
    exec sudo --login --user $USER sh -c 'cd '"$PWD"'; bash'
 elif [[ $platform == 'darwin' ]]; then
-   exec bash
+   exec $(echo $0)
 fi
