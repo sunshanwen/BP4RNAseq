@@ -12,9 +12,9 @@ average <- function()
 {
   ### gene count
   align_based_gene <- read.csv("gene_quantification.csv")
-  align_based_gene <- align_based_gene[, -1]
+  align_based_gene <- align_based_gene[, c("sample", "gene_id", "count")]
   align_free_gene <- read.csv("salmon_gene_quantification.csv")
-  align_free_gene <- align_free_gene[, -1]
+  align_free_gene <- align_free_gene[, c("sample", "gene_id", "count")]
   write.csv(align_based_gene, "gene_alignment_based_quantification.csv", row.names=FALSE)
   write.csv(align_free_gene, "gene_alignment_free_quantification.csv", row.names=FALSE)
   unlink("gene_quantification.csv")
