@@ -17,8 +17,8 @@
 sra_download <- function(accession, dir)
 {
     dir=getwd()
-    system("mkdir -p $HOME/.ncbi/")
-    system("touch $HOME/.ncbi/user-settings.mkfg")
+    # system("mkdir -p $HOME/.ncbi/")
+    # system("touch $HOME/.ncbi/user-settings.mkfg")
     cmd1 <- paste0("echo \"/repository/user/main/public/root = \\\"",dir,"\\\"\" > $HOME/.ncbi/user-settings.mkfg")
     # cat(cmd1)
     system(cmd1)
@@ -27,7 +27,7 @@ sra_download <- function(accession, dir)
         #### use Entrez Direct tool to get all samples accession code, then use prefetch to download all the data
         cmd2 = paste("prefetch -O", dir, "-X 100000000 $(esearch -db sra -query", f, "| efetch --format runinfo | grep",f, "| cut -d \",\" -f 1)")
         #cmd2 = paste("prefetch -X 100000000 $(esearch -db sra -query", f, "| efetch --format runinfo |cut -d \",\" -f 1 | grep SRR)")
-        # cat(cmd1)
+        cat(cmd2)
         system(cmd2)
 
     }
