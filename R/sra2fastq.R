@@ -56,5 +56,6 @@ sra2fastq <- function(threads = 4)
 
   fastq_files<-list.files(sra.dir, pattern = "fastq$", recursive = F, full.names = F)
   file.rename(fastq_files, gsub(".sra","",fastq_files))
+  unlink("sra", recursive = TRUE)
   return(pair)
 }
