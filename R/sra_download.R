@@ -50,6 +50,7 @@ sra_download <- function(accession, dir)
             file<-list.files(sra.dir, pattern = ".sra$", recursive = F, full.names = F)
             cmd4 <- paste("mv", file, dir)
             system(cmd4)
+            system("cd ..")
         }
     }
 
