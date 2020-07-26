@@ -17,7 +17,7 @@
 #'down2quan(threads = 4, dir = getwd(), "sesame", novel_transcript = FALSE, scRNA = FALSE)
 #'}
 
-fastq2quan <- function(threads = 4, dir = getwd(), pair, taxa, novel_transcript = FALSE, scRNA = FALSE, protocol) {
+fastq2quan <- function(threads = 4, dir = getwd(), pair = "paired", taxa, novel_transcript = FALSE, scRNA = FALSE, protocol) {
   setwd(dir)
 
   quality <- qc_test(threads, scRNA)
