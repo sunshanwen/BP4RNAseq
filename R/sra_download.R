@@ -17,30 +17,33 @@
 sra_download <- function(accession, dir)
 {
     dir=getwd()
-    # system("mkdir -p $HOME/.ncbi/")
-    # system("touch $HOME/.ncbi/user-settings.mkfg")
-    cmd1 <- paste0("echo \"/repository/user/main/public/root = \\\"",dir,"\\\"\" > $HOME/.ncbi/user-settings.mkfg")
-    # cat(cmd1)
-    system(cmd1)
-    for(f in accession)
-    {
-        #### use Entrez Direct tool to get all samples accession code, then use prefetch to download all the data
-        cmd2 = paste("prefetch -O", dir, "-X 100000000 $(esearch -db sra -query", f, "| efetch --format runinfo | grep",f, "| cut -d \",\" -f 1)")
-        #cmd2 = paste("prefetch -X 100000000 $(esearch -db sra -query", f, "| efetch --format runinfo |cut -d \",\" -f 1 | grep SRR)")
-        #cat(cmd2)
-        system(cmd2)
-
+    ##check the version of sratoolkit
+    ver <- system("vdb-config --version | cut -d '.' -f 3", intern = TRUE)
+    ver <- na.exclude(as.numeric(as.character(ver)))
+    if(ver <= 3){
+        system("mkdir -p $HOME/.ncbi/")
+        system("touch $HOME/.ncbi/user-settings.mkfg")
+        cmd1 <- paste0("echo \"/repository/user/main/public/root = \\\"",dir,"\\\"\" > $HOME/.ncbi/user-settings.mkfg")
+        system(cmd1)
+        for(f in accession)
+        {
+            #### use Entrez Direct tool to get all samples accession code, then use prefetch to download all the data
+            cmd2 = paste("prefetch -O", dir, "-X 100000000 $(esearch -db sra -query", f, "| efetch --format runinfo | grep",f, "| cut -d \",\" -f 1)")
+            system(cmd2)
+        }
+    } else {
+        cmd1 <- paste0("echo \"/repository/user/main/public/root = \\\"",dir,"\\\"\" > $HOME/.ncbi/user-settings.mkfg")
+        # cat(cmd1)
+        system(cmd1)
+        for(f in accession)
+        {
+            #### use Entrez Direct tool to get all samples accession code, then use prefetch to download all the data
+            cmd2 = paste("prefetch $(esearch -db sra -query", f, "| efetch --format runinfo | grep",f, "| cut -d \",\" -f 1)")
+            system(cmd2)
+        }
     }
-    # files <- list.files(pattern = "\\.sra$", recursive = TRUE, full.names = T)
-    # direc <- unique(gsub("[a-zA-Z0-9]*\\.sra$", replacement = "",files))
-    # if(direc !="./"){
-    #     file <- paste(files, collapse=" ")
-    #     cmd <- paste("mv", file, dir)
-    #     cat(cmd)
-    #     #system(cmd)
-    #     #print(direc)
-    #     unlink(direc, recursive = TRUE)
-    # }
+
+
 }
 
 
