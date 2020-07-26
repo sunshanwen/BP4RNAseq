@@ -16,15 +16,15 @@ RNA-seq study is fundamentally important for researchers. However,
 processing raw reads of RNA-seq data, no matter public or newly
 sequenced data, involves a lot of specialized tools and technical
 configurations that are often unfamiliar and time-consuming to learn for
-non-bioinformatics researchers. The goal of BP4RNAseq is to make the
-RNA-seq analysis smooth and easy. The package integrates the
-state-of-art tools from both alignment-based and alignment-free
-quantification workflows. The BP4RNAseq package uses an optimized
-pipeline, applies to both retrospective and newly generated RNA-seq data
-analyses and can take only two nontechnical parameters and output two
-formatted gene expression quantification at gene and transcript levels
-when working with local FASTQ files, therefore, facilitating the
-application of RNA-seq.
+non-bioinformatics researchers. The goal of BP4RNAseq is to make RNA-seq
+analysis smooth and easy. The package integrates the state-of-art tools
+from both alignment-based and alignment-free quantification workflows.
+It uses an optimized pipeline, applies to both retrospective and newly
+generated RNA-seq data analyses and can take only two nontechnical
+parameters and output formatted gene expression quantification at gene
+and transcript levels. The package also support single-cell RNA-seq
+analyses based on the Alevin algorithm integrated with the Salmon
+\[^1\].
 
 ### Operating System Requirements
 
@@ -34,23 +34,27 @@ BP4RNAseq runs in Windows (Subsystem for Linux), Linux and macOS.
 
 The BP4RNAseq requires the following utilities:
 
-  - conda=4.83
-  - SRA Toolkit=2.10.3
-  - Entrez Direct=13.3
-  - FastQC=v0.11.9
-  - Cutadapt=2.10
-  - datasets(Beta)
-  - SAMtools=1.9
-  - HISAT2=2.2.0
-  - StringTie=2.1.1
-  - Salmon=1.2.1  
-  - R (\>= 3.5.0)
+  - [SRA
+    Toolkit=2.10.3](https://trace.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?view=toolkit_doc)
+  - [Entrez Direct=13.3](https://www.ncbi.nlm.nih.gov/books/NBK179288/)
+  - [FastQC=v0.11.9](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
+  - [Cutadapt=2.10](https://cutadapt.readthedocs.io/en/stable/)
+  - [datasets(Beta)](https://www.ncbi.nlm.nih.gov/datasets/docs/command-line-start/)
+  - [SAMtools=1.9](http://www.htslib.org/)
+  - [HISAT2=2.2.0](http://daehwankimlab.github.io/hisat2/)
+  - [StringTie=2.1.1](https://ccb.jhu.edu/software/stringtie/)
+  - [Salmon=1.2.1](https://combine-lab.github.io/salmon/)  
+  - [jq=1.6](https://stedolan.github.io/jq/)
+  - [R=3.5.0](https://www.r-project.org/)
 
-We provide a bash script to aid users to install all the dependencies.
-The script uses Wget, which is pre-installed on most Linux distributions
-today such as Windows Subsystem for Linux, to download some of the
-utilities. If wget is not installed, users can easily install it with
-the following commands.
+Users can install these dependencies manually. Please place the
+[datasets](https://www.ncbi.nlm.nih.gov/datasets/docs/command-line-start/)
+into the work directly. Alternatively, we provide a bash script to aid
+users to install all the dependencies based on
+[conda](https://docs.conda.io/en/latest/). The script uses Wget, which
+is pre-installed on most Linux distributions today such as Windows
+Subsystem for Linux, to download some of the utilities. If wget is not
+installed, users can easily install it with the following commands.
 
   - Installing Wget on Ubuntu and Debian or Windows Subsystem
     equivalents
@@ -79,11 +83,11 @@ sudo yum install wget
 brew install wget
 ```
 
-With Wget installed, users can install all the dependencies in the
-working directory with the following commands:
+With Wget installed, users can install all the dependencies in the work
+directory with the following commands:
 
 ``` r
-cd WorkingDirectory ### change 'WorkingDirectory' to the the actual folder that you want to work in
+cd WorkDirectory ### change 'WorkDirectory' to the the actual folder that you want to work in
 wget https://raw.githubusercontent.com/sunshanwen/BP4RNAseq/master/install_depends.sh
 chmod +x install_depends.sh
 ./install_depends.sh
@@ -118,6 +122,8 @@ devtools::install_github("sunshanwen/BP4RNAseq")
 
 ### Usage
 
+#### Bulk RNA-seq analyses
+
 The functions in BP4RNAseq are integrated into two main functions:
 down2quan for public RNA-seq data, fastq2quan for newly generated
 RNA-seq data.
@@ -139,18 +145,17 @@ accession id “SRR11486115” and “SRR11486114”, respectively, and the
 latest reference genome, transcript and annotation data of Drosophila
 melanogaster, do the quality control (filter out the poor-quality reads
 and contaminations), reads alignments and gene expression quantification
-based on both alignment-free and alignment-based workflows in the
-working directory. During the quality control procedure, if the
-contamination of the adapter exists the program will automatically
-detect the adapter sequence. However, an option is given to the users to
-provide the adapter sequence to trim before the trimming process.
+based on both alignment-free and alignment-based workflows in the work
+directory. During the quality control procedure, if the contamination of
+the adapter exists the program will automatically detect the adapter
+sequence. However, an option is given to the users to provide the
+adapter sequence to trim before the trimming process.
 
 fastq2quan works with local RNA-seq data in fastq formats. It needs two
 nontechnical parameters at a minimum, i.e., ‘taxa’ as explained above
 and ‘pair’ which specifies the sequencing type with ‘single’ for
 single-end (SE) reads or ‘paired’ for paired-end (PE) reads. Users
-should place all the fastq files in the working directory. A simple
-example
+should place all the fastq files in the work directory. A simple example
 
 ``` r
 library(BP4RNAseq)
@@ -160,8 +165,36 @@ fastq2quan(taxa="Drosophila melanogaster", pair = "single")
 will download the latest reference genome, transcript and annotation
 data of Drosophila melanogaster, do the quality control, reads
 alignments and gene expression quantification based on both
-alignment-free and alignment-based workflows in the working directory as
+alignment-free and alignment-based workflows in the work directory as
 the program down2quan do.
 
 Both programs can do the parallel computing, which is specified by the
 ‘threads’ parameter.
+
+#### Single-cell RNA-seq analyses
+
+down2quan and fastq2quan can also be extended to preprocess single-cell
+RNA-seq data by setting the ‘scRNA’ parameter to be ‘TRUE’ and
+specifying the protocols. Currently, dropseq, chromium and chromiumV3
+are supported protocols. A simple example
+
+``` r
+library(BP4RNAseq)
+down2quan(accession=c("SRR11402955","SRR11402974"), taxa="Homo sapiens", scRNA = TRUE, protocol = "dropseq")
+```
+
+will
+
+Alternatively,
+
+``` r
+library(BP4RNAseq)
+fastq2quan(taxa="Homo sapiens", scRNA = TRUE, protocol = "dropseq")
+```
+
+can preprocess local single-cell RNA-seq data.
+
+The outputs are …..
+
+\[^1\] Srivastava, A., et al. Alevin efficiently estimates accurate gene
+abundances from dscRNA-seq data. Genome Biol 2019;20:16.
