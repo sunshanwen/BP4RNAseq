@@ -23,6 +23,7 @@ tx2gene <- function()
   #cat(cmd1)
   system(cmd1)
   tx2gene <- utils::read.csv("raw_tx2gene.csv", header = FALSE)
+  tx2gene[] <- lapply(tx2gene, as.character)
   index_to_be_changed <- which(tx2gene[,1] %in% tx2gene[,2])
   b <- length(index_to_be_changed)
   if(b > 0){
