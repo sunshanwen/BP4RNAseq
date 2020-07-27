@@ -12,7 +12,16 @@
 down_Ref <- function(taxa) {
   #cmd1 <- paste("./datasets assembly_descriptors tax_name", taxa, "-r | jq .datasets[].assembly_accession -r") ### change "_" to "-" according to the official documentation of datasets
   taxa <- paste0("\"",taxa,"\"")
-  datasets <- system.file("datasets", package = "BP4RNAseq")
+
+  ### switch datasets according to the platform
+  if(Sys.info()['sysname'] == "Linux")
+  {
+    datasets <- system.file("datasets_L", package = "BP4RNAseq")
+  } else if(Sys.info()['sysname'] == "Darwin"){
+    datasets <- system.file("datasets_D", package = "BP4RNAseq")
+  }
+
+
   cmd0 <- system(paste("chmod +x", datasets))
   # cmd1 <- paste("./datasets assembly-descriptors tax-name", taxa, "--refseq --assmaccs | jq .datasets[].assembly_accession -r")
   cmd1 <- paste(datasets, "assembly-descriptors tax-name", taxa, "--refseq --assmaccs | jq .datasets[].assembly_accession -r")
