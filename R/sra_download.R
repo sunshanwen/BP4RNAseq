@@ -19,7 +19,7 @@ sra_download <- function(accession, dir)
     dir=getwd()
     ##check the version of sratoolkit
     ver <- system("vdb-config --version | cut -d '.' -f 3", intern = TRUE)
-    ver <- na.exclude(as.numeric(as.character(ver)))
+    ver <- stats::na.exclude(as.numeric(as.character(ver)))
     if(ver <= 3){
         system("mkdir -p $HOME/.ncbi/")
         system("touch $HOME/.ncbi/user-settings.mkfg")

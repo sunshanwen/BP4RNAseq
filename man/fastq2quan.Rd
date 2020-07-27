@@ -7,7 +7,7 @@
 fastq2quan(
   threads = 4,
   dir = getwd(),
-  pair,
+  pair = "paired",
   taxa,
   novel_transcript = FALSE,
   scRNA = FALSE,

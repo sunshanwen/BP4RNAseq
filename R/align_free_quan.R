@@ -22,7 +22,7 @@ tx2gene <- function()
   cmd1 <- paste("egrep -v '^#|^$'", annotation, "| cut -f 9 | grep ID=rna | awk -F ';' 'BEGIN{OFS = \"=\";} {print $1, $2;}' | awk -F '=' 'BEGIN{OFS = \",\"} {print $NF, $2}' > raw_tx2gene.csv")
   #cat(cmd1)
   system(cmd1)
-  tx2gene <- read.csv("raw_tx2gene.csv", header = FALSE)
+  tx2gene <- utils::read.csv("raw_tx2gene.csv", header = FALSE)
   index_to_be_changed <- which(tx2gene[,1] %in% tx2gene[,2])
   b <- length(index_to_be_changed)
   if(b > 0){
@@ -35,7 +35,7 @@ tx2gene <- function()
   tx2gene[,2] <- gsub("rna-","", tx2gene[,2])
   tx2gene <- tx2gene[, c(2,1)]
   colnames(tx2gene) <- c("transcript_id", "gene_id")
-  write.csv(tx2gene, row.names=FALSE, "tx2gene.csv")
+  utils::write.csv(tx2gene, row.names=FALSE, "tx2gene.csv")
 }
 
 utils::globalVariables("TPM")

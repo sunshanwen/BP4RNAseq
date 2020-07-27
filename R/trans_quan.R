@@ -59,8 +59,9 @@ compile <- function(files)
 
 trans_quan <- function()
 {
-  cmd <- paste("prepDE.py")
-  system(cmd)
+  # cmd <- paste("prepDE.py")
+  # system(cmd)
+  reticulate::source_python(system.file("prepDE_R.py", package = "BP4RNAseq"))
   outputs <- extract()
   compile(outputs)
   files <- list.files(pattern = "^Tmp.*csv$", recursive = T, full.names = T)
