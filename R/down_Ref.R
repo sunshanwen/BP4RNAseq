@@ -29,7 +29,9 @@ down_Ref <- function(taxa) {
   accession_id <- system(cmd1,  intern = TRUE)
 
   continue <- TRUE
+  times <- 0
   while(continue){
+    times <- times + 1
     # print(accession_id)
     # cmd2 <- paste("./datasets download assembly", accession_id, "--include_gff3 --include_rna") ### change "_" to "-" according to the official documentation of datasets
     cmd2 <- paste(datasets, "download assembly", accession_id, "-g -r")
@@ -46,6 +48,11 @@ down_Ref <- function(taxa) {
       # files <- gsub("[0-9a-zA-Z.]*$","", unzip(file, list = TRUE)$Name)
       # print(files)
       # if("rna.fna" %in% files && "genomic.gff" %in% files) {continue = FALSE}
+    }
+    if (times == 20)
+    {
+      print("Internet connection is poor! Can not download the reference genome data. Please retry it later!")
+      break
     }
   }
 }
