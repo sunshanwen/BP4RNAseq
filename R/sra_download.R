@@ -46,7 +46,9 @@ sra_download <- function(accession, dir)
             #### use Entrez Direct tool to get all samples accession code, then use prefetch to download all the data
             cmd2 = paste("prefetch $(esearch -db sra -query", f, "| efetch --format runinfo | grep",f, "| cut -d \",\" -f 1)")
             system(cmd2)
-            file<-list.files("./sra", pattern = ".sra$", recursive = F, full.names = T)
+            path <- paste0(dir,"/sra")
+            file <- list.files(path, pattern = ".sra$", recursive = F, full.names = T)
+            # file<-list.files("./sra", pattern = ".sra$", recursive = F, full.names = T)
             cmd4 <- paste("mv", file, dir)
             system(cmd4)
         }
