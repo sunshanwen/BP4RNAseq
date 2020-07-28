@@ -11,11 +11,6 @@
 
 extract_genome <- function(taxa)
 {
-  file <- list.files(pattern = "^ncbi.*zip$")
-  utils::unzip(file, list = FALSE)
-  # cmd1 <- paste("unzip -o $(ls | grep ^ncbi.*zip$)")
-  # system(cmd1)
-  # unlink("ncbi_dataset.zip")
   ref_seq <- list.files(pattern = "fna$", recursive = T, full.names = T)
   transcript <- list.files(pattern = "rna\\.fna", recursive = T, full.names = T)
   # ref_seq1 <- ref_seq[-which(ref_seq == transcript)]
@@ -37,6 +32,6 @@ extract_genome <- function(taxa)
   results <- c(name1, name2, name3)
   unlink("./ncbi_dataset.zip")
   unlink("README.md")
-  unlink("./ncbi_dataset", recursive = TRUE)
+  unlink("./dehydrated", recursive = TRUE)
   return(results)
 }

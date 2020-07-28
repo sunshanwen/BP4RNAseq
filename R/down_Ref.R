@@ -33,30 +33,14 @@ down_Ref <- function(taxa) {
   # cat(cmd1, "\n")
   accession_id <- system(cmd1,  intern = TRUE)
 
-  continue <- TRUE
-  times <- 0
-  while(continue){
-    file <- list.files(pattern = "^ncbi.*zip$")
-    if(length(file) == 0){
-      cmd2 <- paste(datasets, "download assembly", accession_id, "-g -r")
-      # cat(cmd2, "\n")
-      # cmd2 <- paste("./datasets download assembly", accession_id, "--unresolved")
-      system(cmd2)
-    }
-    tmp <- try(utils::unzip(file, list = TRUE)$Name, silent = T)
-    if(class(tmp) != "try-error"){
-      files <- paste(tmp, collapse = " ")
-      if(grepl("rna.fna", files) && grepl("genomic.gff", files)) {continue = FALSE}
-      # files <- gsub("[0-9a-zA-Z.]*$","", unzip(file, list = TRUE)$Name)
-      # print(files)
-      # if("rna.fna" %in% files && "genomic.gff" %in% files) {continue = FALSE}
-    }
-    times <- times + 1
-    if (times == 20)
-    {
-      print("Internet connection is poor! Can not download the reference genome data. Please retry it later!")
-      break
-    }
-  }
+  cmd2 <- paste(datasets, "download assembly", accession_id, "-g -r --dehydrated --filename dehydrated.zip")
+  system(cmd2)
+  # cat(cmd2, "\n")
+  # file <- list.files(pattern = "^dehydrated.zip$")
+  utils::unzip("dehydrated.zip", list = FALSE, exdir = "dehydrated")
+
+  cmd3 <- paste(datasets, "rehydrate --filename dehydrated")
+  system(cmd3)
   unlink(datasets)
+  unlink("dehydrated.zip")
 }
