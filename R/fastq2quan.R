@@ -48,7 +48,6 @@ fastq2quan <- function(threads = 4, dir = getwd(), pair = "paired", taxa, novel_
   if(status == 1)
   {
     stop("The download of reference genome and annotation files failed! Terminate the program.")
-    break
   }
   # reference <- extract_genome(taxa)
   taxa_tmp <- gsub("\\s", "_", taxa)
