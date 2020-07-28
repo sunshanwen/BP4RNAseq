@@ -48,7 +48,6 @@ down_Ref <- function(taxa) {
     cmd1 <- paste(datasets, "assembly-descriptors tax-name", taxa, "--refseq --assmaccs | jq .datasets[].assembly_accession -r")
     # cat(cmd1, "\n")
     accession_id <- system(cmd1,  intern = TRUE)
-
     cmd2 <- paste(datasets, "download assembly", accession_id, "-g -r --dehydrated --filename dehydrated.zip")
     system(cmd2, intern = T)
     # cat(cmd2, "\n")
