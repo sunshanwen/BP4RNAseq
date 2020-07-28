@@ -25,7 +25,6 @@ down_Ref <- function(taxa) {
     # datasets <- system.file("datasets_D", package = "BP4RNAseq")
   }
 
-
   cmd0 <- system(paste("chmod +x", datasets))
   # cmd1 <- paste("./datasets assembly-descriptors tax-name", taxa, "--refseq --assmaccs | jq .datasets[].assembly_accession -r")
   cmd1 <- paste(datasets, "assembly-descriptors tax-name", taxa, "--refseq --assmaccs | jq .datasets[].assembly_accession -r")
