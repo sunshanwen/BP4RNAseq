@@ -37,7 +37,7 @@ tx2gene_scRNA <- function()
 scRNA_quan <- function(transcript, protocol)
 {
   tx2gene_scRNA()
-  cmd3 <- paste("salmon index --gencode -t", transcript, "-i salmon_index")
+  cmd3 <- paste("salmon index -t", transcript, "-i salmon_index")
   # cat(cmd3, "\n")
   system(cmd3)
   read <- list.files(pattern = "^Trimmed.*1\\.fastq$", full.names = F)
