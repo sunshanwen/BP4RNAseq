@@ -22,5 +22,5 @@ Imports:
     magrittr,
     reticulate
 Depends: R (>= 3.5.0)
-SystemRequirements: UNIX, conda=4.83, SRA Toolkit=2.10.3, Entrez Direct=13.3, FastQC=v0.11.9, Cutadapt=2.10, datasets, SAMtools=1.9, HISAT2=2.2.0, StringTie=2.1.1, Salmon=1.2.1   
+SystemRequirements: UNIX, conda=4.83, SRA Toolkit=2.10.3, Entrez Direct=13.3, FastQC=v0.11.9, Cutadapt=2.10, datasets_L, datasets_D, SAMtools=1.9, HISAT2=2.2.0, StringTie=2.1.1, Salmon=1.2.1   
 RoxygenNote: 7.1.1
