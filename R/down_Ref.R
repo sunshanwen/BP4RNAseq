@@ -11,7 +11,7 @@
 #'}
 down_Ref <- function(taxa) {
   #cmd1 <- paste("./datasets assembly_descriptors tax_name", taxa, "-r | jq .datasets[].assembly_accession -r") ### change "_" to "-" according to the official documentation of datasets
-  taxa <- taxa_raw
+  taxa_raw <- taxa
   taxa_tmp <- gsub("\\s", "_", taxa)
   genome <- paste0(taxa_tmp, ".fna")
   transcript <- paste0("transcript_", taxa_tmp, ".fna")

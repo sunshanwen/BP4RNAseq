@@ -49,7 +49,6 @@ down2quan <- function(accession, dir = getwd(), taxa, novel_transcript = FALSE, 
   if(status == 1)
   {
     stop("The download of reference genome and annotation files failed! Terminate the program.")
-    break
   }
   # reference <- extract_genome(taxa)
   taxa_tmp <- gsub("\\s", "_", taxa)
