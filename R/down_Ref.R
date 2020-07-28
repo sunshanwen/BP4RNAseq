@@ -36,16 +36,13 @@ down_Ref <- function(taxa) {
   continue <- TRUE
   times <- 0
   while(continue){
-    times <- times + 1
-    # print(accession_id)
-    # cmd2 <- paste("./datasets download assembly", accession_id, "--include_gff3 --include_rna") ### change "_" to "-" according to the official documentation of datasets
-    cmd2 <- paste(datasets, "download assembly", accession_id, "-g -r")
-    # cat(cmd2, "\n")
-    # cmd2 <- paste("./datasets download assembly", accession_id, "--unresolved")
-
-    system(cmd2)
     file <- list.files(pattern = "^ncbi.*zip$")
-    #file <- paste0("./", file)
+    if(length(file) == 0){
+      cmd2 <- paste(datasets, "download assembly", accession_id, "-g -r")
+      # cat(cmd2, "\n")
+      # cmd2 <- paste("./datasets download assembly", accession_id, "--unresolved")
+      system(cmd2)
+    }
     tmp <- try(utils::unzip(file, list = TRUE)$Name, silent = T)
     if(class(tmp) != "try-error"){
       files <- paste(tmp, collapse = " ")
@@ -54,6 +51,7 @@ down_Ref <- function(taxa) {
       # print(files)
       # if("rna.fna" %in% files && "genomic.gff" %in% files) {continue = FALSE}
     }
+    times <- times + 1
     if (times == 20)
     {
       print("Internet connection is poor! Can not download the reference genome data. Please retry it later!")
