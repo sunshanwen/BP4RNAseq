@@ -23,8 +23,7 @@ It uses an optimized pipeline, applies to both retrospective and newly
 generated RNA-seq data analyses and can take only two nontechnical
 parameters and output formatted gene expression quantification at gene
 and transcript levels. The package also support single-cell RNA-seq
-analyses based on the Alevin algorithm integrated with the Salmon
-\[^1\].
+analyses based on the Alevin algorithm integrated with the Salmon \[1\].
 
 ### Operating System Requirements
 
@@ -39,7 +38,6 @@ The BP4RNAseq requires the following utilities:
   - [Entrez Direct=13.3](https://www.ncbi.nlm.nih.gov/books/NBK179288/)
   - [FastQC=v0.11.9](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
   - [Cutadapt=2.10](https://cutadapt.readthedocs.io/en/stable/)
-  - [datasets(Beta)](https://www.ncbi.nlm.nih.gov/datasets/docs/command-line-start/)
   - [SAMtools=1.9](http://www.htslib.org/)
   - [HISAT2=2.2.0](http://daehwankimlab.github.io/hisat2/)
   - [StringTie=2.1.1](https://ccb.jhu.edu/software/stringtie/)
@@ -47,14 +45,14 @@ The BP4RNAseq requires the following utilities:
   - [jq=1.6](https://stedolan.github.io/jq/)
   - [R=3.5.0](https://www.r-project.org/)
 
-Users can install these dependencies manually. Please place the
-[datasets](https://www.ncbi.nlm.nih.gov/datasets/docs/command-line-start/)
-into the work directly. Alternatively, we provide a bash script to aid
-users to install all the dependencies based on
-[conda](https://docs.conda.io/en/latest/). The script uses Wget, which
-is pre-installed on most Linux distributions today such as Windows
-Subsystem for Linux, to download some of the utilities. If wget is not
-installed, users can easily install it with the following commands.
+Users can install these dependencies manually.
+
+Alternatively, we provide a bash script to aid users to install all the
+dependencies based on [conda](https://docs.conda.io/en/latest/). The
+script uses Wget, which is pre-installed on most Linux distributions
+such as Windows Subsystem for Linux, to download some of the utilities.
+If wget is not installed, users can easily install it with the following
+commands.
 
   - Installing Wget on Ubuntu and Debian or Windows Subsystem
     equivalents
@@ -83,11 +81,10 @@ sudo yum install wget
 brew install wget
 ```
 
-With Wget installed, users can install all the dependencies in the work
-directory with the following commands:
+With Wget installed, users can install all the dependencies with the
+following commands:
 
 ``` r
-cd WorkDirectory ### change 'WorkDirectory' to the the actual folder that you want to work in
 wget https://raw.githubusercontent.com/sunshanwen/BP4RNAseq/master/install_depends.sh
 chmod +x install_depends.sh
 ./install_depends.sh
@@ -171,6 +168,12 @@ the program down2quan do.
 Both programs can do the parallel computing, which is specified by the
 ‘threads’ parameter.
 
+The outputs of both functions are two gene count matrixes and two
+transcript count matrixes based on alignment-based workflow and
+alignment-free workflow. Researchers can use the averages over two
+workflows for downstream analyses \[2\] or decide the type of data to
+use retrospectively based on the results from the downstream analyses.
+
 #### Single-cell RNA-seq analyses
 
 down2quan and fastq2quan can also be extended to preprocess single-cell
@@ -183,7 +186,12 @@ library(BP4RNAseq)
 down2quan(accession=c("SRR11402955","SRR11402974"), taxa="Homo sapiens", scRNA = TRUE, protocol = "dropseq")
 ```
 
-will
+will download the public scRNA-seq data from two ‘BioSample’ with
+accession id “SRR11402955” and “SRR11402974”, respectively, and the
+latest reference genome, transcript and annotation data of Homo sapiens,
+do the quality control (filter out the poor-quality reads and
+contaminations), reads alignments and gene expression quantification
+based on the Alevin workflow.
 
 Alternatively,
 
@@ -192,9 +200,21 @@ library(BP4RNAseq)
 fastq2quan(taxa="Homo sapiens", scRNA = TRUE, protocol = "dropseq")
 ```
 
-can preprocess local single-cell RNA-seq data.
+can preprocess local single-cell RNA-seq data in fastq formats. The data
+are paired-end reads with one read containing cellular barcode and
+unique molecule identifier (UMI) and the other read being the RNA
+sequence.
 
-The outputs are …..
+The outputs of down2quan and fastq2quan are gene count matrix compressed
+in a binary format, and gene ids, barcode + UMI and tier categorization
+in three separate files. These outputs can be further processed with
+[tximport](https://bioconductor.org/packages/devel/bioc/vignettes/tximport/inst/doc/tximport.html)
+and [Seurat](https://satijalab.org/seurat/).
 
-\[^1\] Srivastava, A., et al. Alevin efficiently estimates accurate gene
-abundances from dscRNA-seq data. Genome Biol 2019;20:16.
+### References
+
+1.  Srivastava, A., et al. Alevin efficiently estimates accurate gene
+    abundances from dscRNA-seq data. Genome Biol 2019;20:16.
+
+2.  Lachmann, A., et al. Interoperable RNA-Seq analysis in the cloud.
+    Biochim. Biophys. Acta-Gene Regul. Mech. 2020;1863(6):1-11.
