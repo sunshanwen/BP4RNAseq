@@ -59,7 +59,7 @@ down_Ref <- function(taxa) {
   }
   if(status == 1)
   {
-    print("The internet connection is poor. Please retry later!")
+    stop("The internet connection is poor. Please retry later!")
   } else {
     unlink(datasets)
     extract_genome(taxa_raw)
