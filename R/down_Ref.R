@@ -12,17 +12,19 @@
 down_Ref <- function(taxa) {
   #cmd1 <- paste("./datasets assembly_descriptors tax_name", taxa, "-r | jq .datasets[].assembly_accession -r") ### change "_" to "-" according to the official documentation of datasets
   taxa <- paste0("\"",taxa,"\"")
-
-  ### switch datasets according to the platform
-  if(Sys.info()['sysname'] == "Linux")
-  {
-    utils::download.file("https://ftp.ncbi.nlm.nih.gov/pub/datasets/command-line/LATEST/linux-amd64/datasets", destfile = "datasets", quit = TRUE)
-    datasets <- list.files(pattern = "^datasets$", full.names = TRUE)
-    # datasets <- system.file("datasets_L", package = "BP4RNAseq")
-  } else if(Sys.info()['sysname'] == "Darwin"){
-    utils::download.file("https://ftp.ncbi.nlm.nih.gov/pub/datasets/command-line/LATEST/mac/datasets", destfile = "datasets", quit = TRUE)
-    datasets <- list.files(pattern = "^datasets$", full.names = TRUE)
-    # datasets <- system.file("datasets_D", package = "BP4RNAseq")
+  datasets <- list.files(pattern = "^datasets$", full.names = TRUE)
+  if(length(datasets) == 0){
+    ### switch datasets according to the platform
+    if(Sys.info()['sysname'] == "Linux")
+    {
+      utils::download.file("https://ftp.ncbi.nlm.nih.gov/pub/datasets/command-line/LATEST/linux-amd64/datasets", destfile = "datasets", quit = TRUE)
+      datasets <- list.files(pattern = "^datasets$", full.names = TRUE)
+      # datasets <- system.file("datasets_L", package = "BP4RNAseq")
+    } else if(Sys.info()['sysname'] == "Darwin"){
+      utils::download.file("https://ftp.ncbi.nlm.nih.gov/pub/datasets/command-line/LATEST/mac/datasets", destfile = "datasets", quit = TRUE)
+      datasets <- list.files(pattern = "^datasets$", full.names = TRUE)
+      # datasets <- system.file("datasets_D", package = "BP4RNAseq")
+    }
   }
 
   cmd0 <- system(paste("chmod +x", datasets))
