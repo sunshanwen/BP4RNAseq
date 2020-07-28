@@ -44,15 +44,24 @@ fastq2quan <- function(threads = 4, dir = getwd(), pair = "paired", taxa, novel_
   files <- list.files(dir, pattern = "fastqc", full.names = F)
   unlink(files)
 
-  down_Ref(taxa)
-  reference <- extract_genome(taxa)
+  status <- down_Ref(taxa)
+  if(status == 1)
+  {
+    stop("The download of reference genome and annotation files failed! Terminate the program.")
+    break
+  }
+  # reference <- extract_genome(taxa)
+  taxa_tmp <- gsub("\\s", "_", taxa)
+  genome <- paste0(taxa_tmp, ".fna")
+  transcript <- paste0("transcript_", taxa_tmp, ".fna")
+  annotation <- paste0(taxa_tmp, ".gff")
   if(scRNA == FALSE){
-    align_ge(pair, taxa, reference[1], reference[2])
+    align_ge(pair, taxa, genome, annotation)
     trans_ass(novel_transcript)
     trans_quan()
-    align_free_quan(pair, reference[1], reference[3], reference[2])
+    align_free_quan(pair, genome, transcript, annotation)
     average()
   } else if (scRNA == TRUE){
-    scRNA_quan(reference[3], protocol)
+    scRNA(transcript, protocol)
   }
 }
