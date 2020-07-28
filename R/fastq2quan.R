@@ -61,6 +61,6 @@ fastq2quan <- function(threads = 4, dir = getwd(), pair = "paired", taxa, novel_
     align_free_quan(pair, genome, transcript, annotation)
     average()
   } else if (scRNA == TRUE){
-    scRNA(transcript, protocol)
+    scRNA_quan(transcript, protocol)
   }
 }

@@ -62,6 +62,6 @@ down2quan <- function(accession, dir = getwd(), taxa, novel_transcript = FALSE, 
     align_free_quan(pair, genome, transcript, annotation)
     average()
   } else if (scRNA == TRUE){
-    scRNA(transcript, protocol)
+    scRNA_quan(transcript, protocol)
   }
 }
