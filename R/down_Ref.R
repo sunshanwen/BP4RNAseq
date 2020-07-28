@@ -38,7 +38,6 @@ down_Ref <- function(taxa) {
   # cat(cmd2, "\n")
   # file <- list.files(pattern = "^dehydrated.zip$")
   utils::unzip("dehydrated.zip", list = FALSE, exdir = "dehydrated")
-
   cmd3 <- paste(datasets, "rehydrate --filename dehydrated")
   system(cmd3)
   unlink(datasets)
