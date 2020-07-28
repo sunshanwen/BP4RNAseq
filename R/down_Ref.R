@@ -16,9 +16,13 @@ down_Ref <- function(taxa) {
   ### switch datasets according to the platform
   if(Sys.info()['sysname'] == "Linux")
   {
-    datasets <- system.file("datasets_L", package = "BP4RNAseq")
+    utils::download.file("https://ftp.ncbi.nlm.nih.gov/pub/datasets/command-line/LATEST/linux-amd64/datasets", destfile = "datasets")
+    datasets <- list.files(pattern = "^datasets$")
+    # datasets <- system.file("datasets_L", package = "BP4RNAseq")
   } else if(Sys.info()['sysname'] == "Darwin"){
-    datasets <- system.file("datasets_D", package = "BP4RNAseq")
+    utils::download.file("https://ftp.ncbi.nlm.nih.gov/pub/datasets/command-line/LATEST/mac/datasets", destfile = "datasets")
+    datasets <- list.files(pattern = "^datasets$")
+    # datasets <- system.file("datasets_D", package = "BP4RNAseq")
   }
 
 
@@ -55,4 +59,5 @@ down_Ref <- function(taxa) {
       break
     }
   }
+  unlink(datasets)
 }
