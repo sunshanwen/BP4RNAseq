@@ -70,7 +70,7 @@ gene_quan <- function()
 #'
 align_free_quan <- function(pair, genome, transcript, annotation)
 {
-  cmd3 <- paste("salmon index --gencode -t", transcript, "-i salmon_index")
+  cmd3 <- paste("salmon index -t", transcript, "-i salmon_index")
   # cat(cmd3, "\n")
   system(cmd3)
   if(pair == "paired")
