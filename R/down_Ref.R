@@ -49,7 +49,7 @@ down_Ref <- function(taxa) {
     # cat(cmd1, "\n")
     accession_id <- system(cmd1,  intern = TRUE)
     cmd2 <- paste(datasets, "download assembly", accession_id, "-g -r --dehydrated --filename dehydrated.zip")
-    system(cmd2, intern = T)
+    system(cmd2, intern = TRUE)
     # cat(cmd2, "\n")
     # file <- list.files(pattern = "^dehydrated.zip$")
     utils::unzip("dehydrated.zip", list = FALSE, exdir = "dehydrated")

@@ -27,7 +27,7 @@ tx2gene <- function()
   index_to_be_changed <- which(tx2gene[,1] %in% tx2gene[,2])
   b <- length(index_to_be_changed)
   if(b > 0){
-    for (i in 1:b)
+    for (i in seq_len(b))
     {
       tx2gene[index_to_be_changed[i],1] <- tx2gene[tx2gene[,2] == tx2gene[index_to_be_changed[i],1] ,1]
     }
