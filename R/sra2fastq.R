@@ -2,7 +2,7 @@
 #' @order 2
 check_paired <- function(sra.dir)
 {
-  files<-list.files(sra.dir, pattern = ".sra$", recursive = F, full.names = F)
+  files<-list.files(sra.dir, pattern = ".sra$", recursive = FALSE, full.names = FALSE)
   temp <- data.frame(samples = NA, paired_or_single = NA)
   for(f in files) {
     cmd = paste("fastq-dump","-X","1","-Z","--split-spot", f, "| wc -l")
@@ -29,7 +29,7 @@ check_paired <- function(sra.dir)
 #'
 #' Convert all SRA files to fastq files and return the sequencing type, i.e., single-end (SE) or paired-end (PE) reads.
 #' @param threads the number of threads to be used. Default is 4.
-#'
+#' @import stringr
 #' @export sra2fastq
 #' @return A string indicates single-end (SE) or paired-end (PE) reads.
 #' @order 1
@@ -45,7 +45,7 @@ sra2fastq <- function(threads = 4)
 
   pair <- check_paired(sra.dir)
   #dir.create(file.path(fq.dir), showWarnings = FALSE) ### create the folder no matter it
-  files<-list.files(sra.dir, pattern = ".sra$", recursive = F, full.names = F)
+  files<-list.files(sra.dir, pattern = ".sra$", recursive = FALSE, full.names = FALSE)
   # files_sra <- stringr::str_subset(files,".sra")
   for(f in files) {
     cmd = paste("fasterq-dump", f, "-O", fq.dir, "-e", threads)
@@ -54,7 +54,7 @@ sra2fastq <- function(threads = 4)
     unlink(f)
   }
 
-  fastq_files<-list.files(sra.dir, pattern = "fastq$", recursive = F, full.names = F)
+  fastq_files<-list.files(sra.dir, pattern = "fastq$", recursive = FALSE, full.names = FALSE)
   file.rename(fastq_files, gsub(".sra","",fastq_files))
   unlink("sra", recursive = TRUE)
   return(pair)

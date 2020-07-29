@@ -14,7 +14,7 @@
 trans_ass <- function(novel_transcript = FALSE)
 {
   aligned_bam <- list.files(pattern = "*\\.bam$")
-  gff <- list.files(pattern = "gff$", recursive = T, full.names = T)
+  gff <- list.files(pattern = "gff$", recursive = TRUE, full.names = TRUE)
   for(f in aligned_bam)
   {
     # taxa <- gsub("^sorted", "", gsub("\\.bam", "", f))

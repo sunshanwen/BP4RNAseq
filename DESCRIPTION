@@ -2,17 +2,21 @@ Package: BP4RNAseq
 Type: Package
 Title: A babysitter's package for reproducible RNA-seq analysis
 Version: 0.2.32
-Authors@R: as.person(c(
-    "Shanwen Sun <sunshanwen@uestc.edu.cn> [aut, cre]", 
-    "Lei Xu <csleixu@szpt.edu.cn> [aut]",
-    "Quan Zou <zouquan@nclab.net> [aut]"
-    ))
-Maintainer: Shanwen Sun <sunshanwen@uestc.edu.cn>
-Description: An automated pipe for reproducible RNA-seq analysis with the minimal efforts from researchers. The package can process bulk RNA-seq data and single-cell RNA-seq data. You can only provide the taxa name and the accession id of RNA-seq data deposited in the National Center for Biotechnology Information (NCBI). After a cup of tea or longer, you will get formated gene expression data as gene count and transcript count based on both alignment-based and alignment-free workflows.  
+Authors@R: c(person(given = "Shanwen",
+            family = "Sun",
+            role = c("cre", "aut"),
+            email = "sunshanwen@gmail.com"),
+            person(given = "Lei",
+                   family = "Xu",
+                   role = "aut"),
+            person(given = "Quan",
+                   family = "Zou",
+                   role = "aut"))
+Description: An automated pipe for reproducible RNA-seq analysis with the minimal efforts from researchers. The package can process bulk RNA-seq data and single-cell RNA-seq data. You can only provide the taxa name and the accession id of RNA-seq data deposited in the National Center for Biotechnology Information (NCBI). After a cup of tea or longer, you will get formated gene expression data as gene count and transcript count based on both alignment-based and alignment-free workflows.
 License: GPL-2
 Encoding: UTF-8
 LazyData: FALSE
-Imports: 
+Imports:
     dplyr,
     fastqcr,
     stringr,
@@ -22,6 +26,10 @@ Imports:
     magrittr,
     reticulate
 Depends: R (>= 3.5.0)
-SystemRequirements: UNIX, conda=4.83, SRA Toolkit=2.10.3, Entrez Direct=13.3, FastQC=v0.11.9, Cutadapt=2.10, datasets, SAMtools=1.9, HISAT2=2.2.0, StringTie=2.1.1, Salmon=1.2.1   
+SystemRequirements: UNIX, conda=4.83, SRA Toolkit=2.10.3, Entrez Direct=13.3, FastQC=v0.11.9, Cutadapt=2.10, datasets, SAMtools=1.9, HISAT2=2.2.0, StringTie=2.1.1, Salmon=1.2.1
 RoxygenNote: 7.1.1
 biocViews: GeneExpressionWorkflow
+Suggests: 
+    knitr,
+    rmarkdown
+VignetteBuilder: knitr

@@ -6,7 +6,7 @@
 #' @order 2
 get_adapter <- function(sample)
 {
-  qc_reports <- list.files(getwd(), pattern = "fastqc.zip", full.names = F)
+  qc_reports <- list.files(getwd(), pattern = "fastqc.zip", full.names = FALSE)
   qc_collection <- fastqcr::qc_read_collection(qc_reports, sample_names = gsub(".zip","",qc_reports), modules = "all", verbose = TRUE)
   if(length(sample))
   {

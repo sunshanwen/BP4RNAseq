@@ -42,7 +42,7 @@ down2quan <- function(accession, dir = getwd(), taxa, novel_transcript = FALSE, 
     quality_trim(quality[[1]]$sample, quality[[1]]$sample, pair, scRNA)### consider if add directory parameter.
     adapter_trim(quality[[1]]$sample, pair, scRNA)
   }
-  files <- list.files(dir, pattern = "fastqc", full.names = F)
+  files <- list.files(dir, pattern = "fastqc", full.names = FALSE)
   unlink(files)
 
   status <- down_Ref(taxa)

@@ -25,7 +25,7 @@ quality_trim <- function(per_base, per_seq, pair, threads = 4, scRNA = FALSE)
       {
         if(pair == "paired"){
           file <- c(paste0(f, "_1_fastqc"), paste0(f, "_2_fastqc"))
-          qc_reports <- list.files(getwd(), pattern = "fastqc.zip$", full.names = F)
+          qc_reports <- list.files(getwd(), pattern = "fastqc.zip$", full.names = FALSE)
           qc_collection <- fastqcr::qc_read_collection(qc_reports, sample_names = gsub(".zip","",qc_reports), modules = "all", verbose = TRUE)
           Encoding <- unique(qc_collection$basic_statistics[qc_collection$basic_statistics$Measure == "Encoding"&qc_collection$basic_statistics$sample == file, 3])
 
@@ -46,7 +46,7 @@ quality_trim <- function(per_base, per_seq, pair, threads = 4, scRNA = FALSE)
           }else stop("Wrong Encoding. Exit.")
         }else if(pair == "single"){
           file <- paste0(f, "_fastqc")
-          qc_reports <- list.files(getwd(), pattern = "fastqc.zip$", full.names = F)
+          qc_reports <- list.files(getwd(), pattern = "fastqc.zip$", full.names = FALSE)
           qc_collection <- fastqcr::qc_read_collection(qc_reports, sample_names = gsub(".zip","",qc_reports), modules = "all", verbose = TRUE)
           Encoding <- unique(qc_collection$basic_statistics[qc_collection$basic_statistics$Measure == "Encoding"&qc_collection$basic_statistics$sample == file, 3])
 
@@ -68,7 +68,7 @@ quality_trim <- function(per_base, per_seq, pair, threads = 4, scRNA = FALSE)
   } else if(scRNA == TRUE){
       files <- unique(gsub("\\.fastq","",unique(c(per_base, per_seq))))
       for (d in files){
-          qc_reports <- list.files(getwd(), pattern = "fastqc.zip$", full.names = F)
+          qc_reports <- list.files(getwd(), pattern = "fastqc.zip$", full.names = FALSE)
           qc_collection <- fastqcr::qc_read_collection(qc_reports, sample_names = gsub(".zip","",qc_reports), modules = "all", verbose = TRUE)
           Encoding <- unique(qc_collection$basic_statistics[qc_collection$basic_statistics$Measure == "Encoding"&qc_collection$basic_statistics$sample == file, 3])
           infile <- paste0(d, ".fastq")

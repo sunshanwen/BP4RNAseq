@@ -1,7 +1,7 @@
 tx2gene_scRNA <- function()
 {
-  annotation <- list.files(pattern = "gff$", recursive = T, full.names = TRUE)
-  #cmd1 <- paste("egrep -v '^#|^$'", annotation, "| awk -F '\t' '$3 ~ /RNA/ {print $9}' | awk -F ';' 'BEGIN{OFS = \"=\";} {print $1, $2;}' | awk -F '=' 'BEGIN{OFS = \"-\";}{print $NF, $2;}'| grep 'gene' | awk -F '-' 'BEGIN{OFS = \",\";print \"gene_id\", \"transcript_id\"}{print $2, $4}' > tx2gene.csv")
+  annotation <- list.files(pattern = "gff$", recursive = TRUE, full.names = TRUE)
+
   cmd1 <- paste("egrep -v '^#|^$'", annotation, "| cut -f 9 | grep ID=rna | awk -F ';' 'BEGIN{OFS = \"=\";} {print $1, $2;}' | awk -F '=' 'BEGIN{OFS = \",\"} {print $NF, $2}' > raw_tx2gene.csv")
   #cat(cmd1)
   system(cmd1)
@@ -40,9 +40,9 @@ scRNA_quan <- function(transcript, protocol)
   cmd3 <- paste("salmon index -t", transcript, "-i salmon_index")
   # cat(cmd3, "\n")
   system(cmd3)
-  read <- list.files(pattern = "^Trimmed.*1\\.fastq$", full.names = F)
+  read <- list.files(pattern = "^Trimmed.*1\\.fastq$", full.names = FALSE)
   if(length(read) == 0){
-    read <- list.files(pattern = ".*1\\.fastq$", full.names = F)
+    read <- list.files(pattern = ".*1\\.fastq$", full.names = FALSE)
   }
   for(f in read)
   {
@@ -65,7 +65,7 @@ scRNA_quan <- function(transcript, protocol)
     # cmd4 <- paste("salmon quant -i salmon_index -l A", gentrome.fna, "-1", read1, "-2", read2, "--validateMappings -o", out)
     cmd4 <- paste0("salmon alevin -i salmon_index -l ISR --", protocol, " -1 ", barcode_seq, " -2 ", read_seq, " --tgMap tx2gene.tsv -o ", out)
     # cat(cmd4, "\n")
-    system(cmd4, intern = T)
+    system(cmd4, intern = TRUE)
   }
   unlink("tx2gene.tsv")
   unlink("salmon_index", recursive = TRUE)

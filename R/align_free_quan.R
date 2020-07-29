@@ -1,7 +1,7 @@
 
 convert_data <- function()
 {
-  files <- list.files(pattern = "quant.sf", recursive = T, full.names = TRUE)
+  files <- list.files(pattern = "quant.sf", recursive = TRUE, full.names = TRUE)
 
   others <- data.frame(transcript_id = character(), length = numeric(), TPM = numeric(), count = numeric(), sample = character())
   for (f in files)
@@ -17,7 +17,7 @@ convert_data <- function()
 
 tx2gene <- function()
 {
-  annotation <- list.files(pattern = "gff$", recursive = T, full.names = TRUE)
+  annotation <- list.files(pattern = "gff$", recursive = TRUE, full.names = TRUE)
   #cmd1 <- paste("egrep -v '^#|^$'", annotation, "| awk -F '\t' '$3 ~ /RNA/ {print $9}' | awk -F ';' 'BEGIN{OFS = \"=\";} {print $1, $2;}' | awk -F '=' 'BEGIN{OFS = \"-\";}{print $NF, $2;}'| grep 'gene' | awk -F '-' 'BEGIN{OFS = \",\";print \"gene_id\", \"transcript_id\"}{print $2, $4}' > tx2gene.csv")
   cmd1 <- paste("egrep -v '^#|^$'", annotation, "| cut -f 9 | grep ID=rna | awk -F ';' 'BEGIN{OFS = \"=\";} {print $1, $2;}' | awk -F '=' 'BEGIN{OFS = \",\"} {print $NF, $2}' > raw_tx2gene.csv")
   #cat(cmd1)
@@ -75,11 +75,10 @@ align_free_quan <- function(pair, genome, transcript, annotation)
   system(cmd3)
   if(pair == "paired")
   {
-    read <- list.files(pattern = "^Trimmed.*1\\.fastq$", full.names = F)
+    read <- list.files(pattern = "^Trimmed.*1\\.fastq$", full.names = FALSE)
     if(length(read) == 0){
-      read <- list.files(pattern = ".*1\\.fastq$", full.names = F)
+      read <- list.files(pattern = ".*1\\.fastq$", full.names = FALSE)
     }
-    # read2 <- list.files(pattern = "^Trimmed.*2\\.fastq$", full.names = F)
     for(f in read)
     {
       # read1 <- paste(read1, sep = ",", collapse = ',')
@@ -91,12 +90,12 @@ align_free_quan <- function(pair, genome, transcript, annotation)
       # cmd4 <- paste("salmon quant -i salmon_index -l A", gentrome.fna, "-1", read1, "-2", read2, "--validateMappings -o", out)
       cmd4 <- paste("salmon quant -i salmon_index -l A", "-1", read1, "-2", read2, "--validateMappings -o", out)
       # cat(cmd4, "\n")
-      system(cmd4, intern = T)
+      system(cmd4, intern = TRUE)
     }
   } else if(pair == "single"){
-    read <- list.files(pattern = "^Trimmed.*\\.fastq$", full.names = F)
+    read <- list.files(pattern = "^Trimmed.*\\.fastq$", full.names = FALSE)
     if(length(read) == 0){
-      read <- list.files(pattern = ".*\\.fastq$", full.names = F)
+      read <- list.files(pattern = ".*\\.fastq$", full.names = FALSE)
     }
     # read <- paste(read, sep = ",", collapse = ',')
     for(f in read)
@@ -107,7 +106,7 @@ align_free_quan <- function(pair, genome, transcript, annotation)
       cmd4 <- paste("salmon quant -i salmon_index -l A -r", f, "--validateMappings -o", out)
 
       # cat(cmd4, "\n")
-      system(cmd4, intern = T)
+      system(cmd4, intern = TRUE)
     }
 
   } else stop("Paired-end and single-end mix. Please check the data source!")

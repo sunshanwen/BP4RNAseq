@@ -33,14 +33,13 @@ align_ge <- function(pair, taxa, genome, annotation)
   taxa <- gsub("\\s", "_", taxa)
 
   index_build(taxa, genome, annotation)
-  index <- list.files(pattern = "ht2$", recursive = T, full.names = T)
+  index <- list.files(pattern = "ht2$", recursive = TRUE, full.names = TRUE)
   if(pair == "paired")
   {
-    read <- list.files(pattern = "^Trimmed.*1\\.fastq$", full.names = F)
+    read <- list.files(pattern = "^Trimmed.*1\\.fastq$", full.names = FALSE)
     if(length(read) == 0){
-      read <- list.files(pattern = ".*1\\.fastq$", full.names = F)
+      read <- list.files(pattern = ".*1\\.fastq$", full.names = FALSE)
     }
-    # read2 <- list.files(pattern = "^Trimmed.*2\\.fastq$", full.names = F)
     for(f in read)
     {
       # read1 <- paste(read1, sep = ",", collapse = ',')
@@ -52,13 +51,13 @@ align_ge <- function(pair, taxa, genome, annotation)
       cmd4 <- paste("hisat2 --dta -x", taxa, "-1", read1, "-2", read2,
                     "| samtools view -bh - | samtools sort - >", out_bam)
       # cat(cmd4, "\n")
-      system(cmd4, intern = T)
+      system(cmd4, intern = TRUE)
     }
 
   } else if(pair == "single"){
-    read <- list.files(pattern = "^Trimmed.*\\.fastq$", full.names = F)
+    read <- list.files(pattern = "^Trimmed.*\\.fastq$", full.names = FALSE)
     if(length(read) == 0){
-      read <- list.files(pattern = ".*\\.fastq$", full.names = F)
+      read <- list.files(pattern = ".*\\.fastq$", full.names = FALSE)
     }
     # read <- paste(read, sep = ",", collapse = ',')
     for(f in read)
@@ -68,7 +67,7 @@ align_ge <- function(pair, taxa, genome, annotation)
       cmd4 <- paste("hisat2 --dta -x", taxa,"-U", f,
                     "| samtools view -bh - | samtools sort - >", out_bam)
       # cat(cmd4, "\n")
-      system(cmd4, intern = T)
+      system(cmd4, intern = TRUE)
     }
 
   } else stop("Paired-end and single-end mix. Please check the data source!")
