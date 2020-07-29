@@ -52,7 +52,6 @@ references:
     year: 2020
 ---
 
-
 ```{r, include = FALSE}
 knitr::opts_chunk$set(
   collapse = TRUE,
@@ -151,3 +150,4 @@ can preprocess local single-cell RNA-seq data in fastq formats. The data are pai
 The outputs of down2quan and fastq2quan are gene count matrix compressed in binary format, and gene ids, barcode + UMI and tier categorization in three separate files. These outputs can be further processed with [tximport](https://bioconductor.org/packages/devel/bioc/vignettes/tximport/inst/doc/tximport.html) and [Seurat](https://satijalab.org/seurat/).
 
 ## References
+
