@@ -28,8 +28,9 @@ get_adapter <- function(sample)
 #' @return None
 #' @order 1
 #' @examples
+#' \dontrun{
 #' adapter_trim(sample, pair)
-#'
+#'}
 adapter_trim <- function(sample, pair, threads = 4, scRNA = FALSE)
 {
   if(scRNA == FALSE){
