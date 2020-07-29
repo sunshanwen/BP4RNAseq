@@ -1,0 +1,20 @@
+---
+title: "BP4RNAseq: a babysitter package for retrospective and newly generated RNA-seq data analyses using both alignment-based and alignment-free quantification methods"
+author: Shanwen Sun, Lei Xu, Quan Zou
+output: rmarkdown::html_vignette
+vignette: >
+  %\VignetteIndexEntry{BP4RNAseq: a babysitter package for retrospective and newly generated RNA-seq data analyses using both alignment-based and alignment-free quantification methods}
+  %\VignetteEngine{knitr::rmarkdown}
+  %\VignetteEncoding{UTF-8}
+---
+
+```{r, include = FALSE}
+knitr::opts_chunk$set(
+  collapse = TRUE,
+  comment = "#>"
+)
+```
+
+```{r setup}
+# library(BP4RNAseq)
+```
