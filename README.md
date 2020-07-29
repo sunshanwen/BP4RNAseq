@@ -8,22 +8,22 @@ of the genome, understanding the regulation of development, and
 investigating the molecular mechanisms that underlie cancer and other
 diseases. RNA-sequencing (RNA-seq) now is the routine to assess the
 genome wide gene expression due to its high speed, accuracy and
-reproducibility, and low cost. An enormous volume of RNA-seq data that
-have been accumulating and deposited in public data repositories, such
-as the Gene Expression Omnibus (GEO) and the Sequence Read Archive
-(SRA). Retrospectively analyzing these data or conducting a brand new
-RNA-seq study is fundamentally important for researchers. However,
-processing raw reads of RNA-seq data, no matter public or newly
-sequenced data, involves a lot of specialized tools and technical
-configurations that are often unfamiliar and time-consuming to learn for
-non-bioinformatics researchers. The goal of BP4RNAseq is to make RNA-seq
-analysis smooth and easy. The package integrates the state-of-art tools
-from both alignment-based and alignment-free quantification workflows.
-It uses an optimized pipeline, applies to both retrospective and newly
-generated RNA-seq data analyses and can take only two nontechnical
-parameters and output formatted gene expression quantification at gene
-and transcript levels. The package also support single-cell RNA-seq
-analyses based on the Alevin algorithm integrated with the Salmon \[1\].
+reproducibility, and low cost. An enormous volume of RNA-seq data have
+been accumulating and deposited in public data repositories, such as the
+Gene Expression Omnibus (GEO) and the Sequence Read Archive (SRA).
+Retrospectively analyzing these data or conducting a brand new RNA-seq
+study is fundamentally important for researchers. However, processing
+raw reads of RNA-seq data, no matter public or newly sequenced data,
+involves a lot of specialized tools and technical configurations that
+are often unfamiliar and time-consuming to learn for non-bioinformatics
+researchers. The goal of BP4RNAseq is to make the RNA-seq analysis
+smooth and easy. The package integrates the state-of-art tools from both
+alignment-based and alignment-free quantification workflows. It uses an
+optimized pipeline, applies to both retrospective and newly generated
+RNA-seq data analyses and can take only two nontechnical parameters and
+output formatted gene expression quantification at gene and transcript
+levels. The package also support single-cell RNA-seq analyses based on
+the Alevin algorithm \[1\].
 
 ### Operating System Requirements
 
@@ -33,26 +33,27 @@ BP4RNAseq runs in Windows (Subsystem for Linux), Linux and macOS.
 
 The BP4RNAseq requires the following utilities:
 
-  - [SRA
-    Toolkit=2.10.3](https://trace.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?view=toolkit_doc)
-  - [Entrez Direct=13.3](https://www.ncbi.nlm.nih.gov/books/NBK179288/)
-  - [FastQC=v0.11.9](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
-  - [Cutadapt=2.10](https://cutadapt.readthedocs.io/en/stable/)
-  - [SAMtools=1.9](http://www.htslib.org/)
-  - [HISAT2=2.2.0](http://daehwankimlab.github.io/hisat2/)
-  - [StringTie=2.1.1](https://ccb.jhu.edu/software/stringtie/)
-  - [Salmon=1.2.1](https://combine-lab.github.io/salmon/)  
-  - [jq=1.6](https://stedolan.github.io/jq/)
-  - [R=3.5.0](https://www.r-project.org/)
+  - [SRA Toolkit
+    \>= 2.10.3](https://trace.ncbi.nlm.nih.gov/Traces/sra/sra.cgi?view=toolkit_doc)
+  - [Entrez Direct
+    \>= 13.3](https://www.ncbi.nlm.nih.gov/books/NBK179288/)
+  - [FastQC \>=
+    v0.11.9](https://www.bioinformatics.babraham.ac.uk/projects/fastqc/)
+  - [Cutadapt \>= 2.10](https://cutadapt.readthedocs.io/en/stable/)
+  - [SAMtools \>= 1.9](http://www.htslib.org/)
+  - [HISAT2 \>= 2.2.0](http://daehwankimlab.github.io/hisat2/)
+  - [StringTie \>= 2.1.1](https://ccb.jhu.edu/software/stringtie/)
+  - [Salmon \>= 1.2.1](https://combine-lab.github.io/salmon/)  
+  - [jq \>= 1.6](https://stedolan.github.io/jq/)
+  - [R \>= 3.5.0](https://www.r-project.org/)
 
 Users can install these dependencies manually.
 
 Alternatively, we provide a bash script to aid users to install all the
 dependencies based on [conda](https://docs.conda.io/en/latest/). The
 script uses Wget, which is pre-installed on most Linux distributions
-such as Windows Subsystem for Linux, to download some of the utilities.
-If wget is not installed, users can easily install it with the following
-commands.
+such as Windows Subsystem for Linux, to download conda. If wget is not
+installed, users can easily install it with the following commands.
 
   - Installing Wget on Ubuntu and Debian or Windows Subsystem
     equivalents
@@ -82,7 +83,8 @@ brew install wget
 ```
 
 With Wget installed, users can install all the dependencies with the
-following commands:
+following
+commands:
 
 ``` r
 wget https://raw.githubusercontent.com/sunshanwen/BP4RNAseq/master/install_depends.sh
@@ -125,12 +127,12 @@ The functions in BP4RNAseq are integrated into two main functions:
 down2quan for public RNA-seq data, fastq2quan for newly generated
 RNA-seq data.
 
-down2quan can receive only two nontechnical parameters. The parameter
-‘accession’ specifies the accession id of the target public RNA-seq
-data in the Gene Expression Omnibus (GEO) or the Sequence Read Archive
-(SRA). The accession id can be of a whole ‘BioProject’ or multiple
-‘BioSample’. The parameter ‘taxa’ offers the scientific or common name
-of the organism investigated. A simple example
+down2quan requires no input data and can receive only two nontechnical
+parameters. The parameter ‘accession’ specifies the accession id of the
+target public RNA-seq data in the Gene Expression Omnibus (GEO) or the
+Sequence Read Archive (SRA). The accession id can be of a whole
+‘BioProject’ or multiple ‘BioSample’. The parameter ‘taxa’ offers the
+scientific or common name of the organism investigated. A simple example
 
 ``` r
 library(BP4RNAseq)
@@ -144,9 +146,9 @@ melanogaster, do the quality control (filter out the poor-quality reads
 and contaminations), reads alignments and gene expression quantification
 based on both alignment-free and alignment-based workflows in the work
 directory. During the quality control procedure, if the contamination of
-the adapter exists the program will automatically detect the adapter
-sequence. However, an option is given to the users to provide the
-adapter sequence to trim before the trimming process.
+the adapter exists, the program will automatically detect the adapter
+sequence to trim. However, an option is given to the users to provide
+the adapter sequence if they know it.
 
 fastq2quan works with local RNA-seq data in fastq formats. It needs two
 nontechnical parameters at a minimum, i.e., ‘taxa’ as explained above
@@ -160,12 +162,12 @@ fastq2quan(taxa="Drosophila melanogaster", pair = "single")
 ```
 
 will download the latest reference genome, transcript and annotation
-data of Drosophila melanogaster, do the quality control, reads
-alignments and gene expression quantification based on both
-alignment-free and alignment-based workflows in the work directory as
-the program down2quan do.
+data of Drosophila melanogaster, and do the quality control, reads
+alignments and gene expression quantification using the local RNA-seq
+data based on both alignment-free and alignment-based workflows as the
+program down2quan do.
 
-Both programs can do the parallel computing, which is specified by the
+Both programs support the parallel computing, which is specified by the
 ‘threads’ parameter.
 
 The outputs of both functions are two gene count matrixes and two
@@ -176,7 +178,7 @@ use retrospectively based on the results from the downstream analyses.
 
 #### Single-cell RNA-seq analyses
 
-down2quan and fastq2quan can also be extended to preprocess single-cell
+down2quan and fastq2quan can also be extended to process single-cell
 RNA-seq data by setting the ‘scRNA’ parameter to be ‘TRUE’ and
 specifying the protocols. Currently, dropseq, chromium and chromiumV3
 are supported protocols. A simple example
@@ -186,12 +188,11 @@ library(BP4RNAseq)
 down2quan(accession=c("SRR11402955","SRR11402974"), taxa="Homo sapiens", scRNA = TRUE, protocol = "dropseq")
 ```
 
-will download the public scRNA-seq data from two ‘BioSample’ with
-accession id “SRR11402955” and “SRR11402974”, respectively, and the
+will download the public single-cell RNA-seq data from two ‘BioSample’
+with accession id “SRR11402955” and “SRR11402974”, respectively, and the
 latest reference genome, transcript and annotation data of Homo sapiens,
-do the quality control (filter out the poor-quality reads and
-contaminations), reads alignments and gene expression quantification
-based on the Alevin workflow.
+do the quality control, reads alignments and gene expression
+quantification based on the Alevin workflow.
 
 Alternatively,
 
@@ -206,8 +207,8 @@ unique molecule identifier (UMI) and the other read being the RNA
 sequence.
 
 The outputs of down2quan and fastq2quan are gene count matrix compressed
-in a binary format, and gene ids, barcode + UMI and tier categorization
-in three separate files. These outputs can be further processed with
+in binary format, and gene ids, barcode + UMI and tier categorization in
+three separate files. These outputs can be further processed with
 [tximport](https://bioconductor.org/packages/devel/bioc/vignettes/tximport/inst/doc/tximport.html)
 and [Seurat](https://satijalab.org/seurat/).
 
