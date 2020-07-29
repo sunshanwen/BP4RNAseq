@@ -1,0 +1,17 @@
+citHeader("To cite BP4RNAseq in publications use:")
+
+citEntry(entry = "Manual",
+         title        = "BP4RNAseq: a babysitter package for retrospective and newly generated RNA-seq data analyses using both alignment-based and alignment-free quantification methods",
+         author       = personList(as.person("Shanwen Sun"),
+                                   as.person("Lei Xu"),
+                                    as.person("Quan Zou")),
+         year         = "2020",
+         note         = "R package version 0.2.2",
+         url          = "https://github.com/sunshanwen/BP4RNAseq",
+
+         textVersion  =
+           paste("Shanwen Sun, Lei Xu, Quan Zou (2020).",
+                 "BP4RNAseq: a babysitter package for retrospective and newly generated RNA-seq data analyses using both alignment-based and alignment-free quantification methods",
+                 "R package version 0.2.2",
+                 "URL https://github.com/sunshanwen/BP4RNAseq")
+)
