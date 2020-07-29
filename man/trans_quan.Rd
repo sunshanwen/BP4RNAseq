@@ -13,6 +13,8 @@ None
 Expression quantification at gene and transcript levels.
 }
 \examples{
+\dontrun{
+
 trans_quan()
 }
-
+}

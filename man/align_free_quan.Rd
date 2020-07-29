@@ -22,8 +22,9 @@ None
 Alignment-free expression quantification with Salmon at gene and transcript levels.
 }
 \examples{
+\dontrun{
 
 align_free_quan("paired", "sesame.fna", "transcript_sesame.fna","sesame.gff")
 }
 
-
+}

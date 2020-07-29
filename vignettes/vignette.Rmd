@@ -117,7 +117,7 @@ down2quan(accession=c("SRR11486115","SRR11486114"), taxa="Drosophila melanogaste
 will download the public RNA-seq data from two 'BioSample' with accession id "SRR11486115" and "SRR11486114", respectively, and the latest reference genome, transcript and annotation data of Drosophila melanogaster, do the quality control (filter out the poor-quality reads and contaminations), reads alignments and gene expression quantification based on both alignment-free and alignment-based workflows in the work directory. During the quality control procedure, if the contamination of the adapter exists, the program will automatically detect the adapter sequence to trim. However, an option is given to the users to provide the adapter sequence if they know it. 
 
 fastq2quan works with local RNA-seq data in fastq formats. It needs two nontechnical parameters at a minimum, i.e., 'taxa' as explained above and 'pair' which specifies the sequencing type with 'single' for single-end (SE) reads or 'paired' for paired-end (PE) reads. Users should place all the fastq files in the work directory. A simple example 
-``` r
+``` r 
 library(BP4RNAseq)
 fastq2quan(taxa="Drosophila melanogaster", pair = "single")
 ```

@@ -18,6 +18,9 @@ None
 scRNA expression quantification with Salmon.
 }
 \examples{
+\dontrun{
+
 align_free_quan("paired", "sesame.fna", "transcript_sesame.fna","sesame.gff")
 }
 
+}
