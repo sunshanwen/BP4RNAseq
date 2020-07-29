@@ -24,8 +24,7 @@ None
 Trim poor quality samples using cutadapt based on the results from quality_test().
 }
 \examples{
-\dontrun{
 
 quality_trim(per_base, per_seq, pair, threads = 4, scRNA)
 }
-}
+

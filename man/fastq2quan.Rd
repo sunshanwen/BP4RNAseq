@@ -36,8 +36,7 @@ None
 Produce the quantifications of gene expression based on the fastq files with alignment-based and alignment-free workflows.
 }
 \examples{
-\dontrun{
 
 down2quan(threads = 4, dir = getwd(), "sesame", novel_transcript = FALSE, scRNA = FALSE)
 }
-}
+

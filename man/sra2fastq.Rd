@@ -16,8 +16,6 @@ A string indicates single-end (SE) or paired-end (PE) reads.
 Convert all SRA files to fastq files and return the sequencing type, i.e., single-end (SE) or paired-end (PE) reads.
 }
 \examples{
-\dontrun{
-
 sra2fastq()
 }
-}
+

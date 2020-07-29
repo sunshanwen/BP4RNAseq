@@ -22,8 +22,6 @@ None
 Trim samples with adapter using cutadapt based on the results from quality_test().
 }
 \examples{
-\dontrun{
-
 adapter_trim(sample, pair)
 }
-}
+

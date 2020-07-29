@@ -22,9 +22,7 @@ None
 Aligning the RNA-seq data to the reference genome with HISAT2.
 }
 \examples{
-\dontrun{
-
 align_ge("paired", "sesame", "sesame.fna", "sesame.gff")
 }
 
-}
+

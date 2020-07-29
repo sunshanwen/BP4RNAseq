@@ -15,8 +15,6 @@ Take averages with alignment-free and alignment-based quantification
 #'
 }
 \examples{
-\dontrun{
-
 average()
 }
-}
+

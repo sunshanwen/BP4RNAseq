@@ -16,8 +16,6 @@ the extracted reference genome, transcript and annotation file names.
 Extract the reference genome, transcript and the corresponding annotation files.
 }
 \examples{
-\dontrun{
-
 extract_genome("sesame")
 }
-}
+

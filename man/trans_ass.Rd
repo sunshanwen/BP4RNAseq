@@ -16,8 +16,6 @@ None
 Transcript assembly with StringTie.
 }
 \examples{
-\dontrun{
-
 trans_ass(novel_transcript = FALSE)
 }
-}
+

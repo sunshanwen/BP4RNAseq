@@ -18,8 +18,7 @@ Problematic samples' names
 Per base sequence quality, per sequence quality scores and adapter content of raw sequence data are assessed and tested based on FastQC.
 }
 \examples{
-\dontrun{
 
 qc_test()
 }
-}
+
