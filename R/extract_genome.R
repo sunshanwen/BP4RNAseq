@@ -11,8 +11,14 @@
 
 extract_genome <- function(taxa)
 {
-  ref_seq <- list.files(pattern = "fna$", recursive = TRUE, full.names = TRUE)
-  transcript <- list.files(pattern = "rna\\.fna", recursive = TRUE, full.names = TRUE)
+  ref_seq <-
+    list.files(pattern = "fna$",
+               recursive = TRUE,
+               full.names = TRUE)
+  transcript <-
+    list.files(pattern = "rna\\.fna",
+               recursive = TRUE,
+               full.names = TRUE)
   # ref_seq1 <- ref_seq[-which(ref_seq == transcript)]
   taxa <- gsub("\\s", "_", taxa)
   name1 <- paste0(taxa, ".fna")
@@ -21,7 +27,10 @@ extract_genome <- function(taxa)
   ref_seq1 <- paste(ref_seq, collapse = ' ')
   cmd2 <- paste("cat", ref_seq1, ">", name1)
   system(cmd2)
-  gff <- list.files(pattern = "gff$", recursive = TRUE, full.names = TRUE)
+  gff <-
+    list.files(pattern = "gff$",
+               recursive = TRUE,
+               full.names = TRUE)
   name2 <- paste0(taxa, ".gff")
   cmd3 <- paste("mv", gff, name2)
   system(cmd3)

@@ -17,51 +17,63 @@
 #'down2quan(threads = 4, dir = getwd(), "sesame", novel_transcript = FALSE, scRNA = FALSE)
 #'}
 
-down2quan <- function(accession, dir = getwd(), taxa, novel_transcript = FALSE, threads = 4, scRNA = FALSE, protocol) {
-  setwd(dir)
-  sra_download(accession, dir)
-  pair <- sra2fastq(threads)
-  quality <- qc_test(threads, scRNA)
+down2quan <-
+  function(accession,
+           dir = getwd(),
+           taxa,
+           novel_transcript = FALSE,
+           threads = 4,
+           scRNA = FALSE,
+           protocol) {
+    setwd(dir)
+    sra_download(accession, dir)
+    pair <- sra2fastq(threads)
+    quality <- qc_test(threads, scRNA)
 
-  if(length(quality[[1]]$sample)) cat("Adapter exists!\n")
-  if(length(quality[[2]]$sample)) cat("Per base sequence quality failed!\n")
-  if(length(quality[[3]]$sample)) cat("Per sequence quality scores failed!\n")
+    if (length(quality[[1]]$sample))
+      cat("Adapter exists!\n")
+    if (length(quality[[2]]$sample))
+      cat("Per base sequence quality failed!\n")
+    if (length(quality[[3]]$sample))
+      cat("Per sequence quality scores failed!\n")
 
-  ### quality trimming
-  if(length(quality[[2]]$sample)|length(quality[[3]]$sample)) {
-    print("Trim low quality bases.")
-    quality_trim(quality[[2]]$sample, quality[[3]]$sample, pair, scRNA)### consider if add directory parameter.
-    if(length(quality[[1]]$sample)) {
+    ### quality trimming
+    if (length(quality[[2]]$sample) | length(quality[[3]]$sample)) {
+      print("Trim low quality bases.")
+      quality_trim(quality[[2]]$sample, quality[[3]]$sample, pair, scRNA)### consider if add directory parameter.
+      if (length(quality[[1]]$sample)) {
+        print("Trim the adapter.")
+        adapter_trim(quality[[1]]$sample, pair, scRNA)
+      }
+    }
+
+    if (length(quality[[1]]$sample)) {
       print("Trim the adapter.")
+      quality_trim(quality[[1]]$sample, quality[[1]]$sample, pair, scRNA)### consider if add directory parameter.
       adapter_trim(quality[[1]]$sample, pair, scRNA)
     }
-  }
+    files <- list.files(dir, pattern = "fastqc", full.names = FALSE)
+    unlink(files)
 
-  if(length(quality[[1]]$sample)) {
-    print("Trim the adapter.")
-    quality_trim(quality[[1]]$sample, quality[[1]]$sample, pair, scRNA)### consider if add directory parameter.
-    adapter_trim(quality[[1]]$sample, pair, scRNA)
+    status <- down_Ref(taxa)
+    if (status == 1)
+    {
+      stop(
+        "The download of reference genome and annotation files failed! Terminate the program."
+      )
+    }
+    # reference <- extract_genome(taxa)
+    taxa_tmp <- gsub("\\s", "_", taxa)
+    genome <- paste0(taxa_tmp, ".fna")
+    transcript <- paste0("transcript_", taxa_tmp, ".fna")
+    annotation <- paste0(taxa_tmp, ".gff")
+    if (scRNA == FALSE) {
+      align_ge(pair, taxa, genome, annotation)
+      trans_ass(novel_transcript)
+      trans_quan()
+      align_free_quan(pair, genome, transcript, annotation)
+      average()
+    } else if (scRNA == TRUE) {
+      scRNA_quan(transcript, protocol)
+    }
   }
-  files <- list.files(dir, pattern = "fastqc", full.names = FALSE)
-  unlink(files)
-
-  status <- down_Ref(taxa)
-  if(status == 1)
-  {
-    stop("The download of reference genome and annotation files failed! Terminate the program.")
-  }
-  # reference <- extract_genome(taxa)
-  taxa_tmp <- gsub("\\s", "_", taxa)
-  genome <- paste0(taxa_tmp, ".fna")
-  transcript <- paste0("transcript_", taxa_tmp, ".fna")
-  annotation <- paste0(taxa_tmp, ".gff")
-  if(scRNA == FALSE){
-    align_ge(pair, taxa, genome, annotation)
-    trans_ass(novel_transcript)
-    trans_quan()
-    align_free_quan(pair, genome, transcript, annotation)
-    average()
-  } else if (scRNA == TRUE){
-    scRNA_quan(transcript, protocol)
-  }
-}

@@ -16,38 +16,76 @@
 
 sra_download <- function(accession, dir)
 {
-    dir=getwd()
+    dir = getwd()
     ##check the version of sratoolkit
-    ver <- system("vdb-config --version | cut -d '.' -f 3", intern = TRUE)
+    ver <-
+        system("vdb-config --version | cut -d '.' -f 3", intern = TRUE)
     ver <- stats::na.exclude(as.numeric(as.character(ver)))
-    if(ver <= 3){
+    if (ver <= 3) {
         system("mkdir -p $HOME/.ncbi/")
         system("touch $HOME/.ncbi/user-settings.mkfg")
-        cmd1 <- paste0("echo \"/repository/user/main/public/root = \\\"",dir,"\\\"\" > $HOME/.ncbi/user-settings.mkfg")
+        cmd1 <-
+            paste0(
+                "echo \"/repository/user/main/public/root = \\\"",
+                dir,
+                "\\\"\" > $HOME/.ncbi/user-settings.mkfg"
+            )
         system(cmd1)
-        for(f in accession)
+        for (f in accession)
         {
             #### use Entrez Direct tool to get all samples accession code, then use prefetch to download all the data
-            cmd2 = paste("prefetch -O", dir, "-X 100000000 $(esearch -db sra -query", f, "| efetch --format runinfo | grep",f, "| cut -d \",\" -f 1)")
+            cmd2 = paste(
+                "prefetch -O",
+                dir,
+                "-X 100000000 $(esearch -db sra -query",
+                f,
+                "| efetch --format runinfo | grep",
+                f,
+                "| cut -d \",\" -f 1)"
+            )
             system(cmd2)
         }
     } else {
-        cmd1 <- paste0("echo \"/repository/user/main/public/root = \\\"",dir,"\\\"\" > $HOME/.ncbi/user-settings.mkfg")
+        cmd1 <-
+            paste0(
+                "echo \"/repository/user/main/public/root = \\\"",
+                dir,
+                "\\\"\" > $HOME/.ncbi/user-settings.mkfg"
+            )
         # cat(cmd1)
         system(cmd1)
         # system("vdb-config --interactive", intern = T)
         # cmd3 <- "vdb-config -i & read -t 3; kill $!"
         # cat(cmd3)
         # system2(cmd3, intern = T)
-        system(paste("/bin/bash -c", shQuote("vdb-config -i & read -t 3; kill $!")), ignore.stdout = TRUE, ignore.stderr = TRUE)
+        system(
+            paste(
+                "/bin/bash -c",
+                shQuote("vdb-config -i & read -t 3; kill $!")
+            ),
+            ignore.stdout = TRUE,
+            ignore.stderr = TRUE
+        )
 
-        for(f in accession)
+        for (f in accession)
         {
             #### use Entrez Direct tool to get all samples accession code, then use prefetch to download all the data
-            cmd2 = paste("prefetch $(esearch -db sra -query", f, "| efetch --format runinfo | grep",f, "| cut -d \",\" -f 1)")
+            cmd2 = paste(
+                "prefetch $(esearch -db sra -query",
+                f,
+                "| efetch --format runinfo | grep",
+                f,
+                "| cut -d \",\" -f 1)"
+            )
             system(cmd2)
-            path <- paste0(dir,"/sra")
-            file <- list.files(path, pattern = ".sra$", recursive = FALSE, full.names = TRUE)
+            path <- paste0(dir, "/sra")
+            file <-
+                list.files(
+                    path,
+                    pattern = ".sra$",
+                    recursive = FALSE,
+                    full.names = TRUE
+                )
             # file<-list.files("./sra", pattern = ".sra$", recursive = F, full.names = T)
             cmd4 <- paste("mv", file, dir)
             system(cmd4)
@@ -56,5 +94,3 @@ sra_download <- function(accession, dir)
 
 
 }
-
-

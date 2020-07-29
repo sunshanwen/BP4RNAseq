@@ -1,13 +1,28 @@
 index_build <- function(taxa, genome, annotation)
 {
-  cmd1 <- paste("awk \'{if ($3==\"exon\") {print $1\"\\t\"$4-1\"\\t\"$5-1}}\'", annotation, "> exonsFile.table")
+  cmd1 <-
+    paste(
+      "awk \'{if ($3==\"exon\") {print $1\"\\t\"$4-1\"\\t\"$5-1}}\'",
+      annotation,
+      "> exonsFile.table"
+    )
   system(cmd1)
-  cmd2 <- paste("awk \'{if ($3==\"intron\") {print $1\"\\t\"$4-1\"\\t\"$5-1\"\\t\"$7}}\'", annotation, "> ssFile.table")
+  cmd2 <-
+    paste(
+      "awk \'{if ($3==\"intron\") {print $1\"\\t\"$4-1\"\\t\"$5-1\"\\t\"$7}}\'",
+      annotation,
+      "> ssFile.table"
+    )
   system(cmd2)
-  if(file.size("exonsFile.table")*file.size("ssFile.table")){
-    cmd3 <- paste("hisat2-build -f", genome, taxa, "--ss ssFile.table", "--exon exonsFile.table")
+  if (file.size("exonsFile.table") * file.size("ssFile.table")) {
+    cmd3 <-
+      paste("hisat2-build -f",
+            genome,
+            taxa,
+            "--ss ssFile.table",
+            "--exon exonsFile.table")
     system(cmd3)
-  }else {
+  } else {
     cmd3 <- paste("hisat2-build -f", genome, taxa)
     system(cmd3)
   }
@@ -33,14 +48,18 @@ align_ge <- function(pair, taxa, genome, annotation)
   taxa <- gsub("\\s", "_", taxa)
 
   index_build(taxa, genome, annotation)
-  index <- list.files(pattern = "ht2$", recursive = TRUE, full.names = TRUE)
-  if(pair == "paired")
+  index <-
+    list.files(pattern = "ht2$",
+               recursive = TRUE,
+               full.names = TRUE)
+  if (pair == "paired")
   {
-    read <- list.files(pattern = "^Trimmed.*1\\.fastq$", full.names = FALSE)
-    if(length(read) == 0){
+    read <-
+      list.files(pattern = "^Trimmed.*1\\.fastq$", full.names = FALSE)
+    if (length(read) == 0) {
       read <- list.files(pattern = ".*1\\.fastq$", full.names = FALSE)
     }
-    for(f in read)
+    for (f in read)
     {
       # read1 <- paste(read1, sep = ",", collapse = ',')
       # read2 <- paste(read2, sep = ",", collapse = ',')
@@ -48,27 +67,42 @@ align_ge <- function(pair, taxa, genome, annotation)
       out_bam <- paste0(name, ".bam")
       read1 <- paste0(name, "_1.fastq")
       read2 <- paste0(name, "_2.fastq")
-      cmd4 <- paste("hisat2 --dta -x", taxa, "-1", read1, "-2", read2,
-                    "| samtools view -bh - | samtools sort - >", out_bam)
+      cmd4 <-
+        paste(
+          "hisat2 --dta -x",
+          taxa,
+          "-1",
+          read1,
+          "-2",
+          read2,
+          "| samtools view -bh - | samtools sort - >",
+          out_bam
+        )
       # cat(cmd4, "\n")
       system(cmd4, intern = TRUE)
     }
 
-  } else if(pair == "single"){
-    read <- list.files(pattern = "^Trimmed.*\\.fastq$", full.names = FALSE)
-    if(length(read) == 0){
+  } else if (pair == "single") {
+    read <-
+      list.files(pattern = "^Trimmed.*\\.fastq$", full.names = FALSE)
+    if (length(read) == 0) {
       read <- list.files(pattern = ".*\\.fastq$", full.names = FALSE)
     }
     # read <- paste(read, sep = ",", collapse = ',')
-    for(f in read)
+    for (f in read)
     {
       name <- gsub(".fastq", "", f)
       out_bam <- paste0(name, ".bam")
-      cmd4 <- paste("hisat2 --dta -x", taxa,"-U", f,
-                    "| samtools view -bh - | samtools sort - >", out_bam)
+      cmd4 <- paste("hisat2 --dta -x",
+                    taxa,
+                    "-U",
+                    f,
+                    "| samtools view -bh - | samtools sort - >",
+                    out_bam)
       # cat(cmd4, "\n")
       system(cmd4, intern = TRUE)
     }
 
-  } else stop("Paired-end and single-end mix. Please check the data source!")
+  } else
+    stop("Paired-end and single-end mix. Please check the data source!")
 }

@@ -14,13 +14,16 @@
 trans_ass <- function(novel_transcript = FALSE)
 {
   aligned_bam <- list.files(pattern = "*\\.bam$")
-  gff <- list.files(pattern = "gff$", recursive = TRUE, full.names = TRUE)
-  for(f in aligned_bam)
+  gff <-
+    list.files(pattern = "gff$",
+               recursive = TRUE,
+               full.names = TRUE)
+  for (f in aligned_bam)
   {
     # taxa <- gsub("^sorted", "", gsub("\\.bam", "", f))
     taxa <- gsub("\\.bam", "", f)
     output <- paste0("ballgown/", taxa, "/", taxa, ".gtf")
-    if(novel_transcript == TRUE){
+    if (novel_transcript == TRUE) {
       cmd1 <- paste("stringtie", f, "-b ballgown -G", gff, "-o", output)
       # cat(cmd1, "\n")
       system(cmd1)
@@ -29,7 +32,8 @@ trans_ass <- function(novel_transcript = FALSE)
       # system(cmd2)
       #### consider to add merge
     } else {
-      cmd1 <- paste("stringtie", f, "-G", gff, "-e -b ballgown", "-o", output)
+      cmd1 <-
+        paste("stringtie", f, "-G", gff, "-e -b ballgown", "-o", output)
       # cat(cmd1, "\n")
       system(cmd1)
       #### consider to add merge
