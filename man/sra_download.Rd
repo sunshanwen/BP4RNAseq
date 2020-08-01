@@ -4,7 +4,7 @@
 \alias{sra_download}
 \title{Download RNA-seq samples from the NCBI.}
 \usage{
-sra_download(accession, dir)
+sra_download(accession, dir = getwd())
 }
 \arguments{
 \item{accession}{the bioproject accession code for the RNA-seq samples deposited in the NCBI.}
@@ -12,14 +12,12 @@ sra_download(accession, dir)
 \item{dir}{the working directory. Default is the current working directory.}
 }
 \value{
-None
+the status of the download (0 for success, 1 for error).
 }
 \description{
 Download RNA-seq samples from the NCBI using SRA Toolkit and Entrez Direct based on the accession code.
 }
 \examples{
-\dontrun{
+sra_download(accession = "SRR11427582")
 
-sra_download("PRJNA615381")
-}
 }

@@ -9,10 +9,10 @@
 #' @export quality_trim
 #' @return None
 #' @examples
-#' \dontrun{
 #'
-#' quality_trim(per_base, per_seq, pair, threads = 4, scRNA)
-#' }
+#' quality_trim(per_base = "test_read_2.fastq", per_seq = "test_read_2.fastq",
+#'              pair = "paired", threads = 4, scRNA = TRUE)
+#'
 
 quality_trim <-
   function(per_base,
@@ -34,7 +34,7 @@ quality_trim <-
         if (pair == "paired") {
           file <- c(paste0(f, "_1_fastqc"), paste0(f, "_2_fastqc"))
           qc_reports <-
-            list.files(getwd(), pattern = "fastqc.zip$", full.names = FALSE)
+            list.files(pattern = "fastqc.zip$", full.names = FALSE, recursive = FALSE)
           qc_collection <-
             fastqcr::qc_read_collection(
               qc_reports,
@@ -52,44 +52,47 @@ quality_trim <-
           outfile1 <- paste0("Trimmed_", f, "_1.fastq")
           outfile2 <- paste0("Trimmed_", f, "_2.fastq")
 
-          if (Encoding == "Sanger / Illumina 1.9") {
-            cmd = paste(
-              "cutadapt -q 10",
-              "-o",
-              outfile1,
-              "-p",
-              outfile2,
-              "-m 20",
-              "-j ",
-              threads,
-              infile1,
-              infile2
-            )
-            # cat(cmd,"\n")#print the current command
-            system(cmd)
-          } else if (Encoding == "Illumina 1.3" |
-                     Encoding == "Illumina 1.5") {
-            cmd = paste(
-              "cutadapt -q 10",
-              "--quality-base=64",
-              "-o",
-              outfile1,
-              "-p",
-              outfile2,
-              "-m 20",
-              "-j ",
-              threads,
-              infile1,
-              infile2
-            )
-            # cat(cmd,"\n")#print the current command
-            system(cmd)
-          } else
-            stop("Wrong Encoding. Exit.")
+          if(length(Encoding)){
+            if (Encoding == "Sanger / Illumina 1.9") {
+              cmd = paste(
+                "cutadapt -q 10",
+                "-o",
+                outfile1,
+                "-p",
+                outfile2,
+                "-m 20",
+                "-j ",
+                threads,
+                infile1,
+                infile2
+              )
+              # cat(cmd,"\n")#print the current command
+              system(cmd)
+            } else if (Encoding == "Illumina 1.3" |
+                       Encoding == "Illumina 1.5") {
+              cmd = paste(
+                "cutadapt -q 10",
+                "--quality-base=64",
+                "-o",
+                outfile1,
+                "-p",
+                outfile2,
+                "-m 20",
+                "-j ",
+                threads,
+                infile1,
+                infile2
+              )
+              # cat(cmd,"\n")#print the current command
+              system(cmd)
+            } else
+              stop("Wrong Encoding. Exit.")
+          } else print("Could not get the Encoding.")
+
         } else if (pair == "single") {
           file <- paste0(f, "_fastqc")
           qc_reports <-
-            list.files(getwd(), pattern = "fastqc.zip$", full.names = FALSE)
+            list.files(pattern = "fastqc.zip$", full.names = FALSE, recursive = FALSE)
           qc_collection <-
             fastqcr::qc_read_collection(
               qc_reports,
@@ -104,6 +107,60 @@ quality_trim <-
           infile <- paste0(f, ".fastq")
           outfile <- paste0("Trimmed_", f, ".fastq")
 
+          if(length(Encoding)){
+            if (Encoding == "Sanger / Illumina 1.9") {
+              cmd = paste("cutadapt -q 10",
+                          "-o",
+                          outfile,
+                          "-m 20",
+                          "-j ",
+                          threads,
+                          infile)
+              # cat(cmd,"\n")#print the current command
+              system(cmd)
+            } else if (Encoding == "Illumina 1.3" |
+                       Encoding == "Illumina 1.5") {
+              cmd = paste(
+                "cutadapt -q 10",
+                "--quality-base=64",
+                "-o",
+                outfile,
+                "-m 20",
+                "-j ",
+                threads,
+                infile
+              )
+              # cat(cmd,"\n")#print the current command
+              system(cmd)
+            } else
+              stop("Wrong Encoding. Exit.")
+          } else print("Could not get the Encoding.")
+
+        }
+      }
+      unlink(files)
+    } else if (scRNA == TRUE) {
+      files <- unique(gsub("\\.fastq", "", unique(c(
+        per_base, per_seq
+      ))))
+      for (f in files) {
+        qc_reports <-
+          list.files(pattern = "fastqc.zip$", full.names = FALSE, recursive = FALSE)
+        qc_collection <-
+          fastqcr::qc_read_collection(
+            qc_reports,
+            sample_names = gsub(".zip", "", qc_reports),
+            modules = "all",
+            verbose = TRUE
+          )
+        file <- paste0(f, "_fastqc")
+        Encoding <-
+          unique(qc_collection$basic_statistics[qc_collection$basic_statistics$Measure == "Encoding" &
+                                                  qc_collection$basic_statistics$sample == file, 3])
+        infile <- paste0(f, ".fastq")
+        outfile <- paste0("Trimmed_", f, ".fastq")
+
+        if(length(Encoding)){
           if (Encoding == "Sanger / Illumina 1.9") {
             cmd = paste("cutadapt -q 10",
                         "-o",
@@ -128,56 +185,9 @@ quality_trim <-
             )
             # cat(cmd,"\n")#print the current command
             system(cmd)
-          } else
-            stop("Wrong Encoding. Exit.")
-        }
-      }
-      unlink(files)
-    } else if (scRNA == TRUE) {
-      files <- unique(gsub("\\.fastq", "", unique(c(
-        per_base, per_seq
-      ))))
-      for (d in files) {
-        qc_reports <-
-          list.files(getwd(), pattern = "fastqc.zip$", full.names = FALSE)
-        qc_collection <-
-          fastqcr::qc_read_collection(
-            qc_reports,
-            sample_names = gsub(".zip", "", qc_reports),
-            modules = "all",
-            verbose = TRUE
-          )
-        Encoding <-
-          unique(qc_collection$basic_statistics[qc_collection$basic_statistics$Measure == "Encoding" &
-                                                  qc_collection$basic_statistics$sample == file, 3])
-        infile <- paste0(d, ".fastq")
-        outfile <- paste0("Trimmed_", d, ".fastq")
-        if (Encoding == "Sanger / Illumina 1.9") {
-          cmd = paste("cutadapt -q 10",
-                      "-o",
-                      outfile,
-                      "-m 20",
-                      "-j ",
-                      threads,
-                      infile)
-          # cat(cmd,"\n")#print the current command
-          system(cmd)
-        } else if (Encoding == "Illumina 1.3" |
-                   Encoding == "Illumina 1.5") {
-          cmd = paste(
-            "cutadapt -q 10",
-            "--quality-base=64",
-            "-o",
-            outfile,
-            "-m 20",
-            "-j ",
-            threads,
-            infile
-          )
-          # cat(cmd,"\n")#print the current command
-          system(cmd)
-        }
-      }
+          }
+        }else print("Could not get the Encoding.")
 
+      }
     }
   }

@@ -36,8 +36,7 @@ None
 Download the RNA-seq samples from the NCBI and produce the quantifications of gene expression with alignment-based and alignment-free workflows.
 }
 \examples{
-\dontrun{
 
-down2quan(threads = 4, dir = getwd(), "sesame", novel_transcript = FALSE, scRNA = FALSE)
-}
+down2quan(accession = "SRR11427582", dir = getwd(), taxa = "Drosophila melanogaster", novel_transcript = FALSE, scRNA = FALSE)
+
 }

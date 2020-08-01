@@ -2,21 +2,34 @@
 % Please edit documentation in R/average.R
 \name{average}
 \alias{average}
-\title{Take averages with alignment-free and alignment-based quantification
-#'}
+\title{Take averages with alignment-free and alignment-based quantification}
 \usage{
-average()
+average(based_gene, free_gene, based_transcript, free_transcript)
+}
+\arguments{
+\item{based_gene}{gene count matrix assessed based on alignment-based workflow}
+
+\item{free_gene}{gene count matrix assessed based on alignment-free workflow}
+
+\item{based_transcript}{transcript count matrix assessed based on alignment-based workflow}
+
+\item{free_transcript}{transcript count matrix assessed based on alignment-free workflow}
 }
 \value{
 the average of gene expression quantification with alignment-free and alignment-based quantification workflow
 }
 \description{
 Take averages with alignment-free and alignment-based quantification
-#'
 }
 \examples{
-\dontrun{
 
-average()
-}
+align_based_gene <- system.file("extdata", "test_gene_alignment_based_quantification.csv", package = "BP4RNAseq")
+align_free_gene <- system.file("extdata", "test_gene_alignment_free_quantification.csv", package = "BP4RNAseq")
+align_based_transcript <- system.file("extdata", "test_transcript_alignment_based_quantification.csv", package = "BP4RNAseq")
+align_free_transcript <- system.file("extdata", "test_transcript_alignment_free_quantification.csv", package = "BP4RNAseq")
+align_based_gene <- read.csv(align_based_gene, header = TRUE)
+align_free_gene <- read.csv(align_free_gene, header = TRUE)
+align_based_transcript <- read.csv(align_based_transcript, header = TRUE)
+align_free_transcript <- read.csv(align_free_transcript, header = TRUE)
+average(align_based_gene, align_free_gene, align_based_transcript, align_free_transcript)
 }

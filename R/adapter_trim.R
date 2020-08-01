@@ -1,26 +1,25 @@
-#' Get the adapter based on FASTQC report.
-#'
-#' Get the adapter based on FASTQC report produced by quality_test().
-#' @inheritParams adapter_trim
-#' @return adapter name
-#' @order 2
+## Get the adapter based on FASTQC report.
+
 get_adapter <- function(sample)
 {
+  adapter_found <- NULL
   qc_reports <-
-    list.files(getwd(), pattern = "fastqc.zip", full.names = FALSE)
-  qc_collection <- fastqcr::qc_read_collection(
-    qc_reports,
-    sample_names = gsub(".zip", "", qc_reports),
-    modules = "all",
-    verbose = TRUE
-  )
-  if (length(sample))
-  {
-    dat <- qc_collection$adapter_content
-    tt <- apply(dat[, -c(1, 2)] > 10, 2, sum) > 0
-    adapter_found <- names(tt)[tt]
-    return(adapter_found)
+    list.files(pattern = "fastqc.zip", full.names = FALSE)
+  if (length(qc_reports)) {
+    qc_collection <- fastqcr::qc_read_collection(
+      qc_reports,
+      sample_names = gsub(".zip", "", qc_reports),
+      modules = "all",
+      verbose = TRUE
+    )
+    if (length(sample))
+    {
+      dat <- qc_collection$adapter_content
+      tt <- apply(dat[,-c(1, 2)] > 10, 2, sum) > 0
+      adapter_found <- names(tt)[tt]
+    }
   }
+  return(adapter_found)
 }
 
 #' Trim samples with adapter using cutadapt.
@@ -29,14 +28,13 @@ get_adapter <- function(sample)
 #' @param sample samples with adapter.
 #' @param pair "single" for single-end (SE) or "paired" for paired-end (PE) reads.
 #' @param threads the number of threads to be used. Default is 4.
-#' @export adapter_trim
 #' @param scRNA logic, whether single-cell RNA-seq is quantified or not. Default is FALSE.
+#' @export adapter_trim
 #' @return None
-#' @order 1
 #' @examples
-#' \dontrun{
-#' adapter_trim(sample, pair)
-#'}
+#'
+#' adapter_trim(sample = "test_read_2.fastq", pair = "paired", scRNA = TRUE)
+#'
 adapter_trim <- function(sample,
                          pair,
                          threads = 4,
@@ -97,7 +95,7 @@ adapter_trim <- function(sample,
                         threads,
                         infile)
             system(cmd)
-            unlink(c(infile))
+            unlink(infile)
           } else if (adap_3or5 == "5") {
             cmd = paste("cutadapt -g",
                         sequence,
@@ -107,7 +105,7 @@ adapter_trim <- function(sample,
                         threads,
                         infile)
             system(cmd)
-            unlink(c(infile))
+            unlink(infile)
           } else if (adap_3or5 == "b") {
             cmd = paste("cutadapt -b",
                         sequence,
@@ -117,7 +115,7 @@ adapter_trim <- function(sample,
                         threads,
                         infile)
             system(cmd)
-            unlink(c(infile))
+            unlink(infile)
           } else
             stop("Wrong selection. Exit.")
         }
@@ -125,148 +123,151 @@ adapter_trim <- function(sample,
       #}
     } else if (answer3 == "n") {
       adapter = get_adapter(sample)
-      for (i in samples)
-      {
-        if (pair[pair$samples == i, 2] == "pair")
+
+      if (length(adapter)) {
+        for (i in samples)
         {
-          outfile1 <- paste0("Adapter_trimmed_", i, "_1.fastq")
-          outfile2 <- paste0("Adapter_trimmed_", i, "_2.fastq")
-          infile1 <- paste0("Trimmed_", i, "_1.fastq")
-          infile2 <- paste0("Trimmed_", i, "_2.fastq")
-          #### to continue
-          if (adapter == "Illumina Universal Adapter") {
-            cmd = paste(
-              "cutadapt -a AGATCGGAAGAG -A AGATCGGAAGAG",
-              "-o",
-              outfile1,
-              "-p",
-              outfile2,
-              "-j ",
-              threads,
-              infile1,
-              infile2
-            )
-            #cat(cmd,"\n")#print the current command
-            system(cmd)
-            unlink(c(infile1, infile2))
-          } else if (adapter == "Illumina Small RNA 3' Adapter") {
-            cmd = paste(
-              "cutadapt -a TGGAATTCTCGG -A TGGAATTCTCGG",
-              "-o",
-              outfile1,
-              "-p",
-              outfile2,
-              "-j ",
-              threads,
-              infile1,
-              infile2
-            )
-            #cat(cmd,"\n")#print the current command
-            system(cmd)
-            unlink(c(infile1, infile2))
-          } else if (adapter == "Nextera Transposase Sequence") {
-            cmd = paste(
-              "cutadapt -a CTGTCTCTTATA -A CTGTCTCTTATA",
-              "-o",
-              outfile1,
-              "-p",
-              outfile2,
-              "-j ",
-              threads,
-              infile1,
-              infile2
-            )
-            #cat(cmd,"\n")#print the current command
-            system(cmd)
-            unlink(c(infile1, infile2))
-          } else if (adapter == "SOLID Small RNA Adapter") {
-            cmd = paste(
-              "cutadapt -a CGCCTTGGCCGT -A CGCCTTGGCCGT",
-              "-o",
-              outfile1,
-              "-p",
-              outfile2,
-              "-j ",
-              threads,
-              infile1,
-              infile2
-            )
-            #cat(cmd,"\n")#print the current command
-            system(cmd)
-            unlink(c(infile1, infile2))
-          } else if (adapter == "Illumina Small RNA 5' Adapter") {
-            cmd = paste(
-              "cutadapt -a GATCGTCGGACT -A GATCGTCGGACT",
-              "-o",
-              outfile1,
-              "-p",
-              outfile2,
-              "-j ",
-              threads,
-              infile1,
-              infile2
-            )
-            #cat(cmd,"\n")#print the current command
-            system(cmd)
-            unlink(c(infile1, infile2))
-          } else
-            stop("Wrong adapter. Exit.")
-        } else if (pair[pair$samples == i, 2] == "single") {
-          infile <- paste0("Trimmed_", i, ".fastq")### maybe need to add "_"
-          outfile <-
-            paste0("Adapter_trimmed_", i, ".fastq")### maybe need to add "_"
-          if (adapter == "Illumina Universal Adapter") {
-            cmd = paste("cutadapt -a AGATCGGAAGAG",
-                        "-o",
-                        outfile,
-                        "-j ",
-                        threads,
-                        infile)
-            #cat(cmd,"\n")#print the current command
-            system(cmd)
-            unlink(c(infile))
-          } else if (adapter == "Illumina Small RNA 3' Adapter") {
-            cmd = paste("cutadapt -a TGGAATTCTCGG",
-                        "-o",
-                        outfile,
-                        "-j ",
-                        threads,
-                        infile)
-            #cat(cmd,"\n")#print the current command
-            system(cmd)
-            unlink(c(infile))
-          } else if (adapter == "Nextera Transposase Sequence") {
-            cmd = paste("cutadapt -a CTGTCTCTTATA",
-                        "-o",
-                        outfile,
-                        "-j ",
-                        threads,
-                        infile)
-            #cat(cmd,"\n")#print the current command
-            system(cmd)
-            unlink(c(infile))
-          } else if (adapter == "SOLID Small RNA Adapter") {
-            cmd = paste("cutadapt -a CGCCTTGGCCGT",
-                        "-o",
-                        outfile,
-                        "-j ",
-                        threads,
-                        infile)
-            #cat(cmd,"\n")#print the current command
-            system(cmd)
-            unlink(c(infile))
-          } else if (adapter == "Illumina Small RNA 5' Adapter") {
-            cmd = paste("cutadapt -g GATCGTCGGACT",
-                        "-o",
-                        outfile,
-                        "-j ",
-                        threads,
-                        infile)
-            #cat(cmd,"\n")#print the current command
-            system(cmd)
-            unlink(c(infile))
-          } else
-            stop("Wrong adapter. Exit.")
+          if (pair[pair$samples == i, 2] == "pair")
+          {
+            outfile1 <- paste0("Adapter_trimmed_", i, "_1.fastq")
+            outfile2 <- paste0("Adapter_trimmed_", i, "_2.fastq")
+            infile1 <- paste0("Trimmed_", i, "_1.fastq")
+            infile2 <- paste0("Trimmed_", i, "_2.fastq")
+            #### to continue
+            if (adapter == "Illumina Universal Adapter") {
+              cmd = paste(
+                "cutadapt -a AGATCGGAAGAG -A AGATCGGAAGAG",
+                "-o",
+                outfile1,
+                "-p",
+                outfile2,
+                "-j ",
+                threads,
+                infile1,
+                infile2
+              )
+              #cat(cmd,"\n")#print the current command
+              system(cmd)
+              unlink(c(infile1, infile2))
+            } else if (adapter == "Illumina Small RNA 3' Adapter") {
+              cmd = paste(
+                "cutadapt -a TGGAATTCTCGG -A TGGAATTCTCGG",
+                "-o",
+                outfile1,
+                "-p",
+                outfile2,
+                "-j ",
+                threads,
+                infile1,
+                infile2
+              )
+              #cat(cmd,"\n")#print the current command
+              system(cmd)
+              unlink(c(infile1, infile2))
+            } else if (adapter == "Nextera Transposase Sequence") {
+              cmd = paste(
+                "cutadapt -a CTGTCTCTTATA -A CTGTCTCTTATA",
+                "-o",
+                outfile1,
+                "-p",
+                outfile2,
+                "-j ",
+                threads,
+                infile1,
+                infile2
+              )
+              #cat(cmd,"\n")#print the current command
+              system(cmd)
+              unlink(c(infile1, infile2))
+            } else if (adapter == "SOLID Small RNA Adapter") {
+              cmd = paste(
+                "cutadapt -a CGCCTTGGCCGT -A CGCCTTGGCCGT",
+                "-o",
+                outfile1,
+                "-p",
+                outfile2,
+                "-j ",
+                threads,
+                infile1,
+                infile2
+              )
+              #cat(cmd,"\n")#print the current command
+              system(cmd)
+              unlink(c(infile1, infile2))
+            } else if (adapter == "Illumina Small RNA 5' Adapter") {
+              cmd = paste(
+                "cutadapt -a GATCGTCGGACT -A GATCGTCGGACT",
+                "-o",
+                outfile1,
+                "-p",
+                outfile2,
+                "-j ",
+                threads,
+                infile1,
+                infile2
+              )
+              #cat(cmd,"\n")#print the current command
+              system(cmd)
+              unlink(c(infile1, infile2))
+            } else
+              stop("Wrong adapter. Exit.")
+          } else if (pair[pair$samples == i, 2] == "single") {
+            infile <- paste0("Trimmed_", i, ".fastq")### maybe need to add "_"
+            outfile <-
+              paste0("Adapter_trimmed_", i, ".fastq")### maybe need to add "_"
+            if (adapter == "Illumina Universal Adapter") {
+              cmd = paste("cutadapt -a AGATCGGAAGAG",
+                          "-o",
+                          outfile,
+                          "-j ",
+                          threads,
+                          infile)
+              #cat(cmd,"\n")#print the current command
+              system(cmd)
+              unlink(infile)
+            } else if (adapter == "Illumina Small RNA 3' Adapter") {
+              cmd = paste("cutadapt -a TGGAATTCTCGG",
+                          "-o",
+                          outfile,
+                          "-j ",
+                          threads,
+                          infile)
+              #cat(cmd,"\n")#print the current command
+              system(cmd)
+              unlink(infile)
+            } else if (adapter == "Nextera Transposase Sequence") {
+              cmd = paste("cutadapt -a CTGTCTCTTATA",
+                          "-o",
+                          outfile,
+                          "-j ",
+                          threads,
+                          infile)
+              #cat(cmd,"\n")#print the current command
+              system(cmd)
+              unlink(infile)
+            } else if (adapter == "SOLID Small RNA Adapter") {
+              cmd = paste("cutadapt -a CGCCTTGGCCGT",
+                          "-o",
+                          outfile,
+                          "-j ",
+                          threads,
+                          infile)
+              #cat(cmd,"\n")#print the current command
+              system(cmd)
+              unlink(infile)
+            } else if (adapter == "Illumina Small RNA 5' Adapter") {
+              cmd = paste("cutadapt -g GATCGTCGGACT",
+                          "-o",
+                          outfile,
+                          "-j ",
+                          threads,
+                          infile)
+              #cat(cmd,"\n")#print the current command
+              system(cmd)
+              unlink(infile)
+            } else
+              stop("Wrong adapter. Exit.")
+          }
         }
       }
     }
@@ -293,7 +294,7 @@ adapter_trim <- function(sample,
                       threads,
                       infile)
           system(cmd)
-          unlink(c(infile))
+          unlink(infile)
         } else if (adap_3or5 == "5") {
           cmd = paste("cutadapt -g",
                       sequence,
@@ -303,7 +304,7 @@ adapter_trim <- function(sample,
                       threads,
                       infile)
           system(cmd)
-          unlink(c(infile))
+          unlink(infile)
         } else if (adap_3or5 == "b") {
           cmd = paste("cutadapt -b",
                       sequence,
@@ -313,7 +314,7 @@ adapter_trim <- function(sample,
                       threads,
                       infile)
           system(cmd)
-          unlink(c(infile))
+          unlink(infile)
         } else
           stop("Wrong selection. Exit.")
 
@@ -321,63 +322,65 @@ adapter_trim <- function(sample,
       #}
     } else if (answer3 == "n") {
       adapter = get_adapter(sample)
-      for (i in samples)
-      {
-        infile <- paste0("Trimmed_", i, ".fastq")### maybe need to add "_"
-        outfile <-
-          paste0("Adapter_trimmed_", i, ".fastq")### maybe need to add "_"
-        if (adapter == "Illumina Universal Adapter") {
-          cmd = paste("cutadapt -a AGATCGGAAGAG",
-                      "-o",
-                      outfile,
-                      "-j ",
-                      threads,
-                      infile)
-          #cat(cmd,"\n")#print the current command
-          system(cmd)
-          unlink(c(infile))
-        } else if (adapter == "Illumina Small RNA 3' Adapter") {
-          cmd = paste("cutadapt -a TGGAATTCTCGG",
-                      "-o",
-                      outfile,
-                      "-j ",
-                      threads,
-                      infile)
-          #cat(cmd,"\n")#print the current command
-          system(cmd)
-          unlink(c(infile))
-        } else if (adapter == "Nextera Transposase Sequence") {
-          cmd = paste("cutadapt -a CTGTCTCTTATA",
-                      "-o",
-                      outfile,
-                      "-j ",
-                      threads,
-                      infile)
-          #cat(cmd,"\n")#print the current command
-          system(cmd)
-          unlink(c(infile))
-        } else if (adapter == "SOLID Small RNA Adapter") {
-          cmd = paste("cutadapt -a CGCCTTGGCCGT",
-                      "-o",
-                      outfile,
-                      "-j ",
-                      threads,
-                      infile)
-          #cat(cmd,"\n")#print the current command
-          system(cmd)
-          unlink(c(infile))
-        } else if (adapter == "Illumina Small RNA 5' Adapter") {
-          cmd = paste("cutadapt -g GATCGTCGGACT",
-                      "-o",
-                      outfile,
-                      "-j ",
-                      threads,
-                      infile)
-          #cat(cmd,"\n")#print the current command
-          system(cmd)
-          unlink(c(infile))
-        } else
-          stop("Wrong adapter. Exit.")
+      if (length(adapter)) {
+        for (i in samples)
+        {
+          infile <- paste0("Trimmed_", i, ".fastq")### maybe need to add "_"
+          outfile <-
+            paste0("Adapter_trimmed_", i, ".fastq")### maybe need to add "_"
+          if (adapter == "Illumina Universal Adapter") {
+            cmd = paste("cutadapt -a AGATCGGAAGAG",
+                        "-o",
+                        outfile,
+                        "-j ",
+                        threads,
+                        infile)
+            #cat(cmd,"\n")#print the current command
+            system(cmd)
+            unlink(infile)
+          } else if (adapter == "Illumina Small RNA 3' Adapter") {
+            cmd = paste("cutadapt -a TGGAATTCTCGG",
+                        "-o",
+                        outfile,
+                        "-j ",
+                        threads,
+                        infile)
+            #cat(cmd,"\n")#print the current command
+            system(cmd)
+            unlink(infile)
+          } else if (adapter == "Nextera Transposase Sequence") {
+            cmd = paste("cutadapt -a CTGTCTCTTATA",
+                        "-o",
+                        outfile,
+                        "-j ",
+                        threads,
+                        infile)
+            #cat(cmd,"\n")#print the current command
+            system(cmd)
+            unlink(infile)
+          } else if (adapter == "SOLID Small RNA Adapter") {
+            cmd = paste("cutadapt -a CGCCTTGGCCGT",
+                        "-o",
+                        outfile,
+                        "-j ",
+                        threads,
+                        infile)
+            #cat(cmd,"\n")#print the current command
+            system(cmd)
+            unlink(infile)
+          } else if (adapter == "Illumina Small RNA 5' Adapter") {
+            cmd = paste("cutadapt -g GATCGTCGGACT",
+                        "-o",
+                        outfile,
+                        "-j ",
+                        threads,
+                        infile)
+            #cat(cmd,"\n")#print the current command
+            system(cmd)
+            unlink(infile)
+          } else
+            stop("Wrong adapter. Exit.")
+        }
       }
     }
   }

@@ -45,10 +45,8 @@ tx2gene_scRNA <- function()
 #' @export scRNA_quan
 #' @return None
 #' @examples
-#' \dontrun{
 #'
-#' align_free_quan("paired", "sesame.fna", "transcript_sesame.fna","sesame.gff")
-#'}
+#' scRNA_quan(transcript = "test_transcript_Homo_sapiens.fna", protocol = "dropseq")
 #'
 scRNA_quan <- function(transcript, protocol)
 {

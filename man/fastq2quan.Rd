@@ -7,11 +7,11 @@
 fastq2quan(
   threads = 4,
   dir = getwd(),
-  pair = "paired",
+  pair,
   taxa,
   novel_transcript = FALSE,
   scRNA = FALSE,
-  protocol
+  protocol = NULL
 )
 }
 \arguments{
@@ -36,8 +36,8 @@ None
 Produce the quantifications of gene expression based on the fastq files with alignment-based and alignment-free workflows.
 }
 \examples{
-\dontrun{
 
-down2quan(threads = 4, dir = getwd(), "sesame", novel_transcript = FALSE, scRNA = FALSE)
-}
+sra_download(accession = "SRR11427582")
+sra2fastq()
+fastq2quan(pair = "single", taxa = "Drosophila melanogaster")
 }

@@ -1,15 +1,8 @@
 
 
 #' @order 2
-check_paired <- function(sra.dir)
+check_paired <- function(files)
 {
-  files <-
-    list.files(
-      sra.dir,
-      pattern = ".sra$",
-      recursive = FALSE,
-      full.names = FALSE
-    )
   temp <- data.frame(samples = NA, paired_or_single = NA)
   for (f in files) {
     cmd = paste("fastq-dump", "-X", "1", "-Z", "--split-spot", f, "| wc -l")
@@ -43,17 +36,14 @@ check_paired <- function(sra.dir)
 #' @return A string indicates single-end (SE) or paired-end (PE) reads.
 #' @order 1
 #' @examples
-#' \dontrun{
 #'
+#' sra_download(accession = "SRR11427582")
 #' sra2fastq()
-#' }
+#'
 sra2fastq <- function(threads = 4)
 {
   sra.dir = getwd() ### get the directory to search SRA files
   fq.dir = getwd()
-
-  pair <- check_paired(sra.dir)
-  #dir.create(file.path(fq.dir), showWarnings = FALSE) ### create the folder no matter it
   files <-
     list.files(
       sra.dir,
@@ -61,22 +51,25 @@ sra2fastq <- function(threads = 4)
       recursive = FALSE,
       full.names = FALSE
     )
-  # files_sra <- stringr::str_subset(files,".sra")
-  for (f in files) {
-    cmd = paste("fasterq-dump", f, "-O", fq.dir, "-e", threads)
-    # cat(cmd,"\n")#print the current command
-    system(cmd) # invoke command
-    unlink(f)
-  }
+  if(length(files)){
+    pair <- check_paired(files)
+    # files_sra <- stringr::str_subset(files,".sra")
+    for (f in files) {
+      cmd = paste("fasterq-dump", f, "-O", fq.dir, "-e", threads)
+      # cat(cmd,"\n")#print the current command
+      system(cmd) # invoke command
+      unlink(f)
+    }
 
-  fastq_files <-
-    list.files(
-      sra.dir,
-      pattern = "fastq$",
-      recursive = FALSE,
-      full.names = FALSE
-    )
-  file.rename(fastq_files, gsub(".sra", "", fastq_files))
-  unlink("sra", recursive = TRUE)
-  return(pair)
+    fastq_files <-
+      list.files(
+        sra.dir,
+        pattern = "fastq$",
+        recursive = FALSE,
+        full.names = FALSE
+      )
+    file.rename(fastq_files, gsub(".sra", "", fastq_files))
+    unlink("sra", recursive = TRUE)
+    return(pair)
+  } else print("No SRA files. Please download them.")
 }

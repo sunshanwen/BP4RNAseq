@@ -22,7 +22,7 @@ None
 Trim samples with adapter using cutadapt based on the results from quality_test().
 }
 \examples{
-\dontrun{
-adapter_trim(sample, pair)
-}
+
+adapter_trim(sample = "test_read_2.fastq", pair = "paired", scRNA = TRUE)
+
 }
