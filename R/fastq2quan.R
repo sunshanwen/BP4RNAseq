@@ -124,8 +124,6 @@ fastq2quan <-
           scRNA_quan(transcript, protocol)
         }
       }
-
-
     } else
       print("No fastq files are found in the work directory.")
   }
