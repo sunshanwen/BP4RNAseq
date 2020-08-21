@@ -4,7 +4,15 @@
 \alias{align_free_quan}
 \title{Alignment-free expression quantification with Salmon at gene and transcript levels.}
 \usage{
-align_free_quan(pair, genome, transcript, annotation, threads = 4)
+align_free_quan(
+  pair,
+  genome,
+  transcript,
+  annotation,
+  threads = 4,
+  salmon_index_add = NULL,
+  salmon_quan_add = NULL
+)
 }
 \arguments{
 \item{pair}{"single" for single-end (SE) or "paired" for paired-end (PE) reads.}
@@ -16,6 +24,10 @@ align_free_quan(pair, genome, transcript, annotation, threads = 4)
 \item{annotation}{the annotation file.}
 
 \item{threads}{the number of threads to be used. Default is 4.}
+
+\item{salmon_index_add}{additional parameters to customize salmon index command. Default is NULL.}
+
+\item{salmon_quan_add}{additional parameters to customize salmon quan command. Default is NULL.}
 }
 \value{
 None

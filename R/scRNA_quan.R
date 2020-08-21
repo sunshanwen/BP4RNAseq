@@ -43,14 +43,15 @@ tx2gene_scRNA <- function()
 #' @param transcript the reference transcript
 #' @param protocol the single-cell RNA sequencing protocol: dropseq, chromium, or chromiumV3.
 #' @param threads the number of threads to be used. Default is 4.
-#' @param salmon_add additional parameters to customize Salmon for single cell RNAseq analyses. Default is NULL.
+#' @param salmon_index_add additional parameters to customize salmon index command. Default is NULL.
+#' @param salmon_alevin_add additional parameters to customize salmon alevin command. Default is NULL.
 #' @export scRNA_quan
 #' @return None
 #' @examples
 #'
 #' scRNA_quan(transcript = "test_transcript_Homo_sapiens.fna", protocol = "dropseq")
 #'
-scRNA_quan <- function(transcript, protocol, threads = 4, salmon_add = NULL)
+scRNA_quan <- function(transcript, protocol, threads = 4, salmon_index_add = NULL, salmon_alevin_add = NULL)
 {
   status <- tryCatch(
     system2(command = "which", args = "salmon", stderr = FALSE, stdout = FALSE),
@@ -63,7 +64,7 @@ scRNA_quan <- function(transcript, protocol, threads = 4, salmon_add = NULL)
   )
   if(status == 0){
     tx2gene_scRNA()
-    cmd3 <- paste("salmon index -t", transcript, "-i salmon_index", "-p", threads, salmon_add)
+    cmd3 <- paste("salmon index -t", transcript, "-i salmon_index", "-p", threads, salmon_index_add)
     # cat(cmd3, "\n")
     system(cmd3)
     read <-
@@ -102,7 +103,7 @@ scRNA_quan <- function(transcript, protocol, threads = 4, salmon_add = NULL)
           read_seq,
           " --tgMap tx2gene.tsv -o ",
           out,
-          salmon_add
+          salmon_alevin_add
         )
       # cat(cmd4, "\n")
       system(cmd4, intern = TRUE)

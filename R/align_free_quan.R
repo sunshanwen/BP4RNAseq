@@ -107,6 +107,8 @@ gene_quan <- function()
 #' @param transcript the reference transcript
 #' @param annotation the annotation file.
 #' @param threads the number of threads to be used. Default is 4.
+#' @param salmon_index_add additional parameters to customize salmon index command. Default is NULL.
+#' @param salmon_quan_add additional parameters to customize salmon quan command. Default is NULL.
 #' @export align_free_quan
 #' @return None
 #' @examples
@@ -115,75 +117,88 @@ gene_quan <- function()
 #'
 #'
 #'
-align_free_quan <- function(pair, genome, transcript, annotation, threads = 4)
+align_free_quan <- function(pair, genome, transcript, annotation, threads = 4, salmon_index_add = NULL, salmon_quan_add = NULL)
 {
-  if(file.exists(genome)&&file.exists(transcript)&&file.exists(annotation)){
-    cmd3 <- paste("salmon index -t", transcript, "-i salmon_index", "-p", threads)
-    # cat(cmd3, "\n")
-    system(cmd3)
-    if (pair == "paired")
-    {
-      read <-
-        list.files(pattern = "^Trimmed.*1\\.fastq$", full.names = FALSE)
-      if (length(read) == 0) {
-        read <- list.files(pattern = ".*1\\.fastq$", full.names = FALSE)
-      }
-      if(length(read)){
-        for (f in read)
-        {
-          # read1 <- paste(read1, sep = ",", collapse = ',')
-          # read2 <- paste(read2, sep = ",", collapse = ',')
-          name <- gsub("_1.fastq", "", f)
-          out <- paste0(name, "_transcripts_quant")
-          read1 <- paste0(name, "_1.fastq")
-          read2 <- paste0(name, "_2.fastq")
-          # cmd4 <- paste("salmon quant -i salmon_index -l A", gentrome.fna, "-1", read1, "-2", read2, "--validateMappings -o", out)
-          cmd4 <-
-            paste(
-              "salmon quant -p", threads, "-i salmon_index -l A",
-              "-1",
-              read1,
-              "-2",
-              read2,
-              "--validateMappings -o",
-              out
-            )
-          # cat(cmd4, "\n")
-          system(cmd4, intern = TRUE)
+  status <- tryCatch(
+    system2(command = "which", args = "salmon", stderr = FALSE, stdout = FALSE),
+    error = function(err){
+      1
+    },
+    warning = function(war){
+      2
+    }
+  )
+  if(status == 0){
+    if(file.exists(genome)&&file.exists(transcript)&&file.exists(annotation)){
+      cmd3 <- paste("salmon index -t", transcript, "-i salmon_index", "-p", threads, salmon_index_add)
+      # cat(cmd3, "\n")
+      system(cmd3)
+      if (pair == "paired")
+      {
+        read <-
+          list.files(pattern = "^Trimmed.*1\\.fastq$", full.names = FALSE)
+        if (length(read) == 0) {
+          read <- list.files(pattern = ".*1\\.fastq$", full.names = FALSE)
         }
-      } else print("No fastq files are found in the work directory.")
-    } else if (pair == "single") {
-      read <-
-        list.files(pattern = "^Trimmed.*\\.fastq$", full.names = FALSE)
-      if (length(read) == 0) {
-        read <- list.files(pattern = ".*\\.fastq$", full.names = FALSE)
-      }
-      if(length(read)){
-      # read <- paste(read, sep = ",", collapse = ',')
-        for (f in read)
-        {
-          name <- gsub(".fastq", "", f)
-          out <- paste0(name, "_transcripts_quant")
-          # cmd4 <- paste("salmon quant -i salmon_index -l A -1", gentrome.fna, "-r", f, "--validateMappings -o", out)
-          cmd4 <-
-            paste("salmon quant -p", threads, "-i salmon_index -l A -r",
-                  f,
-                  "--validateMappings -o",
-                  out)
-
-          # cat(cmd4, "\n")
-          system(cmd4, intern = TRUE)
+        if(length(read)){
+          for (f in read)
+          {
+            # read1 <- paste(read1, sep = ",", collapse = ',')
+            # read2 <- paste(read2, sep = ",", collapse = ',')
+            name <- gsub("_1.fastq", "", f)
+            out <- paste0(name, "_transcripts_quant")
+            read1 <- paste0(name, "_1.fastq")
+            read2 <- paste0(name, "_2.fastq")
+            # cmd4 <- paste("salmon quant -i salmon_index -l A", gentrome.fna, "-1", read1, "-2", read2, "--validateMappings -o", out)
+            cmd4 <-
+              paste(
+                "salmon quant -p", threads, "-i salmon_index -l A",
+                "-1",
+                read1,
+                "-2",
+                read2,
+                "--validateMappings -o",
+                out,
+                salmon_quan_add
+              )
+            # cat(cmd4, "\n")
+            system(cmd4, intern = TRUE)
+          }
+        } else print("No fastq files are found in the work directory.")
+      } else if (pair == "single") {
+        read <-
+          list.files(pattern = "^Trimmed.*\\.fastq$", full.names = FALSE)
+        if (length(read) == 0) {
+          read <- list.files(pattern = ".*\\.fastq$", full.names = FALSE)
         }
-      }
-    } else
-      stop("Paired-end and single-end mix. Please check the data source!")
-    convert_data() #### rna quantification to use for quantifying genes.
-    tx2gene()
-    gene_quan()
-    unlink("raw_tx2gene.csv")
-    unlink("tx2gene.csv")
-    folders <- dir(pattern = "transcripts_quant$")
-    unlink(folders, recursive = TRUE)
-    unlink("salmon_index", recursive = TRUE)
-  } else print("No reference genome and annotation files are found. Please download them first")
+        if(length(read)){
+          # read <- paste(read, sep = ",", collapse = ',')
+          for (f in read)
+          {
+            name <- gsub(".fastq", "", f)
+            out <- paste0(name, "_transcripts_quant")
+            # cmd4 <- paste("salmon quant -i salmon_index -l A -1", gentrome.fna, "-r", f, "--validateMappings -o", out)
+            cmd4 <-
+              paste("salmon quant -p", threads, "-i salmon_index -l A -r",
+                    f,
+                    "--validateMappings -o",
+                    out,
+                    salmon_quan_add)
+            
+            # cat(cmd4, "\n")
+            system(cmd4, intern = TRUE)
+          }
+        }
+      } else
+        stop("Paired-end and single-end mix. Please check the data source!")
+      convert_data() #### rna quantification to use for quantifying genes.
+      tx2gene()
+      gene_quan()
+      unlink("raw_tx2gene.csv")
+      unlink("tx2gene.csv")
+      folders <- dir(pattern = "transcripts_quant$")
+      unlink(folders, recursive = TRUE)
+      unlink("salmon_index", recursive = TRUE)
+    } else print("No reference genome and annotation files are found. Please download them first")
+  } else print("Salmon is not found. Please install it.")
 }
