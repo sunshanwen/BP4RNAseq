@@ -15,7 +15,7 @@ adapter_trim(sample, pair, threads = 4, scRNA = FALSE, cutadapt_add = NULL)
 
 \item{scRNA}{logic, whether single-cell RNA-seq is quantified or not. Default is FALSE.}
 
-\item{cutadapt_add}{additional parameters to customize cutadapt to trim adapter.}
+\item{cutadapt_add}{additional parameters to customize cutadapt to trim adapter. Default is NULL.}
 }
 \value{
 None
