@@ -67,7 +67,8 @@ sra_download <- function(accession, dir = getwd())
             full.names = TRUE
           )
         # file<-list.files("./sra", pattern = ".sra$", recursive = F, full.names = T)
-        cmd4 <- paste("mv", file, dir)
+        files <- paste(file,collapse=" ")
+        cmd4 <- paste("mv", files, "-t", dir)
         system(cmd4)
       }
     }
@@ -100,7 +101,8 @@ sra_download <- function(accession, dir = getwd())
             full.names = TRUE
           )
         #print(file)
-        cmd4 <- paste("mv", file, dir)
+        files <- paste(file,collapse=" ")
+        cmd4 <- paste("mv", files, "-t", dir)
         system(cmd4)
         unlink(file_path)
       }
