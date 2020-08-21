@@ -4,7 +4,14 @@
 \alias{align_based_quan}
 \title{alignment-based workflow}
 \usage{
-align_based_quan(pair, taxa, genome, annotation, novel_transcript = FALSE)
+align_based_quan(
+  pair,
+  taxa,
+  genome,
+  annotation,
+  novel_transcript = FALSE,
+  threads = 4
+)
 }
 \arguments{
 \item{pair}{"single" for single-end (SE) or "paired" for paired-end (PE) reads.}
@@ -16,6 +23,8 @@ align_based_quan(pair, taxa, genome, annotation, novel_transcript = FALSE)
 \item{annotation}{the annotation file.}
 
 \item{novel_transcript}{logic, whether identifying novel transcripts is expected or not. Default is FALSE.}
+
+\item{threads}{the number of threads to be used. Default is 4.}
 }
 \value{
 None
