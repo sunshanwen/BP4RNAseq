@@ -43,14 +43,14 @@ tx2gene_scRNA <- function()
 #' @param transcript the reference transcript
 #' @param protocol the single-cell RNA sequencing protocol: dropseq, chromium, or chromiumV3.
 #' @param threads the number of threads to be used. Default is 4.
-#' @param salmon_add additional parameters to customize Salmon for single cell RNAseq analyses.
+#' @param salmon_add additional parameters to customize Salmon for single cell RNAseq analyses. Default is NULL.
 #' @export scRNA_quan
 #' @return None
 #' @examples
 #'
 #' scRNA_quan(transcript = "test_transcript_Homo_sapiens.fna", protocol = "dropseq")
 #'
-scRNA_quan <- function(transcript, protocol, threads = 4, salmon_add)
+scRNA_quan <- function(transcript, protocol, threads = 4, salmon_add = NULL)
 {
   status <- tryCatch(
     system2(command = "which", args = "salmon", stderr = FALSE, stdout = FALSE),
