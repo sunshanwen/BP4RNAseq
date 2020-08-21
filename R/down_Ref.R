@@ -157,6 +157,6 @@ down_Ref <- function(taxa) {
         print ("The reference genome and annotation files already exist")
       }
     }
-  } else print("jq is not found. Please intall it.")
+  } else print("jq is not found. Please install it.")
   return(status)
 }
