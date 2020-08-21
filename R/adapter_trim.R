@@ -29,6 +29,7 @@ get_adapter <- function(sample)
 #' @param pair "single" for single-end (SE) or "paired" for paired-end (PE) reads.
 #' @param threads the number of threads to be used. Default is 4.
 #' @param scRNA logic, whether single-cell RNA-seq is quantified or not. Default is FALSE.
+#' @param cutadapt_add additional parameters to customize cutadapt to trim adapter
 #' @export adapter_trim
 #' @return None
 #' @examples
@@ -38,7 +39,7 @@ get_adapter <- function(sample)
 adapter_trim <- function(sample,
                          pair,
                          threads = 4,
-                         scRNA = FALSE)
+                         scRNA = FALSE, cutadapt_add = NULL)
 {
   if (scRNA == FALSE) {
     samples <- unique(gsub("\\.fastq", "", sample))
@@ -73,7 +74,8 @@ adapter_trim <- function(sample,
             "-j ",
             threads,
             infile1,
-            infile2
+            infile2,
+            cutadapt_add
           )
           #cat(cmd,"\n")#print the current command
           system(cmd)
@@ -93,7 +95,8 @@ adapter_trim <- function(sample,
                         outfile,
                         "-j ",
                         threads,
-                        infile)
+                        infile,
+                        cutadapt_add)
             system(cmd)
             unlink(infile)
           } else if (adap_3or5 == "5") {
@@ -103,7 +106,8 @@ adapter_trim <- function(sample,
                         outfile,
                         "-j ",
                         threads,
-                        infile)
+                        infile,
+                        cutadapt_add)
             system(cmd)
             unlink(infile)
           } else if (adap_3or5 == "b") {
@@ -113,7 +117,8 @@ adapter_trim <- function(sample,
                         outfile,
                         "-j ",
                         threads,
-                        infile)
+                        infile,
+                        cutadapt_add)
             system(cmd)
             unlink(infile)
           } else
@@ -144,7 +149,8 @@ adapter_trim <- function(sample,
                 "-j ",
                 threads,
                 infile1,
-                infile2
+                infile2,
+                cutadapt_add
               )
               #cat(cmd,"\n")#print the current command
               system(cmd)
@@ -159,7 +165,8 @@ adapter_trim <- function(sample,
                 "-j ",
                 threads,
                 infile1,
-                infile2
+                infile2,
+                cutadapt_add
               )
               #cat(cmd,"\n")#print the current command
               system(cmd)
@@ -174,7 +181,8 @@ adapter_trim <- function(sample,
                 "-j ",
                 threads,
                 infile1,
-                infile2
+                infile2,
+                cutadapt_add
               )
               #cat(cmd,"\n")#print the current command
               system(cmd)
@@ -189,7 +197,8 @@ adapter_trim <- function(sample,
                 "-j ",
                 threads,
                 infile1,
-                infile2
+                infile2,
+                cutadapt_add
               )
               #cat(cmd,"\n")#print the current command
               system(cmd)
@@ -204,7 +213,8 @@ adapter_trim <- function(sample,
                 "-j ",
                 threads,
                 infile1,
-                infile2
+                infile2,
+                cutadapt_add
               )
               #cat(cmd,"\n")#print the current command
               system(cmd)
@@ -221,7 +231,8 @@ adapter_trim <- function(sample,
                           outfile,
                           "-j ",
                           threads,
-                          infile)
+                          infile,
+                          cutadapt_add)
               #cat(cmd,"\n")#print the current command
               system(cmd)
               unlink(infile)
@@ -231,7 +242,8 @@ adapter_trim <- function(sample,
                           outfile,
                           "-j ",
                           threads,
-                          infile)
+                          infile,
+                          cutadapt_add)
               #cat(cmd,"\n")#print the current command
               system(cmd)
               unlink(infile)
@@ -241,7 +253,8 @@ adapter_trim <- function(sample,
                           outfile,
                           "-j ",
                           threads,
-                          infile)
+                          infile,
+                          cutadapt_add)
               #cat(cmd,"\n")#print the current command
               system(cmd)
               unlink(infile)
@@ -251,7 +264,8 @@ adapter_trim <- function(sample,
                           outfile,
                           "-j ",
                           threads,
-                          infile)
+                          infile,
+                          cutadapt_add)
               #cat(cmd,"\n")#print the current command
               system(cmd)
               unlink(infile)
@@ -261,7 +275,8 @@ adapter_trim <- function(sample,
                           outfile,
                           "-j ",
                           threads,
-                          infile)
+                          infile,
+                          cutadapt_add)
               #cat(cmd,"\n")#print the current command
               system(cmd)
               unlink(infile)
@@ -292,7 +307,8 @@ adapter_trim <- function(sample,
                       outfile,
                       "-j ",
                       threads,
-                      infile)
+                      infile,
+                      cutadapt_add)
           system(cmd)
           unlink(infile)
         } else if (adap_3or5 == "5") {
@@ -302,7 +318,8 @@ adapter_trim <- function(sample,
                       outfile,
                       "-j ",
                       threads,
-                      infile)
+                      infile,
+                      cutadapt_add)
           system(cmd)
           unlink(infile)
         } else if (adap_3or5 == "b") {
@@ -312,7 +329,8 @@ adapter_trim <- function(sample,
                       outfile,
                       "-j ",
                       threads,
-                      infile)
+                      infile,
+                      cutadapt_add)
           system(cmd)
           unlink(infile)
         } else
@@ -334,7 +352,8 @@ adapter_trim <- function(sample,
                         outfile,
                         "-j ",
                         threads,
-                        infile)
+                        infile,
+                        cutadapt_add)
             #cat(cmd,"\n")#print the current command
             system(cmd)
             unlink(infile)
@@ -344,7 +363,8 @@ adapter_trim <- function(sample,
                         outfile,
                         "-j ",
                         threads,
-                        infile)
+                        infile,
+                        cutadapt_add)
             #cat(cmd,"\n")#print the current command
             system(cmd)
             unlink(infile)
@@ -354,7 +374,8 @@ adapter_trim <- function(sample,
                         outfile,
                         "-j ",
                         threads,
-                        infile)
+                        infile,
+                        cutadapt_add)
             #cat(cmd,"\n")#print the current command
             system(cmd)
             unlink(infile)
@@ -364,7 +385,8 @@ adapter_trim <- function(sample,
                         outfile,
                         "-j ",
                         threads,
-                        infile)
+                        infile,
+                        cutadapt_add)
             #cat(cmd,"\n")#print the current command
             system(cmd)
             unlink(infile)
@@ -374,7 +396,8 @@ adapter_trim <- function(sample,
                         outfile,
                         "-j ",
                         threads,
-                        infile)
+                        infile,
+                        cutadapt_add)
             #cat(cmd,"\n")#print the current command
             system(cmd)
             unlink(infile)
