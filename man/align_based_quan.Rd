@@ -10,7 +10,10 @@ align_based_quan(
   genome,
   annotation,
   novel_transcript = FALSE,
-  threads = 4
+  threads = 4,
+  hisat2_build_add = NULL,
+  hisat2_add = NULL,
+  stringtie_add = NULL
 )
 }
 \arguments{
@@ -25,6 +28,12 @@ align_based_quan(
 \item{novel_transcript}{logic, whether identifying novel transcripts is expected or not. Default is FALSE.}
 
 \item{threads}{the number of threads to be used. Default is 4.}
+
+\item{hisat2_build_add}{additional parameters to customize hisat2 build command. Default is NULL.}
+
+\item{hisat2_add}{additional parameters to customize hisat2 command. Default is NULL.}
+
+\item{stringtie_add}{additional parameters to customize stringtie command. Default is NULL.}
 }
 \value{
 None

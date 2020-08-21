@@ -1,6 +1,6 @@
 
 #### Reads alignment with Hisat2
-.index_build <- function(taxa, genome, annotation, threads)
+.index_build <- function(taxa, genome, annotation, threads, hisat2_build_add)
 {
   if(file.exists(genome)&& file.exists(annotation)){
     cmd1 <-
@@ -23,10 +23,10 @@
               genome,
               taxa,
               "--ss ssFile.table",
-              "--exon exonsFile.table", "-p", threads)
+              "--exon exonsFile.table", "-p", threads, hisat2_build_add)
       system(cmd3)
     } else {
-      cmd3 <- paste("hisat2-build -f", genome, taxa, "-p", threads)
+      cmd3 <- paste("hisat2-build -f", genome, taxa, "-p", threads, hisat2_build_add)
       system(cmd3)
     }
   } else print("The reference genome and annotation are missing. Please download them first.")
@@ -35,7 +35,7 @@
 # Aligning the RNA-seq data to the reference genome with HISAT2.
 
 
-.align_ge <- function(pair, taxa, genome, annotation, threads)
+.align_ge <- function(pair, taxa, genome, annotation, threads, hisat2_build_add, hisat2_add)
 {
 
   taxa <- gsub("\\s", "_", taxa)
@@ -64,7 +64,7 @@
           read2 <- paste0(name, "_2.fastq")
           cmd4 <-
             paste(
-              "hisat2 -p", threads, "--dta -x",
+              "hisat2 -p", threads, hisat2_add, "--dta -x",
               taxa,
               "-1",
               read1,
@@ -88,7 +88,7 @@
         {
           name <- gsub(".fastq", "", f)
           out_bam <- paste0(name, ".bam")
-          cmd4 <- paste("hisat2 -p", threads, "--dta -x",
+          cmd4 <- paste("hisat2 -p", threads, hisat2_add, "--dta -x",
                         taxa,
                         "-U",
                         f,
@@ -105,7 +105,7 @@
 
 # Transcript assembly with StringTie.
 
-.trans_ass <- function(novel_transcript = FALSE, threads)
+.trans_ass <- function(novel_transcript = FALSE, threads, stringtie_add)
 {
   aligned_bam <- list.files(pattern = "*\\.bam$")
   gff <-
@@ -119,7 +119,9 @@
       taxa <- gsub("\\.bam", "", f)
       output <- paste0("ballgown/", taxa, "/", taxa, ".gtf")
       if (novel_transcript == TRUE) {
-        cmd1 <- paste("stringtie", f, "-b ballgown -G", gff, "-o", output, "-p", threads)
+        cmd1 <- paste("stringtie", f, "-b ballgown -G", gff, "-o", output, "-p",
+                      threads, 
+                      stringtie_add)
         # cat(cmd1, "\n")
         system(cmd1)
         # cmd2 <- paste("stringtie", aligned_bam, "-G", taxa, "-eB -o", taxa)
@@ -128,7 +130,9 @@
         #### consider to add merge
       } else {
         cmd1 <-
-          paste("stringtie", f, "-G", gff, "-e -b ballgown", "-o", output, "-p", threads)
+          paste("stringtie", f, "-G", gff, "-e -b ballgown", "-o", output, "-p", 
+                threads,
+                stringtie_add)
         # cat(cmd1, "\n")
         system(cmd1)
         #### consider to add merge
@@ -261,6 +265,9 @@ utils::globalVariables(c("transcript_id", "count", "gene_id"))
 #' @param annotation the annotation file.
 #' @param novel_transcript logic, whether identifying novel transcripts is expected or not. Default is FALSE.
 #' @param threads the number of threads to be used. Default is 4.
+#' @param hisat2_build_add additional parameters to customize hisat2 build command. Default is NULL.
+#' @param hisat2_add additional parameters to customize hisat2 command. Default is NULL.
+#' @param stringtie_add additional parameters to customize stringtie command. Default is NULL.
 #' @export align_based_quan
 #' @return None
 #' @examples
@@ -271,9 +278,33 @@ utils::globalVariables(c("transcript_id", "count", "gene_id"))
 #'}
 #'
 
-align_based_quan <- function(pair, taxa, genome, annotation, novel_transcript = FALSE, threads = 4)
+align_based_quan <- function(pair, taxa, genome, annotation, novel_transcript = FALSE, 
+                             threads = 4, hisat2_build_add = NULL, hisat2_add = NULL,
+                             stringtie_add = NULL)
 {
-  .align_ge(pair, taxa, genome, annotation, threads)
-  .trans_ass(novel_transcript, threads)
-  .trans_quan()
+  status <- tryCatch(
+    system2(command = "which", args = "hisat2", stdout = FALSE, stderr = FALSE),
+    error = function(err){
+      1
+    },
+    warning = function(war){
+      2
+    }
+  )
+  if(status == 0){
+    status <- tryCatch(
+      system2(command = "which", args = "stringtie", stdout = FALSE, stderr = FALSE),
+      error = function(err){
+        1
+      },
+      warning = function(war){
+        2
+      }
+    )
+    if(status == 0){
+      .align_ge(pair, taxa, genome, annotation, threads, hisat2_build_add, hisat2_add)
+      .trans_ass(novel_transcript, threads, stringtie_add)
+      .trans_quan()
+    }
+  } else print("Hisat2 is not found. Please install it.")
 }
