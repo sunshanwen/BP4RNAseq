@@ -4,7 +4,7 @@
 \alias{adapter_trim}
 \title{Trim samples with adapter using cutadapt.}
 \usage{
-adapter_trim(sample, pair, threads = 4, scRNA = FALSE)
+adapter_trim(sample, pair, threads = 4, scRNA = FALSE, cutadapt_add = NULL)
 }
 \arguments{
 \item{sample}{samples with adapter.}
@@ -14,6 +14,8 @@ adapter_trim(sample, pair, threads = 4, scRNA = FALSE)
 \item{threads}{the number of threads to be used. Default is 4.}
 
 \item{scRNA}{logic, whether single-cell RNA-seq is quantified or not. Default is FALSE.}
+
+\item{cutadapt_add}{additional parameters to customize cutadapt to trim adapter}
 }
 \value{
 None
