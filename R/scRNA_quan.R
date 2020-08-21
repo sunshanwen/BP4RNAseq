@@ -42,16 +42,17 @@ tx2gene_scRNA <- function()
 #' scRNA expression quantification with Salmon.
 #' @param transcript the reference transcript
 #' @param protocol the single-cell RNA sequencing protocol: dropseq, chromium, or chromiumV3.
+#' @param threads the number of threads to be used. Default is 4.
 #' @export scRNA_quan
 #' @return None
 #' @examples
 #'
 #' scRNA_quan(transcript = "test_transcript_Homo_sapiens.fna", protocol = "dropseq")
 #'
-scRNA_quan <- function(transcript, protocol, threads)
+scRNA_quan <- function(transcript, protocol, threads = 4, salmon_add)
 {
   tx2gene_scRNA()
-  cmd3 <- paste("salmon index -t", transcript, "-i salmon_index", "-p", threads)
+  cmd3 <- paste("salmon index -t", transcript, "-i salmon_index", "-p", threads, salmon_add)
   # cat(cmd3, "\n")
   system(cmd3)
   read <-
@@ -89,7 +90,8 @@ scRNA_quan <- function(transcript, protocol, threads)
         " -2 ",
         read_seq,
         " --tgMap tx2gene.tsv -o ",
-        out
+        out,
+        salmon_add
       )
     # cat(cmd4, "\n")
     system(cmd4, intern = TRUE)

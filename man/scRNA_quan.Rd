@@ -4,7 +4,7 @@
 \alias{scRNA_quan}
 \title{scRNA expression quantification with Salmon.}
 \usage{
-scRNA_quan(transcript, protocol)
+scRNA_quan(transcript, protocol, threads)
 }
 \arguments{
 \item{transcript}{the reference transcript}
