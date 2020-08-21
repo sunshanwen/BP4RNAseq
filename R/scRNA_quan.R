@@ -51,51 +51,62 @@ tx2gene_scRNA <- function()
 #'
 scRNA_quan <- function(transcript, protocol, threads = 4, salmon_add)
 {
-  tx2gene_scRNA()
-  cmd3 <- paste("salmon index -t", transcript, "-i salmon_index", "-p", threads, salmon_add)
-  # cat(cmd3, "\n")
-  system(cmd3)
-  read <-
-    list.files(pattern = "^Trimmed.*1\\.fastq$", full.names = FALSE)
-  if (length(read) == 0) {
-    read <- list.files(pattern = ".*1\\.fastq$", full.names = FALSE)
-  }
-  for (f in read)
-  {
-    name <- gsub("_1.fastq", "", f)
-    out <- paste0("scRNA_", name)
-    read1 <- paste0(name, "_1.fastq")
-    read2 <- paste0(name, "_2.fastq")
-    read1 <- paste0(name, "_1.fastq")
-    read2 <- paste0(name, "_2.fastq")
-    read_seq <- read2
-    barcode_seq <- read1
-    cmd1 <-
-      paste0("head -n 1 ", read1, " | grep -o length=[0-9]* | cut -d '=' -f 2")
-    leg_1 <- as.numeric(system(cmd1, intern = TRUE))
-    cmd2 <-
-      paste0("head -n 1 ", read2, " | grep -o length=[0-9]* | cut -d '=' -f 2")
-    leg_2 <- as.numeric(system(cmd2, intern = TRUE))
-    if (leg_1 > leg_2) {
-      read_seq <- read1
-      barcode_seq <- read2
+  status <- tryCatch(
+    system2(command = "which", args = "salmon", stderr = FALSE, stdout = FALSE),
+    error = function(err){
+      1
+    },
+    warning = function(war){
+      2
     }
-    # cmd4 <- paste("salmon quant -i salmon_index -l A", gentrome.fna, "-1", read1, "-2", read2, "--validateMappings -o", out)
-    cmd4 <-
-      paste0(
-        "salmon alevin -p", threads, "-i salmon_index -l ISR --",
-        protocol,
-        " -1 ",
-        barcode_seq,
-        " -2 ",
-        read_seq,
-        " --tgMap tx2gene.tsv -o ",
-        out,
-        salmon_add
-      )
-    # cat(cmd4, "\n")
-    system(cmd4, intern = TRUE)
-  }
-  unlink("tx2gene.tsv")
-  unlink("salmon_index", recursive = TRUE)
+  )
+  if(status == 0){
+    tx2gene_scRNA()
+    cmd3 <- paste("salmon index -t", transcript, "-i salmon_index", "-p", threads, salmon_add)
+    # cat(cmd3, "\n")
+    system(cmd3)
+    read <-
+      list.files(pattern = "^Trimmed.*1\\.fastq$", full.names = FALSE)
+    if (length(read) == 0) {
+      read <- list.files(pattern = ".*1\\.fastq$", full.names = FALSE)
+    }
+    for (f in read)
+    {
+      name <- gsub("_1.fastq", "", f)
+      out <- paste0("scRNA_", name)
+      read1 <- paste0(name, "_1.fastq")
+      read2 <- paste0(name, "_2.fastq")
+      read1 <- paste0(name, "_1.fastq")
+      read2 <- paste0(name, "_2.fastq")
+      read_seq <- read2
+      barcode_seq <- read1
+      cmd1 <-
+        paste0("head -n 1 ", read1, " | grep -o length=[0-9]* | cut -d '=' -f 2")
+      leg_1 <- as.numeric(system(cmd1, intern = TRUE))
+      cmd2 <-
+        paste0("head -n 1 ", read2, " | grep -o length=[0-9]* | cut -d '=' -f 2")
+      leg_2 <- as.numeric(system(cmd2, intern = TRUE))
+      if (leg_1 > leg_2) {
+        read_seq <- read1
+        barcode_seq <- read2
+      }
+      # cmd4 <- paste("salmon quant -i salmon_index -l A", gentrome.fna, "-1", read1, "-2", read2, "--validateMappings -o", out)
+      cmd4 <-
+        paste0(
+          "salmon alevin -p", threads, "-i salmon_index -l ISR --",
+          protocol,
+          " -1 ",
+          barcode_seq,
+          " -2 ",
+          read_seq,
+          " --tgMap tx2gene.tsv -o ",
+          out,
+          salmon_add
+        )
+      # cat(cmd4, "\n")
+      system(cmd4, intern = TRUE)
+    }
+    unlink("tx2gene.tsv")
+    unlink("salmon_index", recursive = TRUE)
+  } else print("Salmon is not found. Please install it.")
 }
