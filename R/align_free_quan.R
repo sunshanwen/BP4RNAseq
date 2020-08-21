@@ -48,7 +48,7 @@ tx2gene <- function()
     #cat(cmd1)
     system(cmd1)
 
-    ### add support for Ensembl annotation file 
+    ### add support for Ensembl annotation file
     if(file.info("raw_tx2gene.csv")$size == 0){
       cmd1 <-
       paste(
@@ -96,7 +96,7 @@ gene_quan <- function()
     utils::write.csv(gene_quantification,
                     "gene_alignment_free_quantification.csv",
                     row.names = FALSE)
-  } 
+  }
 }
 
 #' Alignment-free expression quantification with Salmon at gene and transcript levels.
@@ -106,6 +106,7 @@ gene_quan <- function()
 #' @param genome the reference genome.
 #' @param transcript the reference transcript
 #' @param annotation the annotation file.
+#' @param threads the number of threads to be used. Default is 4.
 #' @export align_free_quan
 #' @return None
 #' @examples
@@ -172,7 +173,7 @@ align_free_quan <- function(pair, genome, transcript, annotation, threads = 4)
 
           # cat(cmd4, "\n")
           system(cmd4, intern = TRUE)
-        }        
+        }
       }
     } else
       stop("Paired-end and single-end mix. Please check the data source!")

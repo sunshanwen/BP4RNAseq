@@ -14,6 +14,8 @@ align_free_quan(pair, genome, transcript, annotation, threads = 4)
 \item{transcript}{the reference transcript}
 
 \item{annotation}{the annotation file.}
+
+\item{threads}{the number of threads to be used. Default is 4.}
 }
 \value{
 None
