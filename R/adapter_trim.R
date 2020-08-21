@@ -29,7 +29,7 @@ get_adapter <- function(sample)
 #' @param pair "single" for single-end (SE) or "paired" for paired-end (PE) reads.
 #' @param threads the number of threads to be used. Default is 4.
 #' @param scRNA logic, whether single-cell RNA-seq is quantified or not. Default is FALSE.
-#' @param cutadapt_add additional parameters to customize cutadapt to trim adapter
+#' @param cutadapt_add additional parameters to customize cutadapt to trim adapter.
 #' @export adapter_trim
 #' @return None
 #' @examples
