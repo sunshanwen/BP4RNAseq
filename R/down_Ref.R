@@ -146,6 +146,6 @@ down_Ref <- function(taxa) {
     } else {
       print ("The reference genome and annotation files already exist")
     }
-    }
+  }
   return(status)
 }
