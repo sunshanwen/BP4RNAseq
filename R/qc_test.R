@@ -1,6 +1,6 @@
 #' @order 2
 ### produce fastqc reports
-fastqc_r <- function(threads, fq.dir, scRNA)
+fastqc_r <- function(threads, fq.dir, scRNA, fastqc_add)
 {
   if (scRNA == FALSE) {
     files_fastq <-
@@ -11,9 +11,9 @@ fastqc_r <- function(threads, fq.dir, scRNA)
         full.names = TRUE
       )
     if(length(list.files)){
-      for (f in files_fastq)        
+      for (f in files_fastq)
         {
-          cmd = paste("fastqc ", f, " --threads ", threads)
+          cmd = paste("fastqc ", f, " --threads ", threads, fastqc_add)
           # cat(cmd,"\n")#print the current command
           system(cmd) # invoke command
         }
@@ -43,7 +43,7 @@ fastqc_r <- function(threads, fq.dir, scRNA)
       }
       for (d in read_seq)
       {
-        cmd = paste("fastqc ", d, " --threads ", threads)
+        cmd = paste("fastqc ", d, " --threads ", threads, fastqc_add)
         # cat(cmd,"\n")#print the current command
         system(cmd) # invoke command
       }
@@ -59,6 +59,7 @@ utils::globalVariables(c("module", "status"))
 #' Per base sequence quality, per sequence quality scores and adapter content of raw sequence data are assessed and tested based on FastQC.
 #' @param threads the number of threads to be used. Default is 4.
 #' @param scRNA logic, whether single-cell RNA-seq is quantified or not. Default is FALSE.
+#' @param fastqc_add additional parameters to customize FASTQC for quality control. Default is NULL.
 #' @export qc_test
 #' @order 1
 #' @return Problematic samples' names
@@ -68,27 +69,38 @@ utils::globalVariables(c("module", "status"))
 #'
 #'
 
-qc_test <- function(threads = 4, scRNA = FALSE)
+qc_test <- function(threads = 4, scRNA = FALSE, fastqc_add = NULL)
 {
-  fq.dir = getwd()
-  qc.dir = getwd()
-  fastqc_r(threads, fq.dir, scRNA)
-  qc <- fastqcr::qc_aggregate(qc.dir, progressbar = FALSE)
-  if(length(qc)){
-    index_ad <-
-      subset(qc, module == "Adapter Content" &
-              status == "FAIL", select = sample)
-    index_sq <-
-      subset(qc,
-            module == "Per base sequence quality" &
-              status == "FAIL",
-            select = sample)
-    index_sqs <-
-      subset(qc,
-            module == "Per sequence quality scores" &
-              status == "FAIL",
-            select = sample)
-    index <- list(index_ad, index_sq, index_sqs)
-    return (index)
-  }
+  status <- tryCatch(
+    system2(command = "which", args = "fastqc", stdout = FALSE, stderr = FALSE),
+    error = function(err){
+      1
+    },
+    warning = function(war){
+      2
+    }
+  )
+  if(status == 0){
+    fq.dir = getwd()
+    qc.dir = getwd()
+    fastqc_r(threads, fq.dir, scRNA, fastqc_add)
+    qc <- fastqcr::qc_aggregate(qc.dir, progressbar = FALSE)
+    if(length(qc)){
+      index_ad <-
+        subset(qc, module == "Adapter Content" &
+                 status == "FAIL", select = sample)
+      index_sq <-
+        subset(qc,
+               module == "Per base sequence quality" &
+                 status == "FAIL",
+               select = sample)
+      index_sqs <-
+        subset(qc,
+               module == "Per sequence quality scores" &
+                 status == "FAIL",
+               select = sample)
+      index <- list(index_ad, index_sq, index_sqs)
+      return (index)
+    }
+  } else print("FASTQC is not found. Please install it.")
 }

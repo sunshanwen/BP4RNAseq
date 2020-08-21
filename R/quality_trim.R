@@ -6,6 +6,7 @@
 #' @param per_seq samples with poor per sequence quality scores.
 #' @param threads the number of threads to be used. Default is 4.
 #' @param scRNA logic, whether single-cell RNA-seq is quantified or not. Default is FALSE.
+#' @param cutadapt_add additional parameters to customize cutadapt to trim poor quality reads. Default is NULL
 #' @export quality_trim
 #' @return None
 #' @examples
@@ -19,7 +20,8 @@ quality_trim <-
            per_seq,
            pair,
            threads = 4,
-           scRNA = FALSE)
+           scRNA = FALSE,
+           cutadapt_add = NULL)
   {
     if (scRNA == FALSE) {
       files <-
@@ -34,7 +36,11 @@ quality_trim <-
         if (pair == "paired") {
           file <- c(paste0(f, "_1_fastqc"), paste0(f, "_2_fastqc"))
           qc_reports <-
-            list.files(pattern = "fastqc.zip$", full.names = FALSE, recursive = FALSE)
+            list.files(
+              pattern = "fastqc.zip$",
+              full.names = FALSE,
+              recursive = FALSE
+            )
           qc_collection <-
             fastqcr::qc_read_collection(
               qc_reports,
@@ -52,7 +58,7 @@ quality_trim <-
           outfile1 <- paste0("Trimmed_", f, "_1.fastq")
           outfile2 <- paste0("Trimmed_", f, "_2.fastq")
 
-          if(length(Encoding)){
+          if (length(Encoding)) {
             if (Encoding == "Sanger / Illumina 1.9") {
               cmd = paste(
                 "cutadapt -q 10",
@@ -87,12 +93,17 @@ quality_trim <-
               system(cmd)
             } else
               stop("Wrong Encoding. Exit.")
-          } else print("Could not get the Encoding.")
+          } else
+            print("Could not get the Encoding.")
 
         } else if (pair == "single") {
           file <- paste0(f, "_fastqc")
           qc_reports <-
-            list.files(pattern = "fastqc.zip$", full.names = FALSE, recursive = FALSE)
+            list.files(
+              pattern = "fastqc.zip$",
+              full.names = FALSE,
+              recursive = FALSE
+            )
           qc_collection <-
             fastqcr::qc_read_collection(
               qc_reports,
@@ -107,7 +118,7 @@ quality_trim <-
           infile <- paste0(f, ".fastq")
           outfile <- paste0("Trimmed_", f, ".fastq")
 
-          if(length(Encoding)){
+          if (length(Encoding)) {
             if (Encoding == "Sanger / Illumina 1.9") {
               cmd = paste("cutadapt -q 10",
                           "-o",
@@ -134,7 +145,8 @@ quality_trim <-
               system(cmd)
             } else
               stop("Wrong Encoding. Exit.")
-          } else print("Could not get the Encoding.")
+          } else
+            print("Could not get the Encoding.")
 
         }
       }
@@ -145,7 +157,9 @@ quality_trim <-
       ))))
       for (f in files) {
         qc_reports <-
-          list.files(pattern = "fastqc.zip$", full.names = FALSE, recursive = FALSE)
+          list.files(pattern = "fastqc.zip$",
+                     full.names = FALSE,
+                     recursive = FALSE)
         qc_collection <-
           fastqcr::qc_read_collection(
             qc_reports,
@@ -160,7 +174,7 @@ quality_trim <-
         infile <- paste0(f, ".fastq")
         outfile <- paste0("Trimmed_", f, ".fastq")
 
-        if(length(Encoding)){
+        if (length(Encoding)) {
           if (Encoding == "Sanger / Illumina 1.9") {
             cmd = paste("cutadapt -q 10",
                         "-o",
@@ -186,7 +200,8 @@ quality_trim <-
             # cat(cmd,"\n")#print the current command
             system(cmd)
           }
-        }else print("Could not get the Encoding.")
+        } else
+          print("Could not get the Encoding.")
 
       }
     }

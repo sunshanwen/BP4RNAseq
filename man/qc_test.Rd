@@ -4,12 +4,14 @@
 \alias{qc_test}
 \title{Quality assessments of raw sequence data.}
 \usage{
-qc_test(threads = 4, scRNA = FALSE)
+qc_test(threads = 4, scRNA = FALSE, fastqc_add = NULL)
 }
 \arguments{
 \item{threads}{the number of threads to be used. Default is 4.}
 
 \item{scRNA}{logic, whether single-cell RNA-seq is quantified or not. Default is FALSE.}
+
+\item{fastqc_add}{additional parameters to customize FASTQC for quality control. Default is NULL.}
 }
 \value{
 Problematic samples' names

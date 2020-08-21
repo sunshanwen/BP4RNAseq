@@ -4,7 +4,14 @@
 \alias{quality_trim}
 \title{Trim poor quality samples using cutadapt.}
 \usage{
-quality_trim(per_base, per_seq, pair, threads = 4, scRNA = FALSE)
+quality_trim(
+  per_base,
+  per_seq,
+  pair,
+  threads = 4,
+  scRNA = FALSE,
+  cutadapt_add = NULL
+)
 }
 \arguments{
 \item{per_base}{samples with poor per base sequence quality.}
@@ -16,6 +23,8 @@ quality_trim(per_base, per_seq, pair, threads = 4, scRNA = FALSE)
 \item{threads}{the number of threads to be used. Default is 4.}
 
 \item{scRNA}{logic, whether single-cell RNA-seq is quantified or not. Default is FALSE.}
+
+\item{cutadapt_add}{additional parameters to customize cutadapt to trim poor quality reads. Default is NULL}
 }
 \value{
 None

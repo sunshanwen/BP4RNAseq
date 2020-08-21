@@ -59,10 +59,7 @@ fastq2quan <-
       unlink(files)
 
       status <- down_Ref(taxa)
-      if (status > 0)
-      {
-        print("The download of reference genome and annotation files failed! Please try it later.")
-      } else if (status == 0) {
+      if (status == 0) {
         # reference <- extract_genome(taxa)
         taxa_tmp <- gsub("\\s", "_", taxa)
         genome <- paste0(taxa_tmp, ".fna")
