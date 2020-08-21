@@ -42,34 +42,57 @@ check_paired <- function(files)
 #'
 sra2fastq <- function(threads = 4)
 {
-  sra.dir = getwd() ### get the directory to search SRA files
-  fq.dir = getwd()
-  files <-
-    list.files(
-      sra.dir,
-      pattern = ".sra$",
-      recursive = FALSE,
-      full.names = FALSE
+  status <-
+    tryCatch(
+      system2(
+        "which",
+        args = shQuote("fasterq-dump"),
+        stdout = FALSE,
+        stderr = FALSE
+      ),
+      error = function(err) {
+        1
+      },
+      warning = function(war) {
+        2
+      }
     )
-  if(length(files)){
-    pair <- check_paired(files)
-    # files_sra <- stringr::str_subset(files,".sra")
-    for (f in files) {
-      cmd = paste("fasterq-dump", f, "-O", fq.dir, "-e", threads)
-      # cat(cmd,"\n")#print the current command
-      system(cmd) # invoke command
-      unlink(f)
-    }
-
-    fastq_files <-
+  if(status == 0){
+    sra.dir = getwd() ### get the directory to search SRA files
+    fq.dir = getwd()
+    files <-
       list.files(
         sra.dir,
-        pattern = "fastq$",
+        pattern = ".sra$",
         recursive = FALSE,
         full.names = FALSE
       )
-    file.rename(fastq_files, gsub(".sra", "", fastq_files))
-    unlink("sra", recursive = TRUE)
-    return(pair)
-  } else print("No SRA files. Please download them.")
+    if(length(files)){
+      pair <- check_paired(files)
+      # files_sra <- stringr::str_subset(files,".sra")
+      for (f in files) {
+        cmd = paste("fasterq-dump", f, "-O", fq.dir, "-e", threads)
+        # cat(cmd,"\n")#print the current command
+        system(cmd) # invoke command
+        unlink(f)
+      }
+
+      fastq_files <-
+        list.files(
+          sra.dir,
+          pattern = "fastq$",
+          recursive = FALSE,
+          full.names = FALSE
+        )
+      file.rename(fastq_files, gsub(".sra", "", fastq_files))
+      unlink("sra", recursive = TRUE)
+      return(pair)
+    } else {
+      print("No SRA files. Please download them.")
+      return(NULL)
+      }
+  } else {
+    print("fasterq-dump is not available. Please install the latest SRA Toolkit.")
+    return(NULL)
+    }
 }
