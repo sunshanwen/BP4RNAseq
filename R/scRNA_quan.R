@@ -43,6 +43,7 @@ tx2gene_scRNA <- function()
 #' @param transcript the reference transcript
 #' @param protocol the single-cell RNA sequencing protocol: dropseq, chromium, or chromiumV3.
 #' @param threads the number of threads to be used. Default is 4.
+#' @param salmon_add additional parameters to customize Salmon for single cell RNAseq analyses.
 #' @export scRNA_quan
 #' @return None
 #' @examples

@@ -4,12 +4,16 @@
 \alias{scRNA_quan}
 \title{scRNA expression quantification with Salmon.}
 \usage{
-scRNA_quan(transcript, protocol, threads)
+scRNA_quan(transcript, protocol, threads = 4, salmon_add)
 }
 \arguments{
 \item{transcript}{the reference transcript}
 
 \item{protocol}{the single-cell RNA sequencing protocol: dropseq, chromium, or chromiumV3.}
+
+\item{threads}{the number of threads to be used. Default is 4.}
+
+\item{salmon_add}{additional parameters to customize Salmon for single cell RNAseq analyses.}
 }
 \value{
 None
