@@ -1,6 +1,6 @@
 
 #### Reads alignment with Hisat2
-.index_build <- function(taxa, genome, annotation)
+.index_build <- function(taxa, genome, annotation, threads)
 {
   if(file.exists(genome)&& file.exists(annotation)){
     cmd1 <-
@@ -23,10 +23,10 @@
               genome,
               taxa,
               "--ss ssFile.table",
-              "--exon exonsFile.table")
+              "--exon exonsFile.table", "-p", threads)
       system(cmd3)
     } else {
-      cmd3 <- paste("hisat2-build -f", genome, taxa)
+      cmd3 <- paste("hisat2-build -f", genome, taxa, "-p", threads)
       system(cmd3)
     }
   } else print("The reference genome and annotation are missing. Please download them first.")
@@ -35,12 +35,12 @@
 # Aligning the RNA-seq data to the reference genome with HISAT2.
 
 
-.align_ge <- function(pair, taxa, genome, annotation)
+.align_ge <- function(pair, taxa, genome, annotation, threads)
 {
 
   taxa <- gsub("\\s", "_", taxa)
 
-  .index_build(taxa, genome, annotation)
+  .index_build(taxa, genome, annotation, threads)
   index <-
     list.files(pattern = "ht2$",
                recursive = TRUE,
@@ -64,7 +64,7 @@
           read2 <- paste0(name, "_2.fastq")
           cmd4 <-
             paste(
-              "hisat2 --dta -x",
+              "hisat2 -p", threads, "--dta -x",
               taxa,
               "-1",
               read1,
@@ -88,7 +88,7 @@
         {
           name <- gsub(".fastq", "", f)
           out_bam <- paste0(name, ".bam")
-          cmd4 <- paste("hisat2 --dta -x",
+          cmd4 <- paste("hisat2 -p", threads, "--dta -x",
                         taxa,
                         "-U",
                         f,
@@ -105,7 +105,7 @@
 
 # Transcript assembly with StringTie.
 
-.trans_ass <- function(novel_transcript = FALSE)
+.trans_ass <- function(novel_transcript = FALSE, threads)
 {
   aligned_bam <- list.files(pattern = "*\\.bam$")
   gff <-
@@ -119,7 +119,7 @@
       taxa <- gsub("\\.bam", "", f)
       output <- paste0("ballgown/", taxa, "/", taxa, ".gtf")
       if (novel_transcript == TRUE) {
-        cmd1 <- paste("stringtie", f, "-b ballgown -G", gff, "-o", output)
+        cmd1 <- paste("stringtie", f, "-b ballgown -G", gff, "-o", output, "-p", threads)
         # cat(cmd1, "\n")
         system(cmd1)
         # cmd2 <- paste("stringtie", aligned_bam, "-G", taxa, "-eB -o", taxa)
@@ -128,7 +128,7 @@
         #### consider to add merge
       } else {
         cmd1 <-
-          paste("stringtie", f, "-G", gff, "-e -b ballgown", "-o", output)
+          paste("stringtie", f, "-G", gff, "-e -b ballgown", "-o", output, "-p", threads)
         # cat(cmd1, "\n")
         system(cmd1)
         #### consider to add merge
@@ -260,6 +260,7 @@ utils::globalVariables(c("transcript_id", "count", "gene_id"))
 #' @param genome the reference genome.
 #' @param annotation the annotation file.
 #' @param novel_transcript logic, whether identifying novel transcripts is expected or not. Default is FALSE.
+#' @param threads the number of threads to be used. Default is 4.
 #' @export align_based_quan
 #' @return None
 #' @examples
@@ -270,9 +271,9 @@ utils::globalVariables(c("transcript_id", "count", "gene_id"))
 #'}
 #'
 
-align_based_quan <- function(pair, taxa, genome, annotation, novel_transcript = FALSE)
+align_based_quan <- function(pair, taxa, genome, annotation, novel_transcript = FALSE, threads = 4)
 {
-  .align_ge(pair, taxa, genome, annotation)
-  .trans_ass(novel_transcript)
+  .align_ge(pair, taxa, genome, annotation, threads)
+  .trans_ass(novel_transcript, threads)
   .trans_quan()
 }

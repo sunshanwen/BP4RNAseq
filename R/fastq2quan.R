@@ -69,9 +69,9 @@ fastq2quan <-
         transcript <- paste0("transcript_", taxa_tmp, ".fna")
         annotation <- paste0(taxa_tmp, ".gff")
         if (scRNA == FALSE) {
-          align_based_quan(pair, taxa, genome, annotation, novel_transcript)
+          align_based_quan(pair, taxa, genome, annotation, novel_transcript, threads)
 
-          align_free_quan(pair, genome, transcript, annotation)
+          align_free_quan(pair, genome, transcript, annotation, threads)
 
           ### renaming results from trans_quan and align_free_quan
           # first gene count
@@ -121,7 +121,7 @@ fastq2quan <-
             align_free_transcript
           )
         } else if (scRNA == TRUE) {
-          scRNA_quan(transcript, protocol)
+          scRNA_quan(transcript, protocol, threads)
         }
       }
     } else

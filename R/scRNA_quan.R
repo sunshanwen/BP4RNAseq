@@ -48,10 +48,10 @@ tx2gene_scRNA <- function()
 #'
 #' scRNA_quan(transcript = "test_transcript_Homo_sapiens.fna", protocol = "dropseq")
 #'
-scRNA_quan <- function(transcript, protocol)
+scRNA_quan <- function(transcript, protocol, threads)
 {
   tx2gene_scRNA()
-  cmd3 <- paste("salmon index -t", transcript, "-i salmon_index")
+  cmd3 <- paste("salmon index -t", transcript, "-i salmon_index", "-p", threads)
   # cat(cmd3, "\n")
   system(cmd3)
   read <-
@@ -82,7 +82,7 @@ scRNA_quan <- function(transcript, protocol)
     # cmd4 <- paste("salmon quant -i salmon_index -l A", gentrome.fna, "-1", read1, "-2", read2, "--validateMappings -o", out)
     cmd4 <-
       paste0(
-        "salmon alevin -i salmon_index -l ISR --",
+        "salmon alevin -p", threads, "-i salmon_index -l ISR --",
         protocol,
         " -1 ",
         barcode_seq,

@@ -47,6 +47,18 @@ tx2gene <- function()
       )
     #cat(cmd1)
     system(cmd1)
+
+    ### add support for Ensembl annotation file 
+    if(file.info("raw_tx2gene.csv")$size == 0){
+      cmd1 <-
+      paste(
+        "egrep -v '^#|^$'",
+        annotation,
+        "| cut -f 9 | grep ID=transcript | awk -F ';' 'BEGIN{OFS = \":\";} {print $1, $2;}' | awk -F ':' 'BEGIN{OFS = \",\"} {print $NF, $2}' > raw_tx2gene.csv"
+      )
+    #cat(cmd1)
+      system(cmd1)
+    }
     tx2gene <- utils::read.csv("raw_tx2gene.csv", header = FALSE)
     tx2gene[] <- lapply(tx2gene, as.character)
     index_to_be_changed <- which(tx2gene[, 1] %in% tx2gene[, 2])
@@ -102,10 +114,10 @@ gene_quan <- function()
 #'
 #'
 #'
-align_free_quan <- function(pair, genome, transcript, annotation)
+align_free_quan <- function(pair, genome, transcript, annotation, threads = 4)
 {
   if(file.exists(genome)&&file.exists(transcript)&&file.exists(annotation)){
-    cmd3 <- paste("salmon index -t", transcript, "-i salmon_index")
+    cmd3 <- paste("salmon index -t", transcript, "-i salmon_index", "-p", threads)
     # cat(cmd3, "\n")
     system(cmd3)
     if (pair == "paired")
@@ -127,7 +139,7 @@ align_free_quan <- function(pair, genome, transcript, annotation)
           # cmd4 <- paste("salmon quant -i salmon_index -l A", gentrome.fna, "-1", read1, "-2", read2, "--validateMappings -o", out)
           cmd4 <-
             paste(
-              "salmon quant -i salmon_index -l A",
+              "salmon quant -p", threads, "-i salmon_index -l A",
               "-1",
               read1,
               "-2",
@@ -153,7 +165,7 @@ align_free_quan <- function(pair, genome, transcript, annotation)
           out <- paste0(name, "_transcripts_quant")
           # cmd4 <- paste("salmon quant -i salmon_index -l A -1", gentrome.fna, "-r", f, "--validateMappings -o", out)
           cmd4 <-
-            paste("salmon quant -i salmon_index -l A -r",
+            paste("salmon quant -p", threads, "-i salmon_index -l A -r",
                   f,
                   "--validateMappings -o",
                   out)
