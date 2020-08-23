@@ -39,11 +39,11 @@ least, the package applies to both retrospective and newly generated
 bulk RNA-seq data analyses and is also applicable for single-cell
 RNA-seq analyses based on the Alevin algorithm \[1\].
 
-### Operating System Requirements
+## Operating System Requirements
 
 BP4RNAseq runs in Windows (Subsystem for Linux), Linux and macOS.
 
-### Dependencies
+## Dependencies
 
 The BP4RNAseq requires the following utilities:
 
@@ -106,7 +106,7 @@ chmod +x install_depends.sh
 ./use_conda.sh
 ```
 
-### Installation
+## Installation
 
 <!-- You can install the released version of BP4RNAseq from [CRAN](https://CRAN.R-project.org) with: -->
 
@@ -132,9 +132,9 @@ You can install BP4RNAseq from [GitHub](https://github.com/) with:
 devtools::install_github("sunshanwen/BP4RNAseq")
 ```
 
-### Usage
+## Usage
 
-#### Bulk RNA-seq analyses
+### Bulk RNA-seq analyses
 
 The functions in BP4RNAseq are integrated into two main functions:
 down2quan for public RNA-seq data, fastq2quan for newly generated
@@ -196,7 +196,7 @@ Alternatively, we recommend to decide the type of data to use based on
 their consistencies with qPCR results if available or/and the results
 from the downstream analyses.
 
-#### Single-cell RNA-seq analyses
+### Single-cell RNA-seq analyses
 
 down2quan and fastq2quan can also be extended to process single-cell
 RNA-seq data by setting the `scRNA` parameter to be ‘TRUE’ and
@@ -232,7 +232,7 @@ three separate files. These outputs can be further processed with
 [tximport](https://bioconductor.org/packages/devel/bioc/vignettes/tximport/inst/doc/tximport.html)
 and [Seurat](https://satijalab.org/seurat/).
 
-#### Using BP4RNAseq as a toolbox for RNA-seq analyses and customizing gene expression quantification to improve the sensitivity and accuracy of RNA-seq analyses.
+### Using BP4RNAseq as a toolbox for RNA-seq analyses and customizing gene expression quantification to improve the sensitivity and accuracy of RNA-seq analyses.
 
 BP4RNAseq offers individual tools to users. These tools can allow users
 to run the exact tools that suit their needs. Specifically, these tools
@@ -264,7 +264,7 @@ fragment-level GC biases in the input data when performing the
 alignment-free workflow. Details about the optional customizing setting
 in each tool can be found in package help page.
 
-### References
+## References
 
 1.  Srivastava, A., et al. Alevin efficiently estimates accurate gene
     abundances from dscRNA-seq data. Genome Biol 2019;20:16.
