@@ -154,9 +154,11 @@ down_Ref <- function(taxa) {
         unlink("dehydrated.zip")
 
       } else {
+        print ("The internet connection is poor. The download of datasets is failed.")
+      }
+    } else {
         print ("The reference genome and annotation files already exist")
       }
-    }
   } else print("jq is not found. Please install it.")
   return(status)
 }

@@ -40,7 +40,7 @@
 
   taxa <- gsub("\\s", "_", taxa)
 
-  .index_build(taxa, genome, annotation, threads)
+  .index_build(taxa, genome, annotation, threads, hisat2_build_add)
   index <-
     list.files(pattern = "ht2$",
                recursive = TRUE,
