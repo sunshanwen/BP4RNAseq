@@ -32,12 +32,12 @@ quantification at gene and transcript levels. Second, it improves the
 accuracy and sensitivity of RNA-seq analyses by using an optimized
 pipeline. Third, it offers individual tools to provide users full
 control to fine tune precisely how individual steps are optimized. This
-can allow experienced users to further improve the accuracy and
-sensitivity of RNA-seq analyses. Users can also use the package as a
-toolbox to run the exact tools that suit their needs. Last but not
-least, the package applies to both retrospective and newly generated
-bulk RNA-seq data analyses and is also applicable for single-cell
-RNA-seq analyses based on the Alevin algorithm \[1\].
+can allow users to inspect intermediate outputs and thus to further
+improve the accuracy and sensitivity of RNA-seq analyses. Users can also
+use the package as a toolbox to run the exact tools that suit their
+needs. Last but not least, the package applies to both retrospective and
+newly generated bulk RNA-seq data analyses and is also applicable for
+single-cell RNA-seq analyses based on the Alevin algorithm \[1\].
 
 ## Operating System Requirements
 
