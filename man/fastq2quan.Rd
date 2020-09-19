@@ -19,7 +19,7 @@ fastq2quan(
 
 \item{dir}{the working directory. Default is the current working directory.}
 
-\item{pair}{"single" for single-end (SE) reads or "paired" for paired-end (PE) reads.}
+\item{pair}{'single' for single-end (SE) reads or 'paired' for paired-end (PE) reads.}
 
 \item{taxa}{the scientific or common name of the organism.}
 
@@ -37,7 +37,7 @@ Produce the quantifications of gene expression based on the fastq files with ali
 }
 \examples{
 
-sra_download(accession = "SRR11427582")
+sra_download(accession = 'SRR11427582')
 sra2fastq()
-fastq2quan(pair = "single", taxa = "Drosophila melanogaster")
+fastq2quan(pair = 'single', taxa = 'Drosophila melanogaster')
 }

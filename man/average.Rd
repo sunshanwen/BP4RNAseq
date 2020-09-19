@@ -23,13 +23,28 @@ Take averages with alignment-free and alignment-based quantification
 }
 \examples{
 
-align_based_gene <- system.file("extdata", "test_gene_alignment_based_quantification.csv", package = "BP4RNAseq")
-align_free_gene <- system.file("extdata", "test_gene_alignment_free_quantification.csv", package = "BP4RNAseq")
-align_based_transcript <- system.file("extdata", "test_transcript_alignment_based_quantification.csv", package = "BP4RNAseq")
-align_free_transcript <- system.file("extdata", "test_transcript_alignment_free_quantification.csv", package = "BP4RNAseq")
+align_based_gene <- system.file(
+'extdata', 'test_gene_alignment_based_quantification.csv', 
+package = 'BP4RNAseq'
+)
+align_free_gene <- system.file(
+'extdata', 'test_gene_alignment_free_quantification.csv', 
+package = 'BP4RNAseq'
+)
+align_based_transcript <- system.file(
+'extdata', 'test_transcript_alignment_based_quantification.csv',
+package = 'BP4RNAseq'
+)
+align_free_transcript <- system.file(
+'extdata', 'test_transcript_alignment_free_quantification.csv', 
+package = 'BP4RNAseq'
+)
 align_based_gene <- read.csv(align_based_gene, header = TRUE)
 align_free_gene <- read.csv(align_free_gene, header = TRUE)
 align_based_transcript <- read.csv(align_based_transcript, header = TRUE)
 align_free_transcript <- read.csv(align_free_transcript, header = TRUE)
-average(align_based_gene, align_free_gene, align_based_transcript, align_free_transcript)
+average(
+align_based_gene, align_free_gene, 
+align_based_transcript, align_free_transcript
+)
 }

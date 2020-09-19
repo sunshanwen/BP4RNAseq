@@ -16,6 +16,6 @@ None
 Download the latest reference genome and the corresponding annotation files from NCBI using the NCBI datasets command-line tool.
 }
 \examples{
-down_Ref("Drosophila melanogaster")
+down_Ref(taxa = 'Drosophila melanogaster')
 
 }

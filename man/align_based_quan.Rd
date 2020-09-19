@@ -17,7 +17,7 @@ align_based_quan(
 )
 }
 \arguments{
-\item{pair}{"single" for single-end (SE) or "paired" for paired-end (PE) reads.}
+\item{pair}{'single' for single-end (SE) or 'paired' for paired-end (PE) reads.}
 
 \item{taxa}{the scientific or common name of the organism.}
 
@@ -43,9 +43,11 @@ alignment-based workflow
 }
 \examples{
 \dontrun{
-test_Homo_sapiens.fna <- system.file("extdata", "test_Homo_sapiens.fna", package = "BP4RNAseq")
-test_Homo_sapiens.gff <- system.file("extdata", "test_Homo_sapiens.gff", package = "BP4RNAseq")
-align_based_quan(pair = "paired", taxa = "Homo sapiens", genome = test_Homo_sapiens.fna, annotation = test_Homo_sapiens.gff, novel_transcript = FALSE)
+test_Homo_sapiens.fna <- system.file('extdata', 'test_Homo_sapiens.fna', package = 'BP4RNAseq')
+test_Homo_sapiens.gff <- system.file('extdata', 'test_Homo_sapiens.gff', package = 'BP4RNAseq')
+align_based_quan(pair = 'paired', taxa = 'Homo sapiens', 
+genome = test_Homo_sapiens.fna, 
+annotation = test_Homo_sapiens.gff, novel_transcript = FALSE)
 }
 
 }

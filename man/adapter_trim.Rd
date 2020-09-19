@@ -9,7 +9,7 @@ adapter_trim(sample, pair, threads = 4, scRNA = FALSE, cutadapt_add = NULL)
 \arguments{
 \item{sample}{samples with adapter.}
 
-\item{pair}{"single" for single-end (SE) or "paired" for paired-end (PE) reads.}
+\item{pair}{'single' for single-end (SE) or 'paired' for paired-end (PE) reads.}
 
 \item{threads}{the number of threads to be used. Default is 4.}
 
@@ -25,6 +25,6 @@ Trim samples with adapter using cutadapt based on the results from quality_test(
 }
 \examples{
 
-adapter_trim(sample = "test_read_2.fastq", pair = "paired", scRNA = TRUE)
+adapter_trim(sample = 'test_read_2.fastq', pair = 'paired', scRNA = TRUE)
 
 }

@@ -17,7 +17,7 @@ Convert all SRA files to fastq files and return the sequencing type, i.e., singl
 }
 \examples{
 
-sra_download(accession = "SRR11427582")
+sra_download(accession = 'SRR11427582')
 sra2fastq()
 
 }
