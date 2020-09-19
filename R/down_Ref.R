@@ -9,7 +9,7 @@ extract_genome <- function(taxa) {
     ref_seq1 <- paste(ref_seq, collapse = " ")
     cmd2 <- paste(ref_seq1, ">", name1)
     system2(command = "cat", args = cmd2)
-    gff <- list.files(path = "./dehydrated", pattern = "gff$", recursive = TRUE, full.names = TRUE)
+    gff <- list.files(path = "./dehydrated", pattern = "gff$", recursive = TRUE, full.names = TRUE
     name2 <- paste0(taxa, ".gff")
     cmd3 <- paste(gff, name2)
     system2(command = "mv", args = cmd3)
