@@ -31,5 +31,6 @@ RoxygenNote: 7.1.1
 biocViews: GeneExpressionWorkflow
 Suggests: 
     knitr,
-    rmarkdown
+    rmarkdown,
+    testthat
 VignetteBuilder: knitr

@@ -67,8 +67,6 @@ fastq2quan <- function(threads = 4, dir = getwd(), pair, taxa, novel_transcript 
                 align_free_gene <- align_free_gene[, c("sample", "gene_id", "count")]
                 utils::write.csv(align_based_gene, "gene_alignment_based_quantification.csv", row.names = FALSE)
                 utils::write.csv(align_free_gene, "gene_alignment_free_quantification.csv", row.names = FALSE)
-                # unlink('gene_quantification.csv') unlink('salmon_gene_quantification.csv')
-                
                 ### then transcript count
                 align_based_transcript <- utils::read.csv("transcript_alignment_based_quantification.csv")
                 align_based_transcript <- align_based_transcript[, c("sample", "transcript_id", "count")]
@@ -76,8 +74,6 @@ fastq2quan <- function(threads = 4, dir = getwd(), pair, taxa, novel_transcript 
                 align_free_transcript <- align_free_transcript[, c("sample", "transcript_id", "count")]
                 utils::write.csv(align_based_transcript, "transcript_alignment_based_quantification.csv", row.names = FALSE)
                 utils::write.csv(align_free_transcript, "transcript_alignment_free_quantification.csv", row.names = FALSE)
-                # unlink('transcript_quantifications.csv') unlink('salmon_transcript_quantifications.csv')
-                
                 average(align_based_gene, align_free_gene, align_based_transcript, align_free_transcript)
             } else if (scRNA == TRUE) {
                 scRNA_quan(transcript, protocol, threads)

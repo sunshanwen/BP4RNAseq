@@ -31,6 +31,6 @@ scRNA expression quantification with Salmon.
 }
 \examples{
 
-scRNA_quan(transcript = "test_transcript_Homo_sapiens.fna", protocol = "dropseq")
+scRNA_quan(transcript = 'test_transcript_Homo_sapiens.fna', protocol = 'dropseq')
 
 }

@@ -18,6 +18,6 @@ the status of the download (0 for success, 1 for error).
 Download RNA-seq samples from the NCBI using SRA Toolkit and Entrez Direct based on the accession code.
 }
 \examples{
-sra_download(accession = "SRR11427582")
+sra_download(accession = 'SRR11427582')
 
 }

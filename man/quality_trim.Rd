@@ -18,7 +18,7 @@ quality_trim(
 
 \item{per_seq}{samples with poor per sequence quality scores.}
 
-\item{pair}{"single" for single-end (SE) or "paired" for paired-end (PE) reads.}
+\item{pair}{'single' for single-end (SE) or 'paired' for paired-end (PE) reads.}
 
 \item{threads}{the number of threads to be used. Default is 4.}
 
@@ -34,7 +34,7 @@ Trim poor quality samples using cutadapt based on the results from quality_test(
 }
 \examples{
 
-quality_trim(per_base = "test_read_2.fastq", per_seq = "test_read_2.fastq",
-             pair = "paired", threads = 4, scRNA = TRUE)
+quality_trim(per_base = 'test_read_2.fastq', per_seq = 'test_read_2.fastq',
+             pair = 'paired', threads = 4, scRNA = TRUE)
 
 }

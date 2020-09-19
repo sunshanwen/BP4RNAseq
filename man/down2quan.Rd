@@ -37,6 +37,9 @@ Download the RNA-seq samples from the NCBI and produce the quantifications of ge
 }
 \examples{
 
-down2quan(accession = "SRR11427582", dir = getwd(), taxa = "Drosophila melanogaster", novel_transcript = FALSE, scRNA = FALSE)
+down2quan(
+accession = 'SRR11427582', dir = getwd(), 
+taxa = 'Drosophila melanogaster', novel_transcript = FALSE, scRNA = FALSE
+)
 
 }

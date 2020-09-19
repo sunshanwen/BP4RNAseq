@@ -15,7 +15,7 @@ align_free_quan(
 )
 }
 \arguments{
-\item{pair}{"single" for single-end (SE) or "paired" for paired-end (PE) reads.}
+\item{pair}{'single' for single-end (SE) or 'paired' for paired-end (PE) reads.}
 
 \item{genome}{the reference genome.}
 
@@ -37,7 +37,10 @@ Alignment-free expression quantification with Salmon at gene and transcript leve
 }
 \examples{
 
-align_free_quan(pair = "paired", "test_Homo_sapiens.fna", "test_transcript_Homo_sapiens.fna","test_Homo_sapiens.gff")
+align_free_quan(
+pair = 'paired', 'test_Homo_sapiens.fna', 
+'test_transcript_Homo_sapiens.fna','test_Homo_sapiens.gff'
+)
 
 
 

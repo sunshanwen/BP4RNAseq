@@ -1,28 +1,24 @@
 #' @order 2
 ### extract the genome and annotation files
 extract_genome <- function(taxa) {
-    ref_seq <- list.files(pattern = "fna$", recursive = TRUE, full.names = TRUE)
     transcript <- list.files(pattern = "rna\\.fna", recursive = TRUE, full.names = TRUE)
-    # ref_seq1 <- ref_seq[-which(ref_seq == transcript)]
+    ref_seq <- list.files(pattern = "fna$", recursive = TRUE, full.names = TRUE)
+    ref_seq <- ref_seq[ref_seq != transcript]
     taxa <- gsub("\\s", "_", taxa)
     name1 <- paste0(taxa, ".fna")
-    # tmp <- paste0('./', name1) ref_seq1 <- paste(ref_seq[-which(ref_seq == tmp)], collapse = ' ')
     ref_seq1 <- paste(ref_seq, collapse = " ")
-    cmd2 <- paste("cat", ref_seq1, ">", name1)
-    system(cmd2)
+    cmd2 <- paste(ref_seq1, ">", name1)
+    system2(command = "cat", args = cmd2)
     gff <- list.files(pattern = "gff$", recursive = TRUE, full.names = TRUE)
     name2 <- paste0(taxa, ".gff")
-    cmd3 <- paste("mv", gff, name2)
-    system(cmd3)
-    
+    cmd3 <- paste(gff, name2)
+    system2(command = "mv", args = cmd3)
     name3 <- paste0("transcript_", taxa, ".fna")
-    cmd4 <- paste("mv", transcript, name3)
-    system(cmd4)
-    # results <- c(name1, name2, name3)
+    cmd4 <- paste(transcript, name3)
+    system2(command = "mv", args = cmd4)
     unlink("./ncbi_dataset.zip")
     unlink("README.md")
     unlink("./dehydrated", recursive = TRUE)
-    # return(results)
 }
 
 
@@ -35,69 +31,63 @@ extract_genome <- function(taxa) {
 #' @order 1
 #' @return None
 #' @examples
-#' down_Ref('Drosophila melanogaster')
+#' down_Ref(taxa = 'Drosophila melanogaster')
 #'
 down_Ref <- function(taxa) {
-    # cmd1 <- paste('./datasets assembly_descriptors tax_name', taxa, '-r | jq .datasets[].assembly_accession -r') ### change '_' to '-' according to the
-    # official documentation of datasets
-    status <- tryCatch(system2(command = "which", args = "jq", stdout = FALSE, stderr = FALSE), error = function(err) {
-        1
-    }, warning = function(war) {
-        2
-    })
+    existence <- check_dep(dependancy = "jq")
+    if (existence == TRUE) {
+        status = 0
+        } else {status = 1}
     if (status == 0) {
         taxa_raw <- taxa
         taxa_tmp <- gsub("\\s", "_", taxa)
         genome <- paste0(taxa_tmp, ".fna")
         transcript <- paste0("transcript_", taxa_tmp, ".fna")
         annotation <- paste0(taxa_tmp, ".gff")
-        # status = 0
-        
+
         if (!(file.exists(genome) && file.exists(transcript) && file.exists(annotation))) {
             taxa <- paste0("\"", taxa, "\"")
             datasets <- list.files(pattern = "^datasets$", full.names = TRUE)
             if (length(datasets) == 0) {
                 ### switch datasets according to the platform
                 if (Sys.info()["sysname"] == "Linux") {
-                  status <- tryCatch(utils::download.file("https://ftp.ncbi.nlm.nih.gov/pub/datasets/command-line/LATEST/linux-amd64/datasets", destfile = "datasets", 
-                    quit = TRUE), error = function(err) {
-                    1
-                  }, warning = function(war) {
-                    2
-                  })
+                  status <- tryCatch(
+                      utils::download.file("https://ftp.ncbi.nlm.nih.gov/pub/datasets/command-line/LATEST/linux-amd64/datasets", 
+                      destfile = "datasets", quit = TRUE), 
+                      error = function(err) {1}, warning = function(war) {2}
+                      )
                   datasets <- list.files(pattern = "^datasets$", full.names = TRUE)
-                  # datasets <- system.file('datasets_L', package = 'BP4RNAseq')
                 } else if (Sys.info()["sysname"] == "Darwin") {
-                  utils::download.file("https://ftp.ncbi.nlm.nih.gov/pub/datasets/command-line/LATEST/mac/datasets", destfile = "datasets", quit = TRUE)
-                  status <- tryCatch(utils::download.file("https://ftp.ncbi.nlm.nih.gov/pub/datasets/command-line/LATEST/mac/datasets", destfile = "datasets", 
-                    quit = TRUE), error = function(err) {
-                    1
-                  }, warning = function(war) {
-                    2
-                  })
+                  status <- tryCatch(utils::download.file("https://ftp.ncbi.nlm.nih.gov/pub/datasets/command-line/LATEST/mac/datasets", 
+                                     destfile = "datasets", quit = TRUE), 
+                                     error = function(err) {1}, 
+                                     warning = function(war) {2}
+                                     )
                   datasets <- list.files(pattern = "^datasets$", full.names = TRUE)
-                  # datasets <- system.file('datasets_D', package = 'BP4RNAseq')
-                }
+                }  
             }
             if (status == 0) {
-                system(paste("chmod +x", datasets))
-                
+                cmd0 <- paste("+x", datasets)
+                system2(command = "chmod", args = cmd0)
                 if (dir.exists("dehydrated") && (length(dir(path = "dehydrated", all.files = FALSE)) > 0)) {
                   print("Downloading the reference genome and annotation files.")
-                  cmd3 <- paste(datasets, "rehydrate --filename dehydrated")
-                  status <- system(cmd3)
+                  cmd3 <- paste("rehydrate --filename dehydrated")
+                  status <- system2(command = datasets, args = cmd3,stdout = FALSE, stderr = FALSE)
                 } else {
-                  # cmd1 <- paste('./datasets assembly-descriptors tax-name', taxa, '--refseq --assmaccs | jq .datasets[].assembly_accession -r')
-                  cmd1 <- paste(datasets, "assembly-descriptors tax-name", taxa, "--refseq --assmaccs | jq .datasets[].assembly_accession -r")
-                  # cat(cmd1, '\n')
-                  accession_id <- system(cmd1, intern = TRUE)
-                  cmd2 <- paste(datasets, "download assembly", accession_id, "-g -r --dehydrated --filename dehydrated.zip")
-                  system(cmd2, intern = TRUE)
-                  # cat(cmd2, '\n') file <- list.files(pattern = '^dehydrated.zip$')
+                  cmd1 <- paste0(
+                      "assembly-descriptors taxon ", "'", taxa, "'",
+                      " --refseq | jq '.assemblies[].assembly.assembly_accession' -r"
+                      )
+                  accession_id <- system2(command = datasets, args = cmd1, stdout=TRUE)
+                  cmd2 <- paste(
+                      "download assembly", accession_id, 
+                      "-p --dehydrated --filename dehydrated.zip"
+                      )
+                  system2(command = datasets, args = cmd2)
                   utils::unzip("dehydrated.zip", list = FALSE, exdir = "dehydrated")
                   print("Downloading the reference genome and annotation files.")
-                  cmd3 <- paste(datasets, "rehydrate --filename dehydrated")
-                  status <- system(cmd3)
+                  cmd3 <- paste("rehydrate --filename dehydrated")
+                  status <- system2(command = datasets, args = cmd3)
                 }
                 
                 if (status == 1) {
@@ -106,9 +96,7 @@ down_Ref <- function(taxa) {
                   unlink(datasets)
                   extract_genome(taxa_raw)
                 }
-                
                 unlink("dehydrated.zip")
-                
             } else {
                 print("The internet connection is poor. The download of datasets is failed.")
             }
