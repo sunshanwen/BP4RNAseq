@@ -27,27 +27,27 @@ down2quan <- function(accession, dir = getwd(), taxa, novel_transcript = FALSE, 
         if (length(pair)) {
             quality <- qc_test(threads, scRNA)
             
-            if (length(quality[[1]]$sample)) 
+            if (length(quality$adapter$sample)) 
                 cat("Adapter exists!\n")
-            if (length(quality[[2]]$sample)) 
+            if (length(quality$base_quality$sample)) 
                 cat("Per base sequence quality failed!\n")
-            if (length(quality[[3]]$sample)) 
+            if (length(quality$sequence_score$sample)) 
                 cat("Per sequence quality scores failed!\n")
             
             ### quality trimming
-            if (length(quality[[2]]$sample) | length(quality[[3]]$sample)) {
+            if (length(quality$base_quality$sample) | length(quality$sequence_score$sample)) {
                 print("Trim low quality bases.")
-                quality_trim(quality[[2]]$sample, quality[[3]]$sample, pair, scRNA)  ### consider if add directory parameter.
-                if (length(quality[[1]]$sample)) {
+                quality_trim(quality$base_quality$sample, quality$sequence_score$sample, pair, scRNA)  ### consider if add directory parameter.
+                if (length(quality$adapter$sample)) {
                   print("Trim the adapter.")
-                  adapter_trim(quality[[1]]$sample, pair, scRNA)
+                  adapter_trim(quality$adapter$sample, pair, scRNA)
                 }
             }
             
-            if (length(quality[[1]]$sample)) {
+            if (length(quality$adapter$sample)) {
                 print("Trim the adapter.")
-                quality_trim(quality[[1]]$sample, quality[[1]]$sample, pair, scRNA)  ### consider if add directory parameter.
-                adapter_trim(quality[[1]]$sample, pair, scRNA)
+                quality_trim(quality$adapter$sample, quality$adapter$sample, pair, scRNA)  ### consider if add directory parameter.
+                adapter_trim(quality$adapter$sample, pair, scRNA)
             }
             files <- list.files(dir, pattern = "fastqc", full.names = FALSE)
             unlink(files)

@@ -24,13 +24,14 @@ quality_trim <- function(per_base, per_seq, pair, threads = 4, scRNA = FALSE, cu
         for (f in files) {
             if (pair == "paired") {
                 file <- c(paste0(f, "_1_fastqc"), paste0(f, "_2_fastqc"))
-                qc_reports <- list.files(pattern = "fastqc.zip$", full.names = FALSE, recursive = FALSE)
+                pattern <- paste0(f, "_1_fastqc.zip")
+                qc_reports <- list.files(pattern = pattern, full.names = FALSE, recursive = FALSE)
                 qc_collection <- fastqcr::qc_read_collection(
                     qc_reports, sample_names = gsub(".zip", "", qc_reports), 
                     modules = "all", verbose = TRUE
                     )
                 Encoding <- unique(
-                    qc_collection$basic_statistics[qc_collection$basic_statistics$Measure == "Encoding" & qc_collection$basic_statistics$sample == file, 3])
+                    qc_collection$basic_statistics[qc_collection$basic_statistics$Measure == "Encoding" & qc_collection$basic_statistics$sample == file[1], 3])
                 
                 infile1 <- paste0(f, "_1.fastq")
                 infile2 <- paste0(f, "_2.fastq")
@@ -57,7 +58,8 @@ quality_trim <- function(per_base, per_seq, pair, threads = 4, scRNA = FALSE, cu
                 
             } else if (pair == "single") {
                 file <- paste0(f, "_fastqc")
-                qc_reports <- list.files(pattern = "fastqc.zip$", full.names = FALSE, recursive = FALSE)
+                pattern <- paste0(f, "_fastqc.zip")
+                qc_reports <- list.files(pattern = pattern, full.names = FALSE, recursive = FALSE)
                 qc_collection <- fastqcr::qc_read_collection(qc_reports, sample_names = gsub(".zip", "", qc_reports), modules = "all", verbose = TRUE)
                 Encoding <- unique(qc_collection$basic_statistics[qc_collection$basic_statistics$Measure == "Encoding" & qc_collection$basic_statistics$sample == 
                   file, 3])
@@ -81,7 +83,8 @@ quality_trim <- function(per_base, per_seq, pair, threads = 4, scRNA = FALSE, cu
     } else if (scRNA == TRUE) {
         files <- unique(gsub("\\.fastq", "", unique(c(per_base, per_seq))))
         for (f in files) {
-            qc_reports <- list.files(pattern = "fastqc.zip$", full.names = FALSE, recursive = FALSE)
+            pattern <- paste0(f, "_fastqc.zip")
+            qc_reports <- list.files(pattern = pattern, full.names = FALSE, recursive = FALSE)
             qc_collection <- fastqcr::qc_read_collection(
                 qc_reports, sample_names = gsub(".zip", "", qc_reports), 
                 modules = "all", verbose = TRUE
