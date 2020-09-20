@@ -26,8 +26,7 @@ tx2gene <- function() {
             "-v '^#|^$'", annotation, 
             "| cut -f 9 | grep ID=rna | awk -F ';' 'BEGIN{OFS = \"=\";} {print $1, $2;}' | awk -F '=' 'BEGIN{OFS = \",\"} {print $NF, $2}' > raw_tx2gene.csv"
             )
-
-        
+        system2(command = "egrep", args = cmd1)
         ### add support for Ensembl annotation file
         if (file.info("raw_tx2gene.csv")$size == 0) {
             cmd1 <- paste(
@@ -36,8 +35,7 @@ tx2gene <- function() {
                 )
             system2(command = "egrep", args = cmd1)
         }
-        tx2gene <- utils::read.csv("raw_t
-                                   x2gene.csv", header = FALSE)
+        tx2gene <- utils::read.csv("raw_tx2gene.csv", header = FALSE)
         tx2gene[] <- lapply(tx2gene, as.character)
         index_to_be_changed <- which(tx2gene[, 1] %in% tx2gene[, 2])
         b <- length(index_to_be_changed)
@@ -139,8 +137,8 @@ align_free_quan <- function(pair, genome, transcript, annotation, threads = 4, s
             convert_data()  #### rna quantification to use for quantifying genes.
             tx2gene()
             gene_quan()
-            unlink("raw_tx2gene.csv")
-            unlink("tx2gene.csv")
+            # unlink("raw_tx2gene.csv")
+            # unlink("tx2gene.csv")
             folders <- dir(pattern = "transcripts_quant$")
             unlink(folders, recursive = TRUE)
             unlink("salmon_index", recursive = TRUE)
