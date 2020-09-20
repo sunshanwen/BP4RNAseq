@@ -53,9 +53,10 @@ quality_trim <- function(per_base, per_seq, pair, threads = 4, scRNA = FALSE, cu
                         "-j ", threads, infile1, infile2
                         )
                     system2(command = "cutadapt", args = cmd)
-                  } else stop("Wrong Encoding. Exit.")
-                } else print("Could not get the Encoding.")
-                
+                  } else {
+                        stop("Wrong Encoding. Exit.")
+                  }
+                }
             } else if (pair == "single") {
                 file <- paste0(f, "_fastqc")
                 pattern <- paste0(f, "_fastqc.zip")
@@ -74,9 +75,8 @@ quality_trim <- function(per_base, per_seq, pair, threads = 4, scRNA = FALSE, cu
                   } else if (Encoding == "Illumina 1.3" | Encoding == "Illumina 1.5") {
                     cmd = paste("-q 10", "--quality-base=64", "-o", outfile, "-m 20", "-j ", threads, infile)
                     system2(command = "cutadapt", args = cmd)
-                  } else stop("Wrong Encoding. Exit.")
-                } else print("Could not get the Encoding.")
-                
+                  } else {stop("Wrong Encoding. Exit.")}
+                } else {print("Could not get the Encoding.")}
             }
         }
         unlink(files)
@@ -103,8 +103,9 @@ quality_trim <- function(per_base, per_seq, pair, threads = 4, scRNA = FALSE, cu
                   cmd = paste("-q 10", "--quality-base=64", "-o", outfile, "-m 20", "-j ", threads, infile)
                   system2(command = "cutadapt", args = cmd)
                 }
-            } else print("Could not get the Encoding.")
-            
+            } else {
+                print("Could not get the Encoding.")
+              }
         }
     }
 }

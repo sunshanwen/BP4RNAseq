@@ -4,7 +4,7 @@ get_adapter <- function(sample, pair) {
     adapter <- NULL
     adap_3or5 <- NULL
     answer <- readline(prompt = "Do you know the adapter (y/n)? ")
-    if (tolower(answer) == "y") {
+    if(tolower(answer) == "y") {
         if (pair == "pair") {
             sequence1 <- readline(prompt = "Please enter the adapter sequence for read1: ")
             sequence2 <- readline(prompt = "Please enter the adapter sequence for read2: ")
@@ -21,8 +21,13 @@ get_adapter <- function(sample, pair) {
             "Nextera Transposase Sequence" = "CTGTCTCTTATA", 
             "SOLID Small RNA Adapter" = "CGCCTTGGCCGT", 
             "Illumina Small RNA 5' Adapter" = "GATCGTCGGACT")
-        qc_reports <- list.files(pattern = "fastqc.zip", full.names = FALSE)
-        if (length(qc_reports)) {
+        pattern <- paste0(gsub("\\.fastq", "", sample), "_fastqc.zip")
+        qc_reports <- list.files(pattern = pattern, full.names = FALSE)
+        
+        samples <- unique(
+          gsub("_2$", "", gsub("_1$", "", sample))
+        )
+        if(length(qc_reports)) {
             qc_collection <- fastqcr::qc_read_collection(
                 qc_reports, sample_names = gsub(".zip", "", qc_reports), 
                 modules = "all", verbose = TRUE
@@ -62,10 +67,10 @@ adapter_trim <- function(sample, pair, threads = 4, scRNA = FALSE, cutadapt_add 
     existence <- check_dep(dependancy = "cutadapt")
     if (existence == TRUE) {
         if (scRNA == FALSE) {
+            adapter_got = get_adapter(sample, pair)
             samples <- unique(
                 gsub("_2$", "", gsub("_1$", "", gsub("\\.fastq", "", sample)))
             )
-            adapter_got = get_adapter(sample, pair)
             if (pair == "pair") {
                 if (length(adapter_got$adapter)) {
                     for (i in samples) {
