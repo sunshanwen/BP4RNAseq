@@ -67,7 +67,7 @@ scRNA_quan <- function(transcript, protocol, threads = 4, salmon_index_add = NUL
                 read_seq <- read1
                 barcode_seq <- read2
             }
-            cmd4 <- paste0(
+            cmd4 <- paste(
                 "alevin -p", threads, "-i salmon_index -l ISR --", 
                 protocol, " -1 ", barcode_seq, " -2 ", read_seq, 
                 " --tgMap tx2gene.tsv -o ", 
