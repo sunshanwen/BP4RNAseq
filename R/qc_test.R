@@ -11,9 +11,9 @@ fastqc_r <- function(threads, fq.dir, scRNA, fastqc_add) {
             }
             status <- 0
         } else {
-          print("No fastq files are found in the work directory.")
+            print("No fastq files are found in the work directory.")
             status <- 1
-          }
+        }
     } else if (scRNA == TRUE) {
         read <- list.files(pattern = ".*1\\.fastq$", full.names = FALSE)
         read_seq <- c()
@@ -42,7 +42,7 @@ fastqc_r <- function(threads, fq.dir, scRNA, fastqc_add) {
         } else {
             print("No fastq files are found in the work directory.")
             status <- 1
-            }
+        }
     }
 }
 
@@ -66,11 +66,11 @@ utils::globalVariables(c("module", "status"))
 
 qc_test <- function(threads = 4, scRNA = FALSE, fastqc_add = NULL) {
     existence <- check_dep(dependancy = "fastqc")
-    if(existence == TRUE){
+    if (existence == TRUE) {
         fq.dir = getwd()
         qc.dir = getwd()
         status <- fastqc_r(threads, fq.dir, scRNA, fastqc_add)
-        if(status == 0){
+        if (status == 0) {
             qc <- fastqcr::qc_aggregate(qc.dir, progressbar = FALSE)
             if (length(qc)) {
                 index_ad <- subset(qc, module == "Adapter Content" & status == "FAIL", select = sample)
@@ -78,7 +78,7 @@ qc_test <- function(threads = 4, scRNA = FALSE, fastqc_add = NULL) {
                 index_sqs <- subset(qc, module == "Per sequence quality scores" & status == "FAIL", select = sample)
                 index <- list(adapter = index_ad, base_quality = index_sq, sequence_score = index_sqs)
                 return(index)
-            }             
+            }
         }
-    } else print("FASTQC is not found. Please install it.") 
+    } else print("FASTQC is not found. Please install it.")
 }

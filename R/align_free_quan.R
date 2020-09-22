@@ -1,10 +1,7 @@
 convert_data <- function() {
     files <- list.files(pattern = "quant.sf", recursive = TRUE, full.names = TRUE)
     if (length(files)) {
-        others <- data.frame(
-            transcript_id = character(), length = numeric(), TPM = numeric(), 
-            count = numeric(), sample = character()
-            )
+        others <- data.frame(transcript_id = character(), length = numeric(), TPM = numeric(), count = numeric(), sample = character())
         for (f in files) {
             other <- utils::read.table(f, header = TRUE, sep = "\t")
             other$sample <- gsub("^\\./", "", gsub("_trans.*", "", f))
@@ -12,27 +9,18 @@ convert_data <- function() {
         }
         names(others) <- c("transcript_id", "length", "TPM", "count", "sample")
         others <- others[, c("sample", "transcript_id", "count", "TPM", "length")]
-        utils::write.csv(
-            others, "transcript_alignment_free_quantification.csv", 
-            row.names = FALSE
-        )
+        utils::write.csv(others, "transcript_alignment_free_quantification.csv", row.names = FALSE)
     }
 }
 
 tx2gene <- function() {
     annotation <- list.files(pattern = "gff$", recursive = TRUE, full.names = TRUE)
     if (length(annotation)) {
-        cmd1 <- paste(
-            "-v '^#|^$'", annotation, 
-            "| cut -f 9 | grep ID=rna | awk -F ';' 'BEGIN{OFS = \"=\";} {print $1, $2;}' | awk -F '=' 'BEGIN{OFS = \",\"} {print $NF, $2}' > raw_tx2gene.csv"
-            )
+        cmd1 <- paste("-v '^#|^$'", annotation, "| cut -f 9 | grep ID=rna | awk -F ';' 'BEGIN{OFS = \"=\";} {print $1, $2;}' | awk -F '=' 'BEGIN{OFS = \",\"} {print $NF, $2}' > raw_tx2gene.csv")
         system2(command = "egrep", args = cmd1)
         ### add support for Ensembl annotation file
         if (file.info("raw_tx2gene.csv")$size == 0) {
-            cmd1 <- paste(
-                "-v '^#|^$'", annotation, 
-                "| cut -f 9 | grep ID=transcript | awk -F ';' 'BEGIN{OFS = \":\";} {print $1, $2;}' | awk -F ':' 'BEGIN{OFS = \",\"} {print $NF, $2}' > raw_tx2gene.csv"
-                )
+            cmd1 <- paste("-v '^#|^$'", annotation, "| cut -f 9 | grep ID=transcript | awk -F ';' 'BEGIN{OFS = \":\";} {print $1, $2;}' | awk -F ':' 'BEGIN{OFS = \",\"} {print $NF, $2}' > raw_tx2gene.csv")
             system2(command = "egrep", args = cmd1)
         }
         tx2gene <- utils::read.csv("raw_tx2gene.csv", header = FALSE)
@@ -41,8 +29,7 @@ tx2gene <- function() {
         b <- length(index_to_be_changed)
         if (b > 0) {
             for (i in seq_len(b)) {
-                tx2gene[index_to_be_changed[i], 1] <- 
-                    tx2gene[tx2gene[, 2] == tx2gene[index_to_be_changed[i], 1], 1]
+                tx2gene[index_to_be_changed[i], 1] <- tx2gene[tx2gene[, 2] == tx2gene[index_to_be_changed[i], 1], 1]
             }
         }
         tx2gene[, 1] <- gsub("gene-", "", tx2gene[, 1])
@@ -63,11 +50,7 @@ gene_quan <- function() {
         all <- stats::na.omit(all)
         tmp1 <- all %>% dplyr::group_by(sample, gene_id) %>% dplyr::summarise(count = sum(count))
         gene_quantification <- tmp1[, c("sample", "gene_id", "count")]
-        utils::write.csv(
-            gene_quantification, 
-            "gene_alignment_free_quantification.csv", 
-            row.names = FALSE
-            )
+        utils::write.csv(gene_quantification, "gene_alignment_free_quantification.csv", row.names = FALSE)
     }
 }
 
@@ -109,11 +92,7 @@ align_free_quan <- function(pair, genome, transcript, annotation, threads = 4, s
                     out <- paste0(name, "_transcripts_quant")
                     read1 <- paste0(name, "_1.fastq")
                     read2 <- paste0(name, "_2.fastq")
-                    cmd4 <- paste(
-                        "quant -p", threads, 
-                        "-i salmon_index -l A", "-1", read1, "-2", read2, 
-                        "--validateMappings -o", out, salmon_quan_add
-                        )
+                    cmd4 <- paste("quant -p", threads, "-i salmon_index -l A", "-1", read1, "-2", read2, "--validateMappings -o", out, salmon_quan_add)
                     system2(command = "salmon", args = cmd4)
                   }
                 } else print("No fastq files are found in the work directory.")
@@ -126,10 +105,7 @@ align_free_quan <- function(pair, genome, transcript, annotation, threads = 4, s
                   for (f in read) {
                     name <- gsub(".fastq", "", f)
                     out <- paste0(name, "_transcripts_quant")
-                    cmd4 <- paste(
-                        "quant -p", threads, "-i salmon_index -l A -r", f, 
-                        "--validateMappings -o", out, salmon_quan_add
-                        )
+                    cmd4 <- paste("quant -p", threads, "-i salmon_index -l A -r", f, "--validateMappings -o", out, salmon_quan_add)
                     system2(command = "salmon", args = cmd4)
                   }
                 }

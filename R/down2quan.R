@@ -64,49 +64,22 @@ down2quan <- function(accession, dir = getwd(), taxa, novel_transcript = FALSE, 
                   align_free_quan(pair, genome, transcript, annotation, threads)
                   
                   ### renaming results from trans_quan and align_free_quan first gene count
-                  align_based_gene <- 
-                      utils::read.csv("gene_alignment_based_quantification.csv")
-                  align_based_gene <- 
-                      align_based_gene[, c("sample", "gene_id", "count")]
-                  align_free_gene <- 
-                      utils::read.csv("gene_alignment_free_quantification.csv")
-                  align_free_gene <- 
-                      align_free_gene[, c("sample", "gene_id", "count")]
-                  utils::write.csv(
-                      align_based_gene, 
-                      "gene_alignment_based_quantification.csv", 
-                      row.names = FALSE
-                      )
-                  utils::write.csv(
-                      align_free_gene, 
-                      "gene_alignment_free_quantification.csv", 
-                      row.names = FALSE
-                      )
-
+                  align_based_gene <- utils::read.csv("gene_alignment_based_quantification.csv")
+                  align_based_gene <- align_based_gene[, c("sample", "gene_id", "count")]
+                  align_free_gene <- utils::read.csv("gene_alignment_free_quantification.csv")
+                  align_free_gene <- align_free_gene[, c("sample", "gene_id", "count")]
+                  utils::write.csv(align_based_gene, "gene_alignment_based_quantification.csv", row.names = FALSE)
+                  utils::write.csv(align_free_gene, "gene_alignment_free_quantification.csv", row.names = FALSE)
+                  
                   ### then transcript count
-                  align_based_transcript <- 
-                      utils::read.csv("transcript_alignment_based_quantification.csv")
-                  align_based_transcript <- 
-                      align_based_transcript[, c("sample", "transcript_id", "count")]
-                  align_free_transcript <- 
-                      utils::read.csv("transcript_alignment_free_quantification.csv")
-                  align_free_transcript <- 
-                      align_free_transcript[, c("sample", "transcript_id", "count")]
-                  utils::write.csv(
-                      align_based_transcript,
-                      "transcript_alignment_based_quantification.csv", 
-                      row.names = FALSE
-                      )
-                  utils::write.csv(
-                      align_free_transcript, 
-                      "transcript_alignment_free_quantification.csv", 
-                      row.names = FALSE
-                      )
-
-                  average(
-                      align_based_gene, align_free_gene, 
-                      align_based_transcript, align_free_transcript
-                      )
+                  align_based_transcript <- utils::read.csv("transcript_alignment_based_quantification.csv")
+                  align_based_transcript <- align_based_transcript[, c("sample", "transcript_id", "count")]
+                  align_free_transcript <- utils::read.csv("transcript_alignment_free_quantification.csv")
+                  align_free_transcript <- align_free_transcript[, c("sample", "transcript_id", "count")]
+                  utils::write.csv(align_based_transcript, "transcript_alignment_based_quantification.csv", row.names = FALSE)
+                  utils::write.csv(align_free_transcript, "transcript_alignment_free_quantification.csv", row.names = FALSE)
+                  
+                  average(align_based_gene, align_free_gene, align_based_transcript, align_free_transcript)
                 } else if (scRNA == TRUE) {
                   scRNA_quan(transcript, protocol, threads)
                 }

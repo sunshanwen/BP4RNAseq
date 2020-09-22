@@ -1,11 +1,8 @@
 tx2gene_scRNA <- function() {
     annotation <- list.files(pattern = "gff$", recursive = TRUE, full.names = TRUE)
     existence <- check_dep(dependancy = "egrep")
-    if(existence == TRUE){
-        cmd1 <- paste(
-            "-v '^#|^$'", annotation, 
-            "| cut -f 9 | grep ID=rna | awk -F ';' 'BEGIN{OFS = \"=\";} {print $1, $2;}' | awk -F '=' 'BEGIN{OFS = \",\"} {print $NF, $2}' > raw_tx2gene.csv"
-        )
+    if (existence == TRUE) {
+        cmd1 <- paste("-v '^#|^$'", annotation, "| cut -f 9 | grep ID=rna | awk -F ';' 'BEGIN{OFS = \"=\";} {print $1, $2;}' | awk -F '=' 'BEGIN{OFS = \",\"} {print $NF, $2}' > raw_tx2gene.csv")
         system2(command = "egrep", args = cmd1)
         tx2gene <- utils::read.csv("raw_tx2gene.csv", header = FALSE)
         tx2gene[] <- lapply(tx2gene, as.character)
@@ -20,7 +17,7 @@ tx2gene_scRNA <- function() {
         tx2gene[, 2] <- gsub("rna-", "", tx2gene[, 2])
         tx2gene <- tx2gene[, c(2, 1)]
         utils::write.table(tx2gene, sep = "\t", col.names = FALSE, row.names = FALSE, "tx2gene.tsv", quote = FALSE)
-        unlink("raw_tx2gene.csv")        
+        unlink("raw_tx2gene.csv")
     }
 }
 
@@ -41,10 +38,7 @@ scRNA_quan <- function(transcript, protocol, threads = 4, salmon_index_add = NUL
     existence <- check_dep(dependancy = "salmon")
     if (existence == TRUE) {
         tx2gene_scRNA()
-        cmd3 <- paste(
-            "index -t", transcript, 
-            "-i salmon_index", "-p", threads, salmon_index_add
-            )
+        cmd3 <- paste("index -t", transcript, "-i salmon_index", "-p", threads, salmon_index_add)
         system2(command = "salmon", args = cmd3)
         read <- list.files(pattern = "^Trimmed.*1\\.fastq$", full.names = FALSE)
         if (length(read) == 0) {
@@ -67,12 +61,8 @@ scRNA_quan <- function(transcript, protocol, threads = 4, salmon_index_add = NUL
                 read_seq <- read1
                 barcode_seq <- read2
             }
-            cmd4 <- paste(
-                "alevin -p", threads, "-i salmon_index -l ISR --", 
-                protocol, " -1 ", barcode_seq, " -2 ", read_seq, 
-                " --tgMap tx2gene.tsv -o ", 
-                out, salmon_alevin_add
-                )
+            cmd4 <- paste("alevin -p", threads, "-i salmon_index -l ISR --", protocol, " -1 ", barcode_seq, " -2 ", read_seq, " --tgMap tx2gene.tsv -o ", 
+                out, salmon_alevin_add)
             system2(command = "salmon", args = cmd4)
         }
         unlink("tx2gene.tsv")

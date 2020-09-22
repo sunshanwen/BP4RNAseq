@@ -2,21 +2,12 @@
 #### Reads alignment with Hisat2
 .index_build <- function(taxa, genome, annotation, threads, hisat2_build_add) {
     if (file.exists(genome) && file.exists(annotation)) {
-        cmd1 <- paste(
-            "'{if ($3==\"exon\") {print $1\"\\t\"$4-1\"\\t\"$5-1}}'", 
-                      annotation, "> exonsFile.table"
-            )
+        cmd1 <- paste("'{if ($3==\"exon\") {print $1\"\\t\"$4-1\"\\t\"$5-1}}'", annotation, "> exonsFile.table")
         system2(command = "awk", args = cmd1)
-        cmd2 <- paste(
-            "'{if ($3==\"intron\") {print $1\"\\t\"$4-1\"\\t\"$5-1\"\\t\"$7}}'",
-            annotation, "> ssFile.table"
-            )
+        cmd2 <- paste("'{if ($3==\"intron\") {print $1\"\\t\"$4-1\"\\t\"$5-1\"\\t\"$7}}'", annotation, "> ssFile.table")
         system2(command = "awk", args = cmd2)
         if (file.size("exonsFile.table") * file.size("ssFile.table")) {
-            cmd3 <- paste(
-                "-f", genome, taxa, "--ss ssFile.table", 
-                "--exon exonsFile.table", "-p", threads, hisat2_build_add
-                )
+            cmd3 <- paste("-f", genome, taxa, "--ss ssFile.table", "--exon exonsFile.table", "-p", threads, hisat2_build_add)
             system2(command = "hisat2-build", args = cmd3)
         } else {
             cmd3 <- paste("-f", genome, taxa, "-p", threads, hisat2_build_add)
@@ -46,11 +37,7 @@
                   out_bam <- paste0(name, ".bam")
                   read1 <- paste0(name, "_1.fastq")
                   read2 <- paste0(name, "_2.fastq")
-                  cmd4 <- paste(
-                      "-p", threads, hisat2_add, "--dta -x", taxa, 
-                      "-1", read1, "-2", read2, 
-                      "| samtools view -bh - | samtools sort - >", out_bam
-                      )
+                  cmd4 <- paste("-p", threads, hisat2_add, "--dta -x", taxa, "-1", read1, "-2", read2, "| samtools view -bh - | samtools sort - >", out_bam)
                   system2(command = "hisat2", args = cmd4)
                 }
             }
@@ -63,10 +50,7 @@
                 for (f in read) {
                   name <- gsub(".fastq", "", f)
                   out_bam <- paste0(name, ".bam")
-                  cmd4 <- paste(
-                      "-p", threads, hisat2_add, "--dta -x", taxa, "-U", f, 
-                      "| samtools view -bh - | samtools sort - >", out_bam
-                      )
+                  cmd4 <- paste("-p", threads, hisat2_add, "--dta -x", taxa, "-U", f, "| samtools view -bh - | samtools sort - >", out_bam)
                   system2(command = "hisat2", args = cmd4)
                 }
             }
@@ -85,16 +69,10 @@
             taxa <- gsub("\\.bam", "", f)
             output <- paste0("ballgown/", taxa, "/", taxa, ".gtf")
             if (novel_transcript == TRUE) {
-                cmd1 <- paste(
-                    f, "-b ballgown -G", gff, "-o", output, "-p", 
-                    threads, stringtie_add
-                    )
+                cmd1 <- paste(f, "-b ballgown -G", gff, "-o", output, "-p", threads, stringtie_add)
                 system2(command = "stringtie", args = cmd1)
             } else {
-                cmd1 <- paste(
-                    f, "-G", gff, "-e -b ballgown", "-o", output,
-                    "-p", threads, stringtie_add
-                    )
+                cmd1 <- paste(f, "-G", gff, "-e -b ballgown", "-o", output, "-p", threads, stringtie_add)
                 system2(command = "stringtie", args = cmd1)
             }
         }
@@ -113,11 +91,8 @@
         for (file in files) {
             output <- paste0("Tmp", gsub("\\.gtf$", "", gsub(".*/", "", file)), ".csv")
             outputs <- c(outputs, output)
-            cmd = paste(
-                "-F '\\t' '$3 == \"transcript\" {print $9}'", file, 
-                "| awk -F ';' '{print $2, $5, $6}' | awk 'BEGIN{OFS = \",\"; print \"transcript_id\", \"FPKM\", \"TPM\"} {print $2, $4, $6}' >", 
-                output
-                )
+            cmd = paste("-F '\\t' '$3 == \"transcript\" {print $9}'", file, "| awk -F ';' '{print $2, $5, $6}' | awk 'BEGIN{OFS = \",\"; print \"transcript_id\", \"FPKM\", \"TPM\"} {print $2, $4, $6}' >", 
+                output)
             system2(command = "awk", args = cmd)
         }
     }

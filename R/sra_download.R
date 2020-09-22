@@ -17,7 +17,11 @@ sra_download <- function(accession, dir = getwd()) {
     } else {
         ### check if sratools is available or not.
         existence <- check_dep(dependancy = "vdb-config")
-        if (existence == TRUE) {status <- 0} else {status <- 1}
+        if (existence == TRUE) {
+            status <- 0
+        } else {
+            status <- 1
+        }
         if (status == 0) {
             system2(command = "vdb-config", args = "--interactive | pidof")
             ## Get the default download directory

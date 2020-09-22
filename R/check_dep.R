@@ -10,12 +10,11 @@
 #'
 
 check_dep <- function(dependancy) {
-    status <- tryCatch(system2(command = "which", 
-                               args = dependancy, 
-                               stdout = FALSE, stderr = FALSE), 
-                       error = function(err) {1},
-                       warning = function(war) {2}
-                       )
+    status <- tryCatch(system2(command = "which", args = dependancy, stdout = FALSE, stderr = FALSE), error = function(err) {
+        1
+    }, warning = function(war) {
+        2
+    })
     if (status == 0) 
         return(TRUE) else return(FALSE)
 }

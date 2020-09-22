@@ -37,34 +37,38 @@ down_Ref <- function(taxa) {
     existence <- check_dep(dependancy = "jq")
     if (existence == TRUE) {
         status = 0
-        } else {status = 1}
+    } else {
+        status = 1
+    }
     if (status == 0) {
         taxa_raw <- taxa
         taxa_tmp <- gsub("\\s", "_", taxa)
         genome <- paste0(taxa_tmp, ".fna")
         transcript <- paste0("transcript_", taxa_tmp, ".fna")
         annotation <- paste0(taxa_tmp, ".gff")
-
+        
         if (!(file.exists(genome) && file.exists(transcript) && file.exists(annotation))) {
             taxa <- paste0("\"", taxa, "\"")
             datasets <- list.files(pattern = "^datasets$", full.names = TRUE)
             if (length(datasets) == 0) {
                 ### switch datasets according to the platform
                 if (Sys.info()["sysname"] == "Linux") {
-                  status <- tryCatch(
-                      utils::download.file("https://ftp.ncbi.nlm.nih.gov/pub/datasets/command-line/LATEST/linux-amd64/datasets", 
-                      destfile = "datasets", quit = TRUE), 
-                      error = function(err) {1}, warning = function(war) {2}
-                      )
+                  status <- tryCatch(utils::download.file("https://ftp.ncbi.nlm.nih.gov/pub/datasets/command-line/LATEST/linux-amd64/datasets", destfile = "datasets", 
+                    quit = TRUE), error = function(err) {
+                    1
+                  }, warning = function(war) {
+                    2
+                  })
                   datasets <- list.files(pattern = "^datasets$", full.names = TRUE)
                 } else if (Sys.info()["sysname"] == "Darwin") {
-                  status <- tryCatch(utils::download.file("https://ftp.ncbi.nlm.nih.gov/pub/datasets/command-line/LATEST/mac/datasets", 
-                                     destfile = "datasets", quit = TRUE), 
-                                     error = function(err) {1}, 
-                                     warning = function(war) {2}
-                                     )
+                  status <- tryCatch(utils::download.file("https://ftp.ncbi.nlm.nih.gov/pub/datasets/command-line/LATEST/mac/datasets", destfile = "datasets", 
+                    quit = TRUE), error = function(err) {
+                    1
+                  }, warning = function(war) {
+                    2
+                  })
                   datasets <- list.files(pattern = "^datasets$", full.names = TRUE)
-                }  
+                }
             }
             if (status == 0) {
                 cmd0 <- paste("+x", datasets)
@@ -72,17 +76,11 @@ down_Ref <- function(taxa) {
                 if (dir.exists("dehydrated") && (length(dir(path = "dehydrated", all.files = FALSE)) > 0)) {
                   print("Downloading the reference genome and annotation files.")
                   cmd3 <- paste("rehydrate --filename dehydrated")
-                  status <- system2(command = datasets, args = cmd3,stdout = FALSE, stderr = FALSE)
+                  status <- system2(command = datasets, args = cmd3, stdout = FALSE, stderr = FALSE)
                 } else {
-                  cmd1 <- paste0(
-                      "assembly-descriptors taxon ", "'", taxa, "'",
-                      " --refseq | jq '.assemblies[].assembly.assembly_accession' -r"
-                      )
-                  accession_id <- system2(command = datasets, args = cmd1, stdout=TRUE)
-                  cmd2 <- paste(
-                      "download assembly", accession_id, 
-                      "-p --dehydrated --filename dehydrated.zip"
-                      )
+                  cmd1 <- paste0("assembly-descriptors taxon ", "'", taxa, "'", " --refseq | jq '.assemblies[].assembly.assembly_accession' -r")
+                  accession_id <- system2(command = datasets, args = cmd1, stdout = TRUE)
+                  cmd2 <- paste("download assembly", accession_id, "-p --dehydrated --filename dehydrated.zip")
                   system2(command = datasets, args = cmd2)
                   utils::unzip("dehydrated.zip", list = FALSE, exdir = "dehydrated")
                   print("Downloading the reference genome and annotation files.")

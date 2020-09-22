@@ -45,8 +45,7 @@ average <- function(based_gene, free_gene, based_transcript, free_transcript) {
     all_gene <- rbind(align_based_gene, align_free_gene)
     all_gene$sample <- as.factor(all_gene$sample)
     all_gene$gene_id <- as.factor(all_gene$gene_id)
-    ave_gene <- all_gene %>% dplyr::group_by(sample, gene_id) %>% 
-        dplyr::summarise(count = mean(count, na.rm = TRUE))
+    ave_gene <- all_gene %>% dplyr::group_by(sample, gene_id) %>% dplyr::summarise(count = mean(count, na.rm = TRUE))
     utils::write.csv(ave_gene, "average_gene_quantification.csv", row.names = FALSE)
     
     ### transcript count
@@ -54,7 +53,6 @@ average <- function(based_gene, free_gene, based_transcript, free_transcript) {
     all_transcript <- rbind(align_based_transcript, align_free_transcript)
     all_transcript$sample <- as.factor(all_transcript$sample)
     all_transcript$transcript_id <- as.factor(all_transcript$transcript_id)
-    ave_transcript <- all_transcript %>% dplyr::group_by(sample, transcript_id) %>% 
-        dplyr::summarise(count = mean(count, na.rm = TRUE))
+    ave_transcript <- all_transcript %>% dplyr::group_by(sample, transcript_id) %>% dplyr::summarise(count = mean(count, na.rm = TRUE))
     utils::write.csv(ave_transcript, "average_transcript_quantification.csv", row.names = FALSE)
 }
