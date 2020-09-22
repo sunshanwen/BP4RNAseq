@@ -52,7 +52,6 @@ fastq2quan <- function(threads = 4, dir = getwd(), pair, taxa, novel_transcript 
         
         status <- down_Ref(taxa)
         if (status == 0) {
-            # reference <- extract_genome(taxa)
             taxa_tmp <- gsub("\\s", "_", taxa)
             genome <- paste0(taxa_tmp, ".fna")
             transcript <- paste0("transcript_", taxa_tmp, ".fna")
