@@ -23,10 +23,6 @@ get_adapter <- function(sample, pair) {
             "Illumina Small RNA 5' Adapter" = "GATCGTCGGACT")
         pattern <- paste0(gsub("\\.fastq", "", sample), "_fastqc.zip")
         qc_reports <- list.files(pattern = pattern, full.names = FALSE)
-# 
-#         samples <- unique(
-#           gsub("_2$", "", gsub("_1$", "", sample))
-#         )
         if(length(qc_reports)) {
             qc_collection <- fastqcr::qc_read_collection(
                 qc_reports, sample_names = gsub(".zip", "", qc_reports),
