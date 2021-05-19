@@ -1,7 +1,7 @@
 Package: BP4RNAseq
 Type: Package
 Title: A babysitter's package for reproducible RNA-seq analysis
-Version: 1.1.0
+Version: 1.2.0
 Authors@R: c(person(given = "Shanwen",
             family = "Sun",
             role = c("cre", "aut"),
