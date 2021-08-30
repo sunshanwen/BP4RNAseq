@@ -34,71 +34,68 @@ extract_genome <- function(taxa) {
 #' down_Ref(taxa = 'Drosophila melanogaster')
 #'
 down_Ref <- function(taxa) {
-    existence <- check_dep(dependancy = "jq")
-    if (existence == TRUE) {
-        status = 0
-    } else {
-        status = 1
-    }
-    if (status == 0) {
-        taxa_raw <- taxa
-        taxa_tmp <- gsub("\\s", "_", taxa)
-        genome <- paste0(taxa_tmp, ".fna")
-        transcript <- paste0("transcript_", taxa_tmp, ".fna")
-        annotation <- paste0(taxa_tmp, ".gff")
-        
-        if (!(file.exists(genome) && file.exists(transcript) && file.exists(annotation))) {
-            taxa <- paste0("\"", taxa, "\"")
-            datasets <- list.files(pattern = "^datasets$", full.names = TRUE)
-            if (length(datasets) == 0) {
-                ### switch datasets according to the platform
-                if (Sys.info()["sysname"] == "Linux") {
-                  status <- tryCatch(utils::download.file("https://ftp.ncbi.nlm.nih.gov/pub/datasets/command-line/LATEST/linux-amd64/datasets", destfile = "datasets", 
-                    quit = TRUE), error = function(err) {
-                    1
-                  }, warning = function(war) {
-                    2
-                  })
-                  datasets <- list.files(pattern = "^datasets$", full.names = TRUE)
-                } else if (Sys.info()["sysname"] == "Darwin") {
-                  status <- tryCatch(utils::download.file("https://ftp.ncbi.nlm.nih.gov/pub/datasets/command-line/LATEST/mac/datasets", destfile = "datasets", 
-                    quit = TRUE), error = function(err) {
-                    1
-                  }, warning = function(war) {
-                    2
-                  })
-                  datasets <- list.files(pattern = "^datasets$", full.names = TRUE)
-                }
+
+    taxa_raw <- taxa
+    taxa_tmp <- gsub("\\s", "_", taxa)
+    genome <- paste0(taxa_tmp, ".fna")
+    transcript <- paste0("transcript_", taxa_tmp, ".fna")
+    annotation <- paste0(taxa_tmp, ".gff")
+    
+    if (!(file.exists(genome) && file.exists(transcript) && file.exists(annotation))) {
+        taxa <- paste0("\"", taxa, "\"")
+        datasets <- list.files(pattern = "^datasets$", full.names = TRUE)
+        if (length(datasets) == 0) {
+            print('Downloading ncbi datasets.')
+            ### switch datasets according to the platform
+            if (Sys.info()["sysname"] == "Linux") {
+              status <- tryCatch(utils::download.file("https://ftp.ncbi.nlm.nih.gov/pub/datasets/command-line/LATEST/linux-amd64/datasets", destfile = "datasets", 
+                quit = TRUE), error = function(err) {
+                1
+              }, warning = function(war) {
+                2
+              })
+              datasets <- list.files(pattern = "^datasets$", full.names = TRUE)
+            } else if (Sys.info()["sysname"] == "Darwin") {
+              status <- tryCatch(utils::download.file("https://ftp.ncbi.nlm.nih.gov/pub/datasets/command-line/LATEST/mac/datasets", destfile = "datasets", 
+                quit = TRUE), error = function(err) {
+                1
+              }, warning = function(war) {
+                2
+              })
+              datasets <- list.files(pattern = "^datasets$", full.names = TRUE)
             }
-            if (status == 0) {
-                cmd0 <- paste("+x", datasets)
-                system2(command = "chmod", args = cmd0)
-                if (dir.exists("dehydrated") && (length(dir(path = "dehydrated", all.files = FALSE)) > 0)) {
-                  print("Downloading the reference genome and annotation files.")
-                  cmd3 <- paste("rehydrate --directory dehydrated")
-                  status <- system2(command = datasets, args = cmd3, stdout = FALSE, stderr = FALSE)
-                } else {
-                  cmd2 <- paste("download genome taxon", taxa, "--reference --dehydrated --filename dehydrated.zip")
-                  system2(command = datasets, args = cmd2, stdout = TRUE)
-                  utils::unzip("dehydrated.zip", list = FALSE, exdir = "dehydrated")
-                  print("Downloading the reference genome and annotation files.")
-                  cmd3 <- paste("rehydrate --directory ./dehydrated")
-                  status <- system2(command = datasets, args = cmd3)
-                }
-                
-                if (status == 1) {
-                  print("The internet connection is poor and the download of reference genome and annotation files failed. Please retry later!")
-                } else {
-                  unlink(datasets)
-                  extract_genome(taxa_raw)
-                }
-                unlink("dehydrated.zip")
-            } else {
-                print("The internet connection is poor. The download of datasets is failed.")
+            if (!status){
+                print("The internet connection is poor. The download of datasets is failed. Please retry later.")
+                unlink(datasets)
+                return(status)
             }
-        } else {
-            print("The reference genome and annotation files already exist")
         }
-    } else print("jq is not found. Please install it.")
+        cmd0 <- paste("+x", datasets)
+        system2(command = "chmod", args = cmd0)
+        if (dir.exists("dehydrated") && (length(dir(path = "dehydrated", all.files = FALSE)) > 0)) {
+          print("Downloading the reference genome and annotation files.")
+          cmd3 <- paste("rehydrate --directory dehydrated")
+          status <- system2(command = datasets, args = cmd3, stdout = FALSE, stderr = FALSE)
+        } else {
+          cmd2 <- paste("download genome taxon", taxa, "--reference --dehydrated --filename dehydrated.zip")
+          system2(command = datasets, args = cmd2, stdout = TRUE)
+          utils::unzip("dehydrated.zip", list = FALSE, exdir = "dehydrated")
+          print("Downloading the reference genome and annotation files.")
+          cmd3 <- paste("rehydrate --directory ./dehydrated")
+          status <- system2(command = datasets, args = cmd3)
+        }
+        
+        if (!status) {
+            print("The internet connection is poor and the download of reference genome and annotation files failed. Please retry later!")
+        } else {
+          unlink(datasets)
+          extract_genome(taxa_raw)
+        }
+        unlink("dehydrated.zip")
+        
+    } else {
+        status = 0
+        print("The reference genome and annotation files already exist")
+    }
     return(status)
 }

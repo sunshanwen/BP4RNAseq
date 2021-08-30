@@ -20,8 +20,9 @@
 
 fastq2quan <- function(threads = 4, dir = getwd(), pair, taxa, novel_transcript = FALSE, scRNA = FALSE, protocol = NULL) {
     setwd(dir)
-    fastq.files <- list.files(pattern = "fastq$", full.names = FALSE)
+    status <- down_Ref(taxa)
     
+    fastq.files <- list.files(pattern = "fastq$", full.names = FALSE)
     if (length(fastq.files)) {
         quality <- qc_test(threads, scRNA)
         
@@ -50,7 +51,6 @@ fastq2quan <- function(threads = 4, dir = getwd(), pair, taxa, novel_transcript 
         files <- list.files(dir, pattern = "fastqc", full.names = FALSE)
         unlink(files)
         
-        status <- down_Ref(taxa)
         if (status == 0) {
             taxa_tmp <- gsub("\\s", "_", taxa)
             genome <- paste0(taxa_tmp, ".fna")
