@@ -75,16 +75,14 @@ down_Ref <- function(taxa) {
                 system2(command = "chmod", args = cmd0)
                 if (dir.exists("dehydrated") && (length(dir(path = "dehydrated", all.files = FALSE)) > 0)) {
                   print("Downloading the reference genome and annotation files.")
-                  cmd3 <- paste("rehydrate --filename dehydrated")
+                  cmd3 <- paste("rehydrate --directory dehydrated")
                   status <- system2(command = datasets, args = cmd3, stdout = FALSE, stderr = FALSE)
                 } else {
-                  cmd1 <- paste0("assembly-descriptors taxon ", "'", taxa, "'", " --refseq | jq '.assemblies[].assembly.assembly_accession' -r")
-                  accession_id <- system2(command = datasets, args = cmd1, stdout = TRUE)
-                  cmd2 <- paste("download assembly", accession_id, "-p --dehydrated --filename dehydrated.zip")
-                  system2(command = datasets, args = cmd2)
+                  cmd2 <- paste("download genome taxon", taxa, "--reference --dehydrated --filename dehydrated.zip")
+                  system2(command = datasets, args = cmd2, stdout = TRUE)
                   utils::unzip("dehydrated.zip", list = FALSE, exdir = "dehydrated")
                   print("Downloading the reference genome and annotation files.")
-                  cmd3 <- paste("rehydrate --filename dehydrated")
+                  cmd3 <- paste("rehydrate --directory ./dehydrated")
                   status <- system2(command = datasets, args = cmd3)
                 }
                 
