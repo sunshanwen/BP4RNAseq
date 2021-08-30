@@ -33,7 +33,6 @@ conda install -y -c bioconda samtools
 conda install -y -c bioconda hisat2
 conda install -y -c bioconda stringtie
 conda install -y -c bioconda salmon
-conda install -y -c conda-forge jq
 # conda config --set channel_priority strict
 conda install -y -c conda-forge r-base
 conda install -y -c conda-forge r-tidyr
