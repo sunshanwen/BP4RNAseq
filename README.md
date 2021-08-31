@@ -58,7 +58,6 @@ The BP4RNAseq requires the following utilities:
   - [HISAT2 \>= 2.2.0](http://daehwankimlab.github.io/hisat2/)
   - [StringTie \>= 2.1.1](https://ccb.jhu.edu/software/stringtie/)
   - [Salmon \>= 1.2.1](https://combine-lab.github.io/salmon/)  
-  - [jq \>= 1.6](https://stedolan.github.io/jq/)
   - [R \>= 4.0.0](https://www.r-project.org/)
 
 Users can install these dependencies manually.
