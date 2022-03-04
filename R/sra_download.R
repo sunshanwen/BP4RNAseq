@@ -49,7 +49,7 @@ sra_download <- function(accession, dir = getwd()) {
                 if (root.exist == TRUE) {
                   for (f in accession) {
                     #### use Entrez Direct tool to get all samples accession code, then use prefetch to download all the data
-                    cmd2 = paste("$(esearch -db sra -query", f, "| efetch --format runinfo | grep", f, "| cut -d \",\" -f 1)")
+                    cmd2 = paste("$(esearch -db sra -query", f, "| efetch -format runinfo | grep", f, "| cut -d \",\" -f 1)")
                     status <- tryCatch(system2("prefetch", args = cmd2, stdout = FALSE, stderr = FALSE), error = function(err) {
                       1
                     }, warning = function(war) {
